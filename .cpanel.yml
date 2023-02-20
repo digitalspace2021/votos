@@ -2,11 +2,11 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/politicosdevjvnt/public_html/
-    - /bin/cp -R main $DEPLOYPATH
+    - /bin/cp -R . $DEPLOYPATH
 metadata:
-    name: "Ies cinoc"
+    name: "Politicos"
     version: "1.0"
-    author: "Danilo Grisalez"
+    author: "Digital Space"
 post_deploy:
     # - command: npm run test-api
     # - command: newman run tests/Cinoc.postman_collection.json > report.txt
