@@ -3,7 +3,8 @@ deployment:
   tasks:
     - export DEPLOYPATH=/home/politicosdevjvnt/public_html/
     # - /bin/cp -R . $DEPLOYPATH
-    - /bin/cp -R --exclude='.git' .  $DEPLOYPATH
+    - /bin/rsync -av --exclude='.git/' . $DEPLOYPATH
+    # - /bin/cp -R --exclude='.git' .  $DEPLOYPATH
 
 metadata:
     name: "Politicos"
