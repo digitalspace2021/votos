@@ -58,7 +58,7 @@ class FormularioController extends Controller
             'telefono' => 'required|max:255',
             'genero' => 'required|max:255',
             'direccion' => 'required|max:255',
-            'tipo_zona' => 'required',
+            // 'tipo_zona' => 'required',
             'zona' => 'required|max:255',
             'puesto_votacion' => 'required|max:255',
             'mensaje' => 'nullable'
