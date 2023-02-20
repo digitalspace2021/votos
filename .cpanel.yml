@@ -1,8 +1,8 @@
 ---
 deployment:
   tasks:
-    # - export DEPLOYPATH=/home/iescinocedu/bolsaempleo.iescinoc.edu.co/
-    # - /bin/cp -R main $DEPLOYPATH
+    - export DEPLOYPATH=/home/politicosdevjvnt/public_html/
+    - /bin/cp -R main $DEPLOYPATH
 metadata:
     name: "Ies cinoc"
     version: "1.0"
