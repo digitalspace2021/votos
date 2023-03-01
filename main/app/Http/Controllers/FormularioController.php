@@ -114,6 +114,7 @@ class FormularioController extends Controller
             'genero' => 'required|max:255',
             'direccion' => 'required|max:255',
             'zona' => 'required|max:255',
+            'tipo_zona' => 'required|max:255',
             'puesto_votacion' => 'required|max:255',
             'mensaje' => 'nullable'
         ]);
@@ -126,6 +127,7 @@ class FormularioController extends Controller
         $formulario->genero = $request->genero;
         $formulario->direccion = $request->direccion;
         $formulario->zona = $request->zona;
+        $formulario->tipo_zona = $request->tipo_zona;
         $formulario->puesto_votacion = $request->puesto_votacion;
         $formulario->mensaje = $request->mensaje;
         $formulario->identificacion = $request->identificacion;

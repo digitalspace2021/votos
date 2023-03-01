@@ -20,7 +20,7 @@ class CreateCandidatosTable extends Migration
             $table->string('telefono');
             $table->string('direccion');
             $table->unsignedInteger('cargo_id');
-            $table->string('email')->unique();
+            $table->string('email');
             $table->timestamps();
         });
     }

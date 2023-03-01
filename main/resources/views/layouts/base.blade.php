@@ -9,6 +9,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
         integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous" />
+    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> --}}
+
 
     @yield('css-extra')
 </head>
@@ -45,7 +48,8 @@
                             <a class="me-3 py-2 text-dark text-decoration-none" href="{{ route('usuarios') }}">Usuarios</a>
                         @endif
                         @if (Auth::user()->hasRole('administrador'))
-                            <a class="me-3 py-2 text-dark text-decoration-none" href="{{ route('candidatos') }}">Candidatos</a>
+                            <a class="me-3 py-2 text-dark text-decoration-none"
+                                href="{{ route('candidatos') }}">Candidatos</a>
                         @endif
                         @if (Auth::user()->hasRole('administrador'))
                             <a class="me-3 py-2 text-dark text-decoration-none" href="{{ route('cargos') }}">Cargos</a>
@@ -79,15 +83,24 @@
         <footer class="pt-4 my-md-5 pt-md-5 border-top">
             <div class="row">
                 <div class="col-12 col-md">
-                    <small class="d-block mb-3 text-muted">Desarrollado por {{env('DEV')}} &copy; {{ date('Y') }}</small>
+                    <small class="d-block mb-3 text-muted">Desarrollado por {{ env('DEV') }} &copy;
+                        {{ date('Y') }}</small>
                 </div>
             </div>
         </footer>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+    </script>
 
     @yield('js-extra')
 </body>

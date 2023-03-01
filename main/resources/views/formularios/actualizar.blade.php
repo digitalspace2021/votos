@@ -84,7 +84,20 @@
 
                         <div class="col-6">
                             <label for="genero" class="form-label">Sexo</label>
-                            <input name="genero" type="text" class="form-control" value="{{ $formulario->genero }}">
+                            <select name="genero" id="genero" class="form-control" value="{{ $formulario->genero }}"
+                                required>
+
+                                <option value="">Selecciona genero</option>
+                                <option value="Hombre" {{ $formulario->genero == 'Hombre' ? 'selected' : '' }}>Hombre
+                                </option>
+                                <option value="Mujer" {{ $formulario->genero == 'Mujer' ? 'selected' : '' }}>Mujer
+                                </option>
+                                <option value="Otro" {{ $formulario->genero == 'Otro' ? 'selected' : '' }}>Otro</option>
+
+                            </select>
+                            <div class="invalid-feedback">
+                                Por favor ingresa tu sexo.
+                            </div>
                         </div>
 
                         <div class="col-6">
@@ -94,8 +107,25 @@
                         </div>
 
                         <div class="col-6">
+                            <label for="tipo_zona" class="form-label">Tipo de ubicacion</label>
+                            <select name="tipo_zona" id="tipo_zona" class="form-control" required>
+                                <option value="0">Seleccion el tipo de zona</option>
+                                <option value="Comuna" {{ $formulario->tipo_zona == 'Comuna' ? 'selected' : '' }}>Comuna
+                                </option>
+                                <option value="Vereda" {{ $formulario->tipo_zona == 'Vereda' ? 'selected' : '' }}>Vereda
+                                </option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Seleccion un tipo de zona valido
+                            </div>
+                        </div>
+
+                        <div class="col-6">
                             <label for="zona" class="form-label">Comuna / Corregimiento</label>
-                            <input name="zona" type="text" class="form-control" value="{{ $formulario->zona }}">
+                            <select class="form-control" name="zona" id="zona" required></select>
+                            <div class="invalid-feedback">
+                                Por favor ingresa tu Comuna / Corregimiento.
+                            </div>
                         </div>
 
                         <div class="col-6">
@@ -126,7 +156,56 @@
     @section('js-extra')
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
         <script>
-            $(document).ready(function() {
+            $(document).ready(async function() {
+
+                var zona = $('#tipo_zona').val()
+
+                console.log(zona)
+
+                $('#zona').select2({
+                    theme: "bootstrap",
+                    ajax: {
+                        dataType: 'json',
+                        url: function(params) {
+                            return "/get_veredas_and_comunas?type=" + $('#tipo_zona').val();
+                        },
+                        type: "get",
+                        delay: 250,
+                        data: function(params) {
+                            return {
+                                search: params.term
+                            };
+                        },
+                        processResults: function(response) {
+                            return {
+                                results: response
+                            };
+                        },
+                        cache: true
+                    }
+
+                });
+
+                await $.ajax({
+                    type: 'GET',
+                    url: '/get_veredas_and_comunas?type=' + zona + '&id=' + '{{ $formulario->zona }}',
+                    data: function(params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    },
+                    cache: true
+                }).then(function(data) {
+                    var option = new Option(data[0].text, data[0].id, true, true);
+                    $('#zona').append(option).trigger('change');
+                });
+
+
                 $('#creador').select2({
                     theme: "bootstrap",
                     ajax: {

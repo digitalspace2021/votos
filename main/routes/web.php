@@ -3,9 +3,11 @@
 use App\Http\Controllers\CandidatoController;
 use App\Http\Controllers\CargoController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\FileManagementController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\FormularioController;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\UtilityController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -87,4 +89,13 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/cargos/{id}/actualizar', [CargoController::class, 'actualizar_guardar'])->name('cargos.actualizar.guardar');
     Route::get('/cargos/{id}/eliminar', [CargoController::class, 'eliminar'])->name('cargos.eliminar');
     Route::get('/cargos/{id}/eliminar/conf', [CargoController::class, 'eliminar_confirmar'])->name('cargos.eliminar.confirmar');
+
+
+    Route::get('/export/formularios', [FileManagementController::class, 'exportFormulario'])->name('export.forms');
+    Route::get('/import/viewss', [FileManagementController::class, 'importFormularioView'])->name('import.view');
+    Route::post('/import/form', [FileManagementController::class, 'importFormulario'])->name('import.form');
+    
+    // utils
+    Route::get('get_veredas_and_comunas', [UtilityController::class, 'getVeredasAndComunas']);
+
 });

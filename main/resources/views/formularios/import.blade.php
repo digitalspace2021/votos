@@ -12,9 +12,14 @@
 
 @section('cabecera')
     <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
-        <h1 class="display-4 fw-normal">Nuevo formulario</h1>
+        <h1 class="display-4 fw-normal">Importar formularios</h1>
     </div>
 @endsection
+
+
+@if (Session::has('message'))
+    <p class="alert {{ Session::get('alert-class') }}">{{ Session::get('message') }}</p>
+@endif
 
 @section('cuerpo')
     <div class="container">
@@ -28,7 +33,8 @@
                     @endforeach
                 </ul>
 
-                <form class="needs-validation" method="POST" action="{{ route('formularios.crear.guardar') }}" novalidate>
+                <form class="needs-validation" enctype="multipart/form-data" method="POST"
+                    action="{{ route('import.form') }}" novalidate>
                     @csrf
                     <input type="hidden" name="creador_id" id="creador_id"
                         @if (Auth::user()->hasRole('simple')) value="{{ Auth::user()->id }}" @endif>
@@ -58,72 +64,6 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-6">
-                            <label for="nombres" class="form-label">Nombre(s)</label>
-                            <input type="text" class="form-control" id="nombres" name="nombres" placeholder=""
-                                value="" required>
-                            <div class="invalid-feedback">
-                                Este campo es requerido.
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <label for="apellidos" class="form-label">Apellido(s)</label>
-                            <input type="text" class="form-control" id="apellidos" name="apellidos" placeholder=""
-                                value="" required>
-                            <div class="invalid-feedback">
-                                Este campo es requerido.
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <label for="identificacion" class="form-label">Cedula</label>
-                            <input type="text" class="form-control" id="identificacion" name="identificacion"
-                                placeholder="" value="" required>
-                            <div class="invalid-feedback">
-                                Este campo es requerido.
-                            </div>
-                        </div>
-
-                        <div class="col-6">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" name="email"
-                                placeholder="usuario@mail.com" required>
-                            <div class="invalid-feedback">
-                                Por favor ingresa un Email valido.
-                            </div>
-                        </div>
-
-                        <div class="col-6">
-                            <label for="telefono" class="form-label">Telefono</label>
-                            <input type="text" class="form-control" id="telefono" name="telefono"
-                                placeholder="+57 321-123-1122" required>
-                            <div class="invalid-feedback">
-                                Por favor ingresa tu numero telefonico.
-                            </div>
-                        </div>
-
-                        <div class="col-6">
-                            <label for="genero" class="form-label">Sexo</label>
-                            <select name="genero" id="genero" class="form-control" required>
-                                <option value="">Selecciona genero</option>
-                                <option value="Hombre">Hombre</option>
-                                <option value="Mujer">Mujer</option>
-                                <option value="Otro">Otro</option>
-                            </select>
-                            <div class="invalid-feedback">
-                                Por favor ingresa tu sexo.
-                            </div>
-                        </div>
-
-                        <div class="col-6">
-                            <label for="direccion" class="form-label">Direccion</label>
-                            <input type="text" class="form-control" id="direccion" name="direccion"
-                                placeholder="Direccion" required>
-                            <div class="invalid-feedback ">
-                                Por favor ingresa tu direccion.
-                            </div>
-                        </div>
 
                         <div class="col-6">
                             <label for="tipo_zona" class="form-label">Tipo de ubicacion</label>
@@ -140,27 +80,13 @@
                         <div class="col-6">
                             <label for="zona" class="form-label">Comuna / Corregimiento</label>
                             <select class="form-control" name="zona" id="zona" required></select>
-                            {{-- <input type="text" class="form-control" id="zona" name="zona"
-                                placeholder="Comuna" required> --}}
                             <div class="invalid-feedback">
                                 Por favor ingresa tu Comuna / Corregimiento.
                             </div>
                         </div>
 
-                        <div class="col-6">
-                            <label for="zona" class="form-label">Puesto de votacion</label>
-                            <input type="text" class="form-control" id="puesto_votacion" name="puesto_votacion"
-                                placeholder="Puesto de votacion" required>
-                            <div class="invalid-feedback">
-                                Por favor ingresa tu puesto de votacion.
-                            </div>
-                        </div>
+                        <input type="file" class="custom-up" name="file" id="fileUp">
 
-                        <div class="col-12">
-                            <label for="mensaje" class="form-label">Mensaje <span
-                                    class="text-muted">(Opcional)</span></label>
-                            <textarea class="form-control" name="mensaje" id="mensaje" cols="30" rows="10"></textarea>
-                        </div>
                     </div>
 
                     <hr class="my-4">
@@ -179,34 +105,6 @@
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
         <script>
             $(document).ready(function() {
-
-                $('#creador').select2({
-                    theme: "bootstrap",
-                    ajax: {
-                        dataType: 'json',
-                        url: "{!! route('util.lista_usuarios') !!}",
-                        type: "get",
-                        delay: 250,
-                        data: function(params) {
-                            return {
-                                search: params.term
-                            };
-                        },
-                        processResults: function(response) {
-                            return {
-                                results: response
-                            };
-                        },
-                        cache: true
-                    }
-
-                });
-
-                $('#creador').on('select2:select', function(e) {
-                    var data = e.params.data;
-                    $('#creador_id').val(data.id);
-                });
-
 
                 $('#zona').select2({
                     theme: "bootstrap",
@@ -237,6 +135,34 @@
                     $('#zona').val(data.id);
                 });
 
+
+                $('#creador').select2({
+                    theme: "bootstrap",
+                    ajax: {
+                        dataType: 'json',
+                        url: "{!! route('util.lista_usuarios') !!}",
+                        type: "get",
+                        delay: 250,
+                        data: function(params) {
+                            return {
+                                search: params.term
+                            };
+                        },
+                        processResults: function(response) {
+                            return {
+                                results: response
+                            };
+                        },
+                        cache: true
+                    }
+
+                });
+
+                $('#creador').on('select2:select', function(e) {
+                    var data = e.params.data;
+                    $('#creador_id').val(data.id);
+                });
+
                 $('#candidato_id').select2({
                     theme: "bootstrap",
                     ajax: {
@@ -263,22 +189,6 @@
                     var data = e.params.data;
                     $('#candidato_id').val(data.id);
                 });
-
-                (() => {
-                    'use strict'
-
-                    const forms = document.querySelectorAll('.needs-validation')
-                    Array.from(forms).forEach(form => {
-                        form.addEventListener('submit', event => {
-                            if (!form.checkValidity()) {
-                                event.preventDefault()
-                                event.stopPropagation()
-                            }
-
-                            form.classList.add('was-validated')
-                        }, false)
-                    })
-                })()
             })
         </script>
     @endsection

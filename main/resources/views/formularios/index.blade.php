@@ -12,15 +12,23 @@
     <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
         <h1 class="display-4 fw-normal">Formularios</h1>
         <p class="fs-5 text-muted">Aqui podras encontrar la gestion de formularios, solo los administradores pueden crear,
-            editar y eliminar formularios.</p>
+            editar y eliminar formularios.
+
+        <div class="actions">
+            <a href="{{ route('import.view') }}" class="btn btn-sm btn-success">
+                <i class="fa fa-upload"></i>
+                Importar </a>
+        </div>
+        </p>
     </div>
 
     @if (Auth::user()->hasRole(['administrador', 'simple']))
         <div class="row">
             <div class="col-10">
+                <a href="{{ route('export.forms') }}" class="btn  btn-sm btn-success">Exportar</a>
             </div>
-            <div class="col-2 mb-2 text-right">
-                <a href="{{ route('formularios.crear') }}" class="btn btn-success">Crear formulario</a>
+            <div class="col-2 mb-2 text-center">
+                <a href="{{ route('formularios.crear') }}" class="btn  btn-sm btn-success">Crear formulario</a>
             </div>
         </div>
     @endif
@@ -32,9 +40,11 @@
             <thead>
                 <tr>
                     <th>Creador</th>
+                    <th>Identificación</th>
                     <th>Nombre completo</th>
                     <th>Email</th>
                     <th>Telefono</th>
+                    <th>Dirección</th>
                     <th>Puesto de votacion</th>
                     <th>Fecha actualizacion</th>
                     <th>Accion</th>
@@ -42,6 +52,7 @@
             </thead>
         </table>
     </div>
+
 @endsection
 
 @section('js-extra')
@@ -58,7 +69,12 @@
                 columns: [{
                         data: 'creador',
                         name: 'creador'
-                    }, {
+                    },
+                    {
+                        data: 'identificacion',
+                        name: 'identificacion'
+                    },
+                    {
                         data: 'nombre',
                         name: 'nombre'
                     },
@@ -69,6 +85,10 @@
                     {
                         data: 'telefono',
                         name: 'telefono'
+                    },
+                    {
+                        data: 'direccion',
+                        name: 'direccion'
                     },
                     {
                         data: 'puesto_votacion',
