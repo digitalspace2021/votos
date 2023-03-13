@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\FileManagementController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\FormularioController;
+use App\Http\Controllers\HighchartController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\UtilityController;
 use App\Models\User;
@@ -94,8 +95,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/export/formularios', [FileManagementController::class, 'exportFormulario'])->name('export.forms');
     Route::get('/import/viewss', [FileManagementController::class, 'importFormularioView'])->name('import.view');
     Route::post('/import/form', [FileManagementController::class, 'importFormulario'])->name('import.form');
-    
+
     // utils
     Route::get('get_veredas_and_comunas', [UtilityController::class, 'getVeredasAndComunas']);
-
+    Route::get('/statitics/{candidato_id?}', [HighchartController::class, 'handleChart']);
 });

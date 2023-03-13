@@ -91,7 +91,7 @@
                             <option value="0">Seleccion el tipo de zona</option>
                             <option value="Comuna" {{ $formulario->tipo_zona == 'Comuna' ? 'selected' : '' }}>Comuna
                             </option>
-                            <option value="Vereda" {{ $formulario->tipo_zona == 'Vereda' ? 'selected' : '' }}>Vereda
+                            <option value="Corregimiento" {{ $formulario->tipo_zona == 'Corregimiento' ? 'selected' : '' }}>Corregimiento
                             </option>
                         </select>
                         <div class="invalid-feedback">

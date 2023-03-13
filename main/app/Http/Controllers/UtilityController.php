@@ -10,7 +10,7 @@ class UtilityController extends Controller
 
     public function getVeredasAndComunas()
     {
-        if (request()->get('type') == 'Vereda') {
+        if (request()->get('type') == 'Corregimiento') {
             if (request()->get('id')) {
                 return response()->json(DB::table('veredas')->where('id', request()->get('id'))->select('name as text', 'id')->get());
             }

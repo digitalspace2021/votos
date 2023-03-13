@@ -130,7 +130,7 @@
                             <select name="tipo_zona" id="tipo_zona" class="form-control" required>
                                 <option value="0">Seleccion el tipo de zona</option>
                                 <option value="Comuna">Comuna</option>
-                                <option value="Vereda">Vereda</option>
+                                <option value="Corregimiento">Corregimiento</option>
                             </select>
                             <div class="invalid-feedback">
                                 Seleccion un tipo de zona valido
