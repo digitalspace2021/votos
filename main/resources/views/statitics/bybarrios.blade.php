@@ -18,12 +18,14 @@
             <label for="candidato_id" class="form-label">Candidato :
 
                 @foreach ($candidatos as $item)
+
                     @if ($item->id == $candidato)
                         <label>
                             {{ $item->name }}
                     @endif
 
             </label>
+
             @endforeach
 
             </label>

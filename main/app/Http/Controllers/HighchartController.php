@@ -13,6 +13,7 @@ class HighchartController extends Controller
     {
 
         $candidatos = Candidato::get(['name', 'id']);
+
         $DataUsers = (object)collect([]);
         $DataComunas = (object)collect([]);
         $DataCorregimientos = (object)collect([]);
@@ -20,6 +21,7 @@ class HighchartController extends Controller
         if (!$candidato) {
             return view('statitics.bybarrios', compact('DataCorregimientos', 'DataComunas', 'DataUsers'));
         }
+
         /****************************************************************************************************************************************** */
         $DataCorregimientos = Formulario::select('corregimientos.name as drilldown', 'corregimientos.name as name', DB::raw("COUNT(formularios.id) as y"), 'formularios.tipo_zona')
             ->join('veredas', 'formularios.zona', '=', 'veredas.id')
