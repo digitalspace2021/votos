@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Candidato;
 use App\Models\Formulario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -11,6 +12,7 @@ class HighchartController extends Controller
     public function handleChart($candidato = null)
     {
 
+        $candidatos = Candidato::get(['name', 'id']);
         $DataUsers = (object)collect([]);
         $DataComunas = (object)collect([]);
         $DataCorregimientos = (object)collect([]);
@@ -43,6 +45,6 @@ class HighchartController extends Controller
             ->groupBy('users.name')
             ->get();
 
-        return view('statitics.bybarrios', compact('DataCorregimientos', 'DataComunas', 'DataUsers'));
+        return view('statitics.bybarrios', compact('DataCorregimientos', 'DataComunas', 'DataUsers', 'candidatos', 'candidato'));
     }
 }

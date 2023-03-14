@@ -160,8 +160,6 @@
 
                 var zona = $('#tipo_zona').val()
 
-                console.log(zona)
-
                 $('#zona').select2({
                     theme: "bootstrap",
                     ajax: {
@@ -227,6 +225,7 @@
                     }
 
                 });
+                
                 $('#creador').val('{{ $formulario->propietario_id }}').trigger('change');
 
                 $('#creador').on('select2:select', function(e) {

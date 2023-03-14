@@ -12,12 +12,12 @@
     {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> --}}
 
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/data.js"></script>
-    <script src="https://code.highcharts.com/modules/drilldown.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="{{asset('js/highcharts.js')}}"></script>
+    <script src="{{asset('js/data.js')}}"></script>
+    <script src="{{asset('js/drilldown.js')}}"></script>
+    <script src="{{asset('js/exporting.js')}}"></script>
+    <script src="{{asset('js/export-data.js')}}"></script>
+    <script src="{{asset('js/accessibility.js')}}"></script>
 
 
     @yield('css-extra')

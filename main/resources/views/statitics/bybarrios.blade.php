@@ -15,7 +15,18 @@
         <h5 class="display-6 fw-normal">Estadisticas</h5>
 
         <div class="col-12">
-            <label for="candidato_id" class="form-label">Candidato</label>
+            <label for="candidato_id" class="form-label">Candidato :
+
+                @foreach ($candidatos as $item)
+                    @if ($item->id == $candidato)
+                        <label>
+                            {{ $item->name }}
+                    @endif
+
+            </label>
+            @endforeach
+
+            </label>
             <select class="form-control" name="candidato_id" id="candidato_id" onchange="getStatitics()" required></select>
             <div class="invalid-feedback">
                 Este campo es requerido.
@@ -49,260 +60,234 @@
 @section('js-extra')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
-            
-            $('#candidato_id').select2({
-                theme: "bootstrap",
-                ajax: {
-                    dataType: 'json',
-                    url: "{!! route('util.lista_candidatos') !!}",
-                    type: "get",
-                    delay: 250,
-                    data: function(params) {
-                        return {
-                            search: params.term
-                        };
-                    },
-                    processResults: function(response) {
-                        return {
-                            results: response
-                        };
-                    },
-                    cache: true
-                }
-
-            });
-
-            // $('#candidato_id').select2({
-            //     theme: "bootstrap",
-            //     ajax: {
-            //         dataType: 'json',
-            //         url: "{!! route('util.lista_candidatos') !!}",
-            //         type: "get",
-            //         delay: 250,
-            //         data: function(params) {
-            //             return {
-            //                 search: params.term
-            //             };
-            //         },
-            //         processResults: function(response) {
-            //             return {
-            //                 results: response
-            //             };
-            //         },
-            //         cache: true
-            //     }
-
-            // });
-
-            // $('#candidato_id').val(8).trigger('change');
-
-            function getStatitics() {
-                if ($('#candidato_id').val()) {
-                    window.location.href = '/statitics/' + $('#candidato_id').val()
-                }
+        $('#candidato_id').select2({
+            theme: "bootstrap",
+            ajax: {
+                dataType: 'json',
+                url: "{!! route('util.lista_candidatos') !!}",
+                type: "get",
+                delay: 250,
+                data: function(params) {
+                    return {
+                        search: params.term
+                    };
+                },
+                processResults: function(response) {
+                    return {
+                        results: response
+                    };
+                },
+                cache: true
             }
 
-            function openCity(cityName) {
-                var i;
-                var x = document.getElementsByClassName("city");
-                for (i = 0; i < x.length; i++) {
-                    x[i].style.display = "none";
-                }
-                document.getElementById(cityName).style.display = "block";
+        });
+
+        function getStatitics() {
+            if ($('#candidato_id').val()) {
+                window.location.href = '/statitics/' + $('#candidato_id').val()
             }
+        }
 
-            let data1 = <?= $DataUsers ?>;
-            let data2 = <?= $DataCorregimientos ?>;
-            let data3 = <?= $DataComunas ?>;
+        function openCity(cityName) {
+            var i;
+            var x = document.getElementsByClassName("city");
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            document.getElementById(cityName).style.display = "block";
+        }
 
-            let result1 = [];
-            let result2 = [];
-            let result3 = [];
+        let data1 = <?= $DataUsers ?>;
+        let data2 = <?= $DataCorregimientos ?>;
+        let data3 = <?= $DataComunas ?>;
 
-            data1.forEach(element => {
-                result1.push(element)
-            });
-            data2.forEach(element => {
-                result2.push(element)
-            });
-            data3.forEach(element => {
-                result3.push(element)
-            });
+        let result1 = [];
+        let result2 = [];
+        let result3 = [];
 
-            const chart1 = Highcharts.chart('container1', {
-                chart: {
-                    type: 'column'
-                },
-                title: {
-                    align: 'left',
-                    text: 'Votos por registrador'
-                },
-                subtitle: {
-                    align: 'left',
-                    text: 'Discrimiado por administradores.'
-                },
-                accessibility: {
-                    announceNewData: {
-                        enabled: true
-                    }
-                },
-                xAxis: {
-                    type: 'category'
-                },
-                yAxis: {
-                    title: {
-                        text: 'Total votos'
-                    }
+        data1.forEach(element => {
+            result1.push(element)
+        });
+        data2.forEach(element => {
+            result2.push(element)
+        });
+        data3.forEach(element => {
+            result3.push(element)
+        });
 
-                },
-                legend: {
-                    enabled: false
-                },
-                plotOptions: {
-                    series: {
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                            format: '{point.y:.1f}'
-                            // format: '{point.y:.1f}%'
-                        }
-                    }
-                },
-
-                tooltip: {
-                    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b><br/>'
-                },
-
-                series: [{
-                    name: 'Formularios',
-                    colorByPoint: true,
-                    data: result1
-                }],
-                drilldown: {
-                    breadcrumbs: {
-                        position: {
-                            align: 'right'
-                        }
-                    },
+        const chart1 = Highcharts.chart('container1', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                align: 'left',
+                text: 'Votos por registrador'
+            },
+            subtitle: {
+                align: 'left',
+                text: 'Discrimiado por administradores.'
+            },
+            accessibility: {
+                announceNewData: {
+                    enabled: true
                 }
-            });
-            const chart2 = Highcharts.chart('container2', {
-                chart: {
-                    type: 'column'
-                },
+            },
+            xAxis: {
+                type: 'category'
+            },
+            yAxis: {
                 title: {
-                    align: 'left',
-                    text: 'Votos por Corregimientos'
-                },
-                subtitle: {
-                    align: 'left',
-                    text: 'Discrimiado por Corregimientos.'
-                },
-                accessibility: {
-                    announceNewData: {
-                        enabled: true
-                    }
-                },
-                xAxis: {
-                    type: 'category'
-                },
-                yAxis: {
-                    title: {
-                        text: 'Total votos'
-                    }
-
-                },
-                legend: {
-                    enabled: false
-                },
-                plotOptions: {
-                    series: {
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                            format: '{point.y:.1f}'
-                            // format: '{point.y:.1f}%'
-                        }
-                    }
-                },
-
-                tooltip: {
-                    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b><br/>'
-                },
-
-                series: [{
-                    name: 'Formularios',
-                    colorByPoint: true,
-                    data: result2
-                }],
-                drilldown: {
-                    breadcrumbs: {
-                        position: {
-                            align: 'right'
-                        }
-                    },
+                    text: 'Total votos'
                 }
-            });
-            const chart3 = Highcharts.chart('container3', {
-                chart: {
-                    type: 'column'
+
+            },
+            legend: {
+                enabled: false
+            },
+            plotOptions: {
+                series: {
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.y:.1f}'
+                        // format: '{point.y:.1f}%'
+                    }
+                }
+            },
+
+            tooltip: {
+                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b><br/>'
+            },
+
+            series: [{
+                name: 'Formularios',
+                colorByPoint: true,
+                data: result1
+            }],
+            drilldown: {
+                breadcrumbs: {
+                    position: {
+                        align: 'right'
+                    }
                 },
+            }
+        });
+        const chart2 = Highcharts.chart('container2', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                align: 'left',
+                text: 'Votos por Corregimientos'
+            },
+            subtitle: {
+                align: 'left',
+                text: 'Discrimiado por Corregimientos.'
+            },
+            accessibility: {
+                announceNewData: {
+                    enabled: true
+                }
+            },
+            xAxis: {
+                type: 'category'
+            },
+            yAxis: {
                 title: {
-                    align: 'left',
-                    text: 'Votos por Comunas'
-                },
-                subtitle: {
-                    align: 'left',
-                    text: 'Discrimiado por Comunas.'
-                },
-                accessibility: {
-                    announceNewData: {
-                        enabled: true
-                    }
-                },
-                xAxis: {
-                    type: 'category'
-                },
-                yAxis: {
-                    title: {
-                        text: 'Total votos'
-                    }
-
-                },
-                legend: {
-                    enabled: false
-                },
-                plotOptions: {
-                    series: {
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                            format: '{point.y:.1f}'
-                            // format: '{point.y:.1f}%'
-                        }
-                    }
-                },
-
-                tooltip: {
-                    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b><br/>'
-                },
-
-                series: [{
-                    name: 'Formularios',
-                    colorByPoint: true,
-                    data: result3
-                }],
-                drilldown: {
-                    breadcrumbs: {
-                        position: {
-                            align: 'right'
-                        }
-                    },
+                    text: 'Total votos'
                 }
-            });
 
+            },
+            legend: {
+                enabled: false
+            },
+            plotOptions: {
+                series: {
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.y:.1f}'
+                        // format: '{point.y:.1f}%'
+                    }
+                }
+            },
+
+            tooltip: {
+                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b><br/>'
+            },
+
+            series: [{
+                name: 'Formularios',
+                colorByPoint: true,
+                data: result2
+            }],
+            drilldown: {
+                breadcrumbs: {
+                    position: {
+                        align: 'right'
+                    }
+                },
+            }
+        });
+        const chart3 = Highcharts.chart('container3', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                align: 'left',
+                text: 'Votos por Comunas'
+            },
+            subtitle: {
+                align: 'left',
+                text: 'Discrimiado por Comunas.'
+            },
+            accessibility: {
+                announceNewData: {
+                    enabled: true
+                }
+            },
+            xAxis: {
+                type: 'category'
+            },
+            yAxis: {
+                title: {
+                    text: 'Total votos'
+                }
+
+            },
+            legend: {
+                enabled: false
+            },
+            plotOptions: {
+                series: {
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.y:.1f}'
+                        // format: '{point.y:.1f}%'
+                    }
+                }
+            },
+
+            tooltip: {
+                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b><br/>'
+            },
+
+            series: [{
+                name: 'Formularios',
+                colorByPoint: true,
+                data: result3
+            }],
+            drilldown: {
+                breadcrumbs: {
+                    position: {
+                        align: 'right'
+                    }
+                },
+            }
+        });
     </script>
 @endsection
