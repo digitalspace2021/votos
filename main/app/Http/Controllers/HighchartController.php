@@ -19,7 +19,7 @@ class HighchartController extends Controller
         $DataCorregimientos = (object)collect([]);
 
         if (!$candidato) {
-            return view('statitics.bybarrios', compact('DataCorregimientos', 'DataComunas', 'DataUsers'));
+            return view('statitics.bybarrios', compact('DataCorregimientos', 'DataComunas', 'DataUsers', 'candidatos', 'candidato'));
         }
 
         /****************************************************************************************************************************************** */
