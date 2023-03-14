@@ -111,7 +111,6 @@ class CargoController extends Controller
 
         if (DB::table('candidatos')->where('cargo_id', $id)->get()) {
             Alert::error(trans($this->className), 'No puedes eliminar este cargo ' . $this->singular . ' solicitado.');
-            Alert::success(trans($this->className), 'Se ha actualizado el ' . $this->singular . ' con exito!');
             return redirect()->route(trans($this->plural));
         }
 
