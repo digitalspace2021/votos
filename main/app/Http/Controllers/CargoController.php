@@ -109,7 +109,7 @@ class CargoController extends Controller
     {
         $cargo = $this->model::find($id);
 
-        if (DB::table('candidatos')->where('cargo_id', $id)->get()) {
+        if (DB::table('candidatos')->where('cargo_id', $id)->count()) {
             Alert::error(trans($this->className), 'No puedes eliminar este cargo ' . $this->singular . ' solicitado.');
             return redirect()->route(trans($this->plural));
         }
