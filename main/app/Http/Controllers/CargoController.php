@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateCargoRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -94,7 +95,9 @@ class CargoController extends Controller
 
     public function eliminar(Request $request, $id)
     {
+
         $cargo = $this->model::find($id);
+
         if (!$cargo) {
             Alert::error(trans($this->className), 'No se ha encontrado el ' . $this->singular . ' solicitado.');
             return redirect()->route(trans($this->plural));
@@ -105,6 +108,13 @@ class CargoController extends Controller
     public function eliminar_confirmar(Request $request, $id)
     {
         $cargo = $this->model::find($id);
+
+        if (DB::table('candidatos')->where('cargo_id', $id)->get()) {
+            Alert::error(trans($this->className), 'No puedes eliminar este cargo ' . $this->singular . ' solicitado.');
+            Alert::success(trans($this->className), 'Se ha actualizado el ' . $this->singular . ' con exito!');
+            return redirect()->route(trans($this->plural));
+        }
+
         if (!$cargo) {
             Alert::error(trans($this->className), 'No se ha encontrado el ' . $this->singular . ' solicitado.');
             return redirect()->route(trans($this->plural));
