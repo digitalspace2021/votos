@@ -10,15 +10,31 @@ class UtilityController extends Controller
 
     public function getVeredasAndComunas()
     {
+
         if (request()->get('type') == 'Corregimiento') {
             if (request()->get('id')) {
                 return response()->json(DB::table('veredas')->where('id', request()->get('id'))->select('name as text', 'id')->get());
             }
+            if (request()->get('search', null)) {
+                return response()->json(DB::table('veredas')->select('name as text', 'id')->where('name', 'Like', "%" . request()->get('search') . "%")->get());
+            }
             return response()->json(DB::table('veredas')->select('name as text', 'id')->get());
         }
-        if (request()->get('id')) {
-            return response()->json(DB::table('barrios')->where('id', request()->get('id'))->select('name as text', 'id')->get());
+
+        if (request()->get('type') == 'Comuna') {
+            if (request()->get('id')) {
+                return response()->json(DB::table('barrios')->where('id', request()->get('id'))->select('name as text', 'id')->get());
+            }
+            if (request()->get('search', null)) {
+                return response()->json(DB::table('barrios')->select('name as text', 'id')->where('name', 'Like', "%" . request()->get('search') . "%")->get());
+            }
+            return response()->json(DB::table('barrios')->select('name as text', 'id')->get());
         }
-        return response()->json(DB::table('barrios')->select('name as text', 'id')->get());
+
+
+        // if (request()->get('id')) {
+        //     return response()->json(DB::table('barrios')->where('id', request()->get('id'))->select('name as text', 'id')->get());
+        // }
+        // return response()->json(DB::table('barrios')->select('name as text', 'id')->get());
     }
 }
