@@ -22,7 +22,7 @@
         </p>
     </div>
 
-    <div class="l0row">
+    <div class="row">
         @if (Auth::user()->hasRole(['administrador']))
             <div class="col-10">
                 <a href="{{ route('export.forms') }}" class="btn  btn-sm btn-success">Exportar</a>
