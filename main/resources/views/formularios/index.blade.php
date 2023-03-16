@@ -31,9 +31,6 @@
     @endif
     @if (Auth::user()->hasRole(['administrador', 'simple']))
         <div class="row">
-            <div class="col-10">
-                <a href="{{ route('export.forms') }}" class="btn  btn-sm btn-success">Exportar</a>
-            </div>
             <div class="col-2 mb-2 text-center">
                 <a href="{{ route('formularios.crear') }}" class="btn  btn-sm btn-success">Crear formulario</a>
             </div>
