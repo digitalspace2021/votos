@@ -22,20 +22,18 @@
         </p>
     </div>
 
-    @if (Auth::user()->hasRole(['administrador']))
-        <div class="row">
+    <div class="l0row">
+        @if (Auth::user()->hasRole(['administrador']))
             <div class="col-10">
                 <a href="{{ route('export.forms') }}" class="btn  btn-sm btn-success">Exportar</a>
             </div>
-        </div>
-    @endif
-    @if (Auth::user()->hasRole(['administrador', 'simple']))
-        <div class="row">
+        @endif
+        @if (Auth::user()->hasRole(['administrador', 'simple']))
             <div class="col-2 mb-2 text-center">
                 <a href="{{ route('formularios.crear') }}" class="btn  btn-sm btn-success">Crear formulario</a>
             </div>
-        </div>
-    @endif
+        @endif
+    </div>
 @endsection
 
 @section('cuerpo')
@@ -56,7 +54,6 @@
             </thead>
         </table>
     </div>
-
 @endsection
 
 @section('js-extra')
