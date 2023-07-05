@@ -67,7 +67,7 @@ Problematicas
                         name: 'identificacion'
                     },
                     {
-                        data: 'nombre',
+                        data: 'nombre_completo',
                         name: 'nombre'
                     },
                     {

@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Problem\StoreRequest;
-use App\Models\Problem;
-use Dflydev\DotAccessData\Data;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
 
 class ProblemController extends Controller
@@ -18,14 +18,12 @@ class ProblemController extends Controller
 
     public function getAll()
     {
-        /* $problems = Problem::with('form')->get(); */
-
         /* colums nombre completo from formularios nombre+apellido, telefono, direccion, responsable, pruesto_votacion from table formularios and columns acciones view, edit and status */
-
         $problems = DataTables::of(DB::table('problems')
             ->join('formularios', 'problems.form_id', '=', 'formularios.id')
             ->join('users', 'formularios.propietario_id', '=', 'users.id')
             ->select('problems.id', 'formularios.identificacion', 'formularios.nombre', 'formularios.apellido', 'formularios.telefono', 'formularios.direccion', 'users.name', 'formularios.puesto_votacion', 'problems.estado')
+            ->addSelect(DB::raw("CONCAT(formularios.nombre, ' ', formularios.apellido) AS nombre_completo"))
             ->get())
             ->addColumn('acciones', function ($problem) {
                 $btn = '' /* '<a href="' . route('problems.show', $problem->id) . '" class="btn btn-outline-secondary" title="Ver problema"><i class="fa fa-eye"></i></a>' */;
@@ -46,13 +44,14 @@ class ProblemController extends Controller
             ->make(true);
 
         return $problems;
-
-        /* return response()->json([
-            'problems' => $problems
-        ]); */
     }
 
-    public function create()
+    /**
+     * The function retrieves all users from the database and passes them to the create view.
+     * 
+     * @return View a view called 'problems.create' and passing the 'users' variable to the view.
+     */
+    public function create(): View
     {
         $users = DB::table('users')->get();
         return view('problems.create', compact('users'));
@@ -63,7 +62,17 @@ class ProblemController extends Controller
         return view('problems.edit', compact('id'));
     }
 
-    public function store(StoreRequest $request)
+    /**
+     * The store function is used to store form data and related problems in a database
+     * transaction, and then redirect the user with a success or error message.
+     * 
+     * @param StoreRequest request The `` parameter is an instance of the `StoreRequest` class,
+     * which is a custom request class that handles the validation and authorization logic for the
+     * store method. It contains the data submitted by the user through a form.
+     * 
+     * @return RedirectResponse a RedirectResponse.
+     */
+    public function store(StoreRequest $request): RedirectResponse
     {
         DB::beginTransaction();
 
@@ -95,7 +104,17 @@ class ProblemController extends Controller
         }
     }
 
-    public function destroy(int $id)
+    /**
+     * The function destroys a problem and its associated formularios from the database, and returns a
+     * redirect response with a success message if successful, or an error message if there was an
+     * error.
+     * 
+     * @param int id The "id" parameter is an integer that represents the unique identifier of the
+     * problem or formularios that you want to delete from the database.
+     * 
+     * @return RedirectResponse a RedirectResponse.
+     */
+    public function destroy(int $id): RedirectResponse
     {
         DB::beginTransaction();
 
