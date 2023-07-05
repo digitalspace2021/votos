@@ -9,7 +9,7 @@ class Formulario extends Model
 {
     use HasFactory;
 
-    protected $fillable=[
+    protected $fillable = [
         'propietario_id',
         'candidato_id',
         'identificacion',
@@ -24,4 +24,9 @@ class Formulario extends Model
         'puesto_votacion',
         'mensaje'
     ];
+
+    public function problem()
+    {
+        return $this->hasOne(Problem::class, 'form_id', 'id');
+    }
 }

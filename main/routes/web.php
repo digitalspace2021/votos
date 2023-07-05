@@ -7,6 +7,7 @@ use App\Http\Controllers\FileManagementController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\FormularioController;
 use App\Http\Controllers\HighchartController;
+use App\Http\Controllers\ProblemController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\UtilityController;
 use App\Models\User;
@@ -99,4 +100,10 @@ Route::middleware(['auth'])->group(function () {
     // utils
     Route::get('get_veredas_and_comunas', [UtilityController::class, 'getVeredasAndComunas']);
     Route::get('/statitics/{candidato_id?}', [HighchartController::class, 'handleChart']);
+
+    Route::get('/problems', [ProblemController::class, 'index'])->name('problems.index');
+    Route::get('/problems/create', [ProblemController::class, 'create'])->name('problems.create');
+    Route::post('/problems/create', [ProblemController::class, 'store'])->name('problems.store');
+    Route::get('/problems/getall', [ProblemController::class, 'getAll'])->name('problems.getAll');
+    Route::get('/problems/{id}/edit', [ProblemController::class, 'edit'])->name('problems.edit');
 });
