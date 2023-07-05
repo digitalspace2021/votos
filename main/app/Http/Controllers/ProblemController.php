@@ -25,12 +25,12 @@ class ProblemController extends Controller
         $problems = DataTables::of(DB::table('problems')
             ->join('formularios', 'problems.form_id', '=', 'formularios.id')
             ->join('users', 'formularios.propietario_id', '=', 'users.id')
-            ->select('problems.id', 'formularios.identificacion' ,'formularios.nombre', 'formularios.apellido', 'formularios.telefono', 'formularios.direccion', 'users.name', 'formularios.puesto_votacion', 'problems.estado')
+            ->select('problems.id', 'formularios.identificacion', 'formularios.nombre', 'formularios.apellido', 'formularios.telefono', 'formularios.direccion', 'users.name', 'formularios.puesto_votacion', 'problems.estado')
             ->get())
             ->addColumn('acciones', function ($problem) {
                 $btn = '' /* '<a href="' . route('problems.show', $problem->id) . '" class="btn btn-outline-secondary" title="Ver problema"><i class="fa fa-eye"></i></a>' */;
                 $btn .= '<a href="' . route('problems.edit', $problem->id) . '" class="btn btn-outline-primary m-2" title="Editar problema"><i class="fa fa-edit"></i></a>';
-                /* $btn .= '<a href="' . route('problems.destroy', $problem->id) . '" class="btn btn-outline-danger" title="Eliminar problema"><i class="fa fa-times"></i></a>'; */
+                $btn .= '<a href="' . route('problems.destroy', $problem->id) . '" class="btn btn-outline-danger" title="Eliminar problema"><i class="fa fa-times"></i></a>';
                 /* $btn .= '<a href="' . route('problems.status', $problem->id) . '" class="btn btn-outline-success m-2" title="Cambiar estado"><i class="fa fa-check"></i></a>'; */
 
                 return $btn;
@@ -92,6 +92,23 @@ class ProblemController extends Controller
         } catch (\Throwable $th) {
             DB::rollback();
             return back()->with('error', 'Error al crear el problema');
+        }
+    }
+
+    public function destroy(int $id)
+    {
+        DB::beginTransaction();
+
+        try {
+            DB::table('problems')->where('id', $id)->delete();
+            DB::table('formularios')->where('id', $id)->delete();
+
+            DB::commit();
+
+            return redirect()->route('problems.index')->with('success', 'Problema eliminado correctamente');
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return back()->with('error', 'Error al eliminar el problema');
         }
     }
 }

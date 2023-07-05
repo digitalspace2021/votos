@@ -106,4 +106,5 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/problems/create', [ProblemController::class, 'store'])->name('problems.store');
     Route::get('/problems/getall', [ProblemController::class, 'getAll'])->name('problems.getAll');
     Route::get('/problems/{id}/edit', [ProblemController::class, 'edit'])->name('problems.edit');
+    Route::get('/problems/{id}/delete', [ProblemController::class, 'destroy'])->name('problems.destroy');
 });

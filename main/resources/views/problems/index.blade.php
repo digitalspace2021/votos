@@ -17,9 +17,9 @@ Problematicas
 </div>
 
 
-@if (session('success'))
-<div class="alert alert-success">
-    {{ session('success') }}
+@if (session('success') || session('error'))
+<div class="alert alert-{{session('success') ? 'success' : 'danger'}} mx-2">
+    {{session('success') ?? session('error')}}
 </div>
 @endif
 
