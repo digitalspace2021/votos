@@ -23,7 +23,12 @@ class FormularioController extends Controller
 
     public function tabla()
     {
-        return Datatables::of($this->model::query())
+        /* only register if not have relation with problems or if has the estado in problems is true */
+        $forms = $this->model::whereDoesntHave('problem', function ($query) {
+            $query->where('estado', false);
+        })->orWhereDoesntHave('problem');
+        
+        return Datatables::of($forms)
             ->addColumn('creador', function ($col) {
                 $creador = User::find($col->propietario_id);
                 return $creador ? $creador->name : '-';
