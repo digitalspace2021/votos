@@ -22,11 +22,8 @@ class Formulario extends Model
         'tipo_zona',
         'zona',
         'puesto_votacion',
-        'mensaje'
+        'mensaje',
+        'estado',
+        'vinculo'
     ];
-
-    public function problem()
-    {
-        return $this->hasOne(Problem::class, 'form_id', 'id');
-    }
 }

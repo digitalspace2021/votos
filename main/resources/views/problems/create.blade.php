@@ -71,6 +71,29 @@ Crear formulario
                     @enderror
                 </div>
                 <div class="col-md-6 mb-2">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" name="email" required>
+                    @error('email')
+                    <div class="text-danger">
+                        {{ $message }}
+                    </div>
+                    @enderror
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label for="genero" class="form-label">Genero</label>
+                    <select name="genero" id="" class="form-select">
+                        <option value="">Selecciona un genero</option>
+                        <option value="Hombre">Hombre</option>
+                        <option value="Mujer">Mujer</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                    @error('genero')
+                    <div class="text-danger">
+                        {{ $message }}
+                    </div>
+                    @enderror
+                </div>
+                <div class="col-md-6 mb-2">
                     <label for="telefono" class="form-label">Telefono</label>
                     <input type="text" class="form-control" name="telefono" required>
                     @error('telefono')
@@ -107,9 +130,9 @@ Crear formulario
                     @enderror
                 </div>
                 <div class="col-md-12" id="desc_problem">
-                    <label for="descripcion">Descripcion</label>
+                    <label for="descripcion">Problematica</label>
                     <textarea name="descripcion" id="" cols="30" rows="5" class="form-control"
-                        required>{{old('desc')}}</textarea>
+                        required>{{old('descripcion')}}</textarea>
 
                     @error('descripcion')
                     <div class="text-danger">

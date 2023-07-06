@@ -19,11 +19,11 @@ class ProblemController extends Controller
     public function getAll()
     {
         /* colums nombre completo from formularios nombre+apellido, telefono, direccion, responsable, pruesto_votacion from table formularios and columns acciones view, edit and status */
-        $problems = DataTables::of(DB::table('problems')
-            ->join('formularios', 'problems.form_id', '=', 'formularios.id')
+        $problems = DataTables::of(DB::table('formularios')
             ->join('users', 'formularios.propietario_id', '=', 'users.id')
-            ->select('problems.id', 'formularios.identificacion', 'formularios.nombre', 'formularios.apellido', 'formularios.telefono', 'formularios.direccion', 'users.name', 'formularios.puesto_votacion', 'problems.estado')
+            ->select('formularios.id', 'formularios.identificacion', 'formularios.nombre', 'formularios.apellido', 'formularios.telefono', 'formularios.direccion', 'users.name', 'formularios.puesto_votacion', 'formularios.estado')
             ->addSelect(DB::raw("CONCAT(formularios.nombre, ' ', formularios.apellido) AS nombre_completo"))
+            ->where('formularios.estado', false)
             ->get())
             ->addColumn('acciones', function ($problem) {
                 $btn = '' /* '<a href="' . route('problems.show', $problem->id) . '" class="btn btn-outline-secondary" title="Ver problema"><i class="fa fa-eye"></i></a>' */;
@@ -77,7 +77,7 @@ class ProblemController extends Controller
         DB::beginTransaction();
 
         try {
-            $form = DB::table('formularios')->insertGetId([
+            DB::table('formularios')->insertGetId([
                 'propietario_id' => $request->creador,
                 'identificacion' => $request->identificacion,
                 'nombre' => $request->nombres,
@@ -85,16 +85,12 @@ class ProblemController extends Controller
                 'telefono' => $request->telefono,
                 'direccion' => $request->direccion,
                 'puesto_votacion' => $request->puesto,
-                'created_at' => now(),
-            ]);
-
-            DB::table('problems')->insert([
+                'estado' => false,
+                'genero' => $request->genero,
+                'email' => $request->email,
                 'vinculo' => $request->vinculo,
-                'descripcion' => $request->descripcion,
-                'form_id' => $form,
                 'created_at' => now(),
             ]);
-
             DB::commit();
 
             return redirect()->route('problems.index')->with('success', 'Problema creado correctamente');
@@ -119,7 +115,6 @@ class ProblemController extends Controller
         DB::beginTransaction();
 
         try {
-            DB::table('problems')->where('id', $id)->delete();
             DB::table('formularios')->where('id', $id)->delete();
 
             DB::commit();

@@ -33,6 +33,8 @@ class StoreRequest extends FormRequest
             'vinculo' => ['required'],
             'puesto' => ['required'],
             'descripcion' => ['required', 'string', 'min:10'],
+            'email' => ['required', 'string', 'email', 'max:255'],
+            'genero' => ['required', 'string', 'in:Hombre,Mujer,Otro'],
         ];
     }
 }
