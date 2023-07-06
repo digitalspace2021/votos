@@ -138,7 +138,7 @@
                         </div>
 
                         <div class="col-6">
-                            <label for="zona" class="form-label">Comuna / Corregimiento</label>
+                            <label for="zona" class="form-label" id="label_zona">Comuna / Corregimiento</label>
                             <select class="form-control" name="zona" id="zona" required></select>
                             {{-- <input type="text" class="form-control" id="zona" name="zona"
                                 placeholder="Comuna" required> --}}
@@ -279,6 +279,14 @@
                         }, false)
                     })
                 })()
-            })
+
+                $("#tipo_zona").change(function() {
+                    if ($(this).val() == 'Corregimiento') {
+                        $("#label_zona").html('Corregimiento');
+                    } else {
+                        $("#label_zona").html('Comuna');
+                    }
+                });
+            });
         </script>
     @endsection
