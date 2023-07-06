@@ -30,7 +30,7 @@ class ProblemController extends Controller
                 $btn = '' /* '<a href="' . route('problems.show', $problem->id) . '" class="btn btn-outline-secondary" title="Ver problema"><i class="fa fa-eye"></i></a>' */;
                 $btn .= '<a href="' . route('problems.edit', $problem->id) . '" class="btn btn-outline-primary m-2" title="Editar problema"><i class="fa fa-edit"></i></a>';
                 $btn .= '<a href="' . route('problems.destroy', $problem->id) . '" class="btn btn-outline-danger" title="Eliminar problema"><i class="fa fa-times"></i></a>';
-                /* $btn .= '<a href="' . route('problems.status', $problem->id) . '" class="btn btn-outline-success m-2" title="Cambiar estado"><i class="fa fa-check"></i></a>'; */
+                $btn .= '<button prid="'.$problem->id.'" class="btn btn-outline-success m-2 status" title="Cambiar estado"><i class="fa fa-check"></i></button>';
 
                 return $btn;
             })
@@ -169,5 +169,38 @@ class ProblemController extends Controller
             DB::rollback();
             return back()->with('error', 'Error al eliminar el problema');
         }
+    }
+
+
+    /**
+     * The function changes the status of a problem and updates its zone and type of zone, and returns
+     * a success message based on the new status.
+     * 
+     * @param Request request The  parameter is an instance of the Request class, which
+     * represents an HTTP request. It contains information about the request such as the request
+     * method, headers, and input data.
+     * @param id The "id" parameter is the unique identifier of the problem that needs to be updated.
+     * It is used to find the specific problem in the database.
+     * 
+     * @return RedirectResponse a RedirectResponse.
+     */
+    public function changeStatus(Request $request, $id): RedirectResponse
+    {
+        $problem = Formulario::findOrFail($id);
+
+        if (!$problem) {
+            return back()->with('error', 'Error al cambiar el estado del problema');
+        }
+
+        $problem->update([
+            'estado' => !$problem->estado,
+            'zona' => $request->zona,
+            'tipo_zona' => $request->tipo_zona,
+        ]);
+
+        if ($problem->estado == true) {
+            return back()->with('success', 'Problematica confirmada correctamente');
+        }
+        return back()->with('success', 'Problematica pendiente correctamente');
     }
 }

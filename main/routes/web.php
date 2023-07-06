@@ -108,4 +108,5 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/problems/{id}/edit', [ProblemController::class, 'edit'])->name('problems.edit');
     Route::get('/problems/{id}/delete', [ProblemController::class, 'destroy'])->name('problems.destroy');
     Route::put('/problems/{id}/update', [ProblemController::class, 'update'])->name('problems.update');
+    Route::put('/problem/{id}/status', [ProblemController::class, 'changeStatus'])->name('problems.changeStatus');
 });
