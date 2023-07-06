@@ -33,7 +33,7 @@ Crear formulario
                     <label for="creador" class="form-label">Quien lo diligencia</label>
                     <select class="form-control" name="creador" id="creador" required>
                         @foreach ($users as $user)
-                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                        <option value="{{ $user->id }}" {{old('creador') == $user->id ? 'selected' : ''}} >{{ $user->name }}</option>
                         @endforeach
                     </select>
                     @error('creador')
@@ -44,7 +44,7 @@ Crear formulario
                 </div>
                 <div class="col-md-12 mb-2">
                     <label for="identificacion">Identificacion</label>
-                    <input type="number" name="identificacion" id="" class="form-control" required>
+                    <input type="number" name="identificacion" id="" class="form-control" value="{{old('identificacion')}}" required>
                     @error('identificacion')
                     <div class="text-danger">
                         {{ $message }}
@@ -53,7 +53,7 @@ Crear formulario
                 </div>
                 <div class="col-md-6 mb-2">
                     <label for="nombres" class="form-label">Nombres</label>
-                    <input type="text" class="form-control" name="nombres" required>
+                    <input type="text" class="form-control" name="nombres" value="{{old('nombres')}}" required>
                     @error('nombres')
                     hola
                     <div class="text-danger">
@@ -63,7 +63,7 @@ Crear formulario
                 </div>
                 <div class="col-md-6 mb-2">
                     <label for="apellidos" class="form-label">Apellidos</label>
-                    <input type="text" class="form-control" name="apellidos" required>
+                    <input type="text" class="form-control" name="apellidos" value="{{old('apellidos')}}" required>
                     @error('apellidos')
                     <div class="text-danger">
                         {{ $message }}
@@ -72,7 +72,7 @@ Crear formulario
                 </div>
                 <div class="col-md-6 mb-2">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" name="email" required>
+                    <input type="email" class="form-control" name="email" value="{{old('email')}}" required>
                     @error('email')
                     <div class="text-danger">
                         {{ $message }}
@@ -83,9 +83,9 @@ Crear formulario
                     <label for="genero" class="form-label">Genero</label>
                     <select name="genero" id="" class="form-select">
                         <option value="">Selecciona un genero</option>
-                        <option value="Hombre">Hombre</option>
-                        <option value="Mujer">Mujer</option>
-                        <option value="Otro">Otro</option>
+                        <option value="Hombre" {{old('genero') == 'Hombre' ? 'selected' : ''}}>Hombre</option>
+                        <option value="Mujer" {{old('genero') == 'Mujer' ? 'selected' : ''}}>Mujer</option>
+                        <option value="Otro" {{old('genero') == 'Otro' ? 'selected' : ''}}>Otro</option>
                     </select>
                     @error('genero')
                     <div class="text-danger">
@@ -95,7 +95,7 @@ Crear formulario
                 </div>
                 <div class="col-md-6 mb-2">
                     <label for="telefono" class="form-label">Telefono</label>
-                    <input type="text" class="form-control" name="telefono" required>
+                    <input type="text" class="form-control" name="telefono" value="{{old('telefono')}}" required>
                     @error('telefono')
                     <div class="text-danger">
                         {{ $message }}
@@ -104,7 +104,7 @@ Crear formulario
                 </div>
                 <div class="col-md-6 mb-2">
                     <label for="direccion" class="form-label">Direccion</label>
-                    <input type="text" class="form-control" name="direccion" required>
+                    <input type="text" class="form-control" name="direccion" value="{{old('direccion')}}" required>
                     @error('direccion')
                     <div class="text-danger">
                         {{ $message }}
@@ -113,7 +113,7 @@ Crear formulario
                 </div>
                 <div class="col-md-6 mb-2">
                     <label for="vinculo" class="form-label">Vinculo</label>
-                    <input type="text" class="form-control" name="vinculo" required>
+                    <input type="text" class="form-control" name="vinculo" value="{{old('vinculo')}}" required>
                     @error('vinculo')
                     <div class="text-danger">
                         {{ $message }}
@@ -122,7 +122,7 @@ Crear formulario
                 </div>
                 <div class="col-md-6 mb-2">
                     <label for="puesto" class="form-label">Puesto de votacion</label>
-                    <input type="number" class="form-control" name="puesto" required>
+                    <input type="number" class="form-control" name="puesto" value="{{old('puesto')}}" required>
                     @error('puesto')
                     <div class="text-danger">
                         {{ $message }}
@@ -131,8 +131,7 @@ Crear formulario
                 </div>
                 <div class="col-md-12" id="desc_problem">
                     <label for="descripcion">Problematica</label>
-                    <textarea name="descripcion" id="" cols="30" rows="5" class="form-control"
-                        required>{{old('descripcion')}}</textarea>
+                    <textarea name="descripcion" id="" cols="30" rows="5" class="form-control"required>{{old('descripcion')}}</textarea>
 
                     @error('descripcion')
                     <div class="text-danger">
