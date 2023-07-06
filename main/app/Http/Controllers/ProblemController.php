@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Problem\StoreRequest;
+use App\Models\Formulario;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -59,45 +60,48 @@ class ProblemController extends Controller
 
     public function edit($id)
     {
-        return view('problems.edit', compact('id'));
+        $users = DB::table('users')->get();
+
+        $problem = Formulario::findOrFail($id);
+
+        if ($problem->estado == true || !$problem) {
+            return back()->with('error', 'No se puede editar un problema resuelto');
+        }
+
+        return view('problems.edit', compact('users', 'problem'));
     }
 
     /**
-     * The store function is used to store form data and related problems in a database
-     * transaction, and then redirect the user with a success or error message.
+     * The function stores a new record in the "Formulario" table and redirects the user to the index
+     * page with a success message if successful, or returns back with an error message if not.
      * 
-     * @param StoreRequest request The `` parameter is an instance of the `StoreRequest` class,
-     * which is a custom request class that handles the validation and authorization logic for the
-     * store method. It contains the data submitted by the user through a form.
+     * @param StoreRequest request The  parameter is an instance of the StoreRequest class,
+     * which is a custom request class that handles the validation and data retrieval for the store
+     * method. It contains the data submitted by the user through a form.
      * 
      * @return RedirectResponse a RedirectResponse.
      */
     public function store(StoreRequest $request): RedirectResponse
     {
-        DB::beginTransaction();
+        $problem = Formulario::create([
+            'propietario_id' => $request->creador,
+            'identificacion' => $request->identificacion,
+            'nombre' => $request->nombres,
+            'apellido' => $request->apellidos,
+            'telefono' => $request->telefono,
+            'direccion' => $request->direccion,
+            'puesto_votacion' => $request->puesto,
+            'estado' => false,
+            'genero' => $request->genero,
+            'email' => $request->email,
+            'vinculo' => $request->vinculo,
+            'mensaje' => $request->descripcion,
+        ]);
 
-        try {
-            DB::table('formularios')->insertGetId([
-                'propietario_id' => $request->creador,
-                'identificacion' => $request->identificacion,
-                'nombre' => $request->nombres,
-                'apellido' => $request->apellidos,
-                'telefono' => $request->telefono,
-                'direccion' => $request->direccion,
-                'puesto_votacion' => $request->puesto,
-                'estado' => false,
-                'genero' => $request->genero,
-                'email' => $request->email,
-                'vinculo' => $request->vinculo,
-                'created_at' => now(),
-            ]);
-            DB::commit();
-
+        if ($problem) {
             return redirect()->route('problems.index')->with('success', 'Problema creado correctamente');
-        } catch (\Throwable $th) {
-            DB::rollback();
-            return back()->with('error', 'Error al crear el problema');
         }
+        return back()->with('error', 'Error al crear el problema');
     }
 
     /**
