@@ -27,10 +27,10 @@ class ProblemController extends Controller
             ->where('formularios.estado', false)
             ->get())
             ->addColumn('acciones', function ($problem) {
-                $btn = '' /* '<a href="' . route('problems.show', $problem->id) . '" class="btn btn-outline-secondary" title="Ver problema"><i class="fa fa-eye"></i></a>' */;
+                $btn = '<a href="' . route('problems.show', $problem->id) . '" class="btn btn-outline-secondary" title="Ver problema"><i class="fa fa-eye"></i></a>';
                 $btn .= '<a href="' . route('problems.edit', $problem->id) . '" class="btn btn-outline-primary m-2" title="Editar problema"><i class="fa fa-edit"></i></a>';
                 $btn .= '<a href="' . route('problems.destroy', $problem->id) . '" class="btn btn-outline-danger" title="Eliminar problema"><i class="fa fa-times"></i></a>';
-                $btn .= '<button prid="'.$problem->id.'" class="btn btn-outline-success m-2 status" title="Cambiar estado"><i class="fa fa-check"></i></button>';
+                $btn .= '<button prid="' . $problem->id . '" class="btn btn-outline-success m-2 status" title="Cambiar estado"><i class="fa fa-check"></i></button>';
 
                 return $btn;
             })
@@ -202,5 +202,17 @@ class ProblemController extends Controller
             return back()->with('success', 'Problematica confirmada correctamente');
         }
         return back()->with('success', 'Problematica pendiente correctamente');
+    }
+
+    public function show($id)
+    {
+        $problem = Formulario::findOrFail($id);
+        $users = DB::table('users')->get();
+
+        if(!$problem){
+            return back()->with('error', 'Error al mostrar el problema');
+        }
+
+        return view('problems.show', compact('problem', 'users'));
     }
 }
