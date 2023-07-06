@@ -121,7 +121,7 @@
                         </div>
 
                         <div class="col-6">
-                            <label for="zona" class="form-label">Comuna / Corregimiento</label>
+                            <label for="zona" class="form-label" id="label_zona">Comuna / Corregimiento</label>
                             <select class="form-control" name="zona" id="zona" required></select>
                             <div class="invalid-feedback">
                                 Por favor ingresa tu Comuna / Corregimiento.
@@ -135,7 +135,7 @@
                         </div>
 
                         <div class="col-12">
-                            <label for="mensaje" class="form-label">Mensaje</label>
+                            <label for="mensaje" class="form-label">Problematica</label>
                             <textarea name="mensaje" ea class="form-control" cols="30" rows="10">{{ $formulario->mensaje }}</textarea>
                         </div>
                     </div>
@@ -276,6 +276,15 @@
                         }, false)
                     })
                 })()
+
+
+                $("#tipo_zona").change(function() {
+                    if ($(this).val() == 'Corregimiento') {
+                        $("#label_zona").html('Corregimiento');
+                    } else {
+                        $("#label_zona").html('Comuna');
+                    }
+                });
             })
         </script>
     @endsection

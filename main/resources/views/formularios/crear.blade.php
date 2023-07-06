@@ -157,7 +157,7 @@
                         </div>
 
                         <div class="col-12">
-                            <label for="mensaje" class="form-label">Mensaje <span
+                            <label for="mensaje" class="form-label">Problematica <span
                                     class="text-muted">(Opcional)</span></label>
                             <textarea class="form-control" name="mensaje" id="mensaje" cols="30" rows="10"></textarea>
                         </div>

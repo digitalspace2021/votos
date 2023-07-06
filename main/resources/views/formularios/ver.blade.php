@@ -114,7 +114,7 @@
                     </div>
 
                     <div class="col-12">
-                        <label for="mensaje" class="form-label">Mensaje</label>
+                        <label for="mensaje" class="form-label">Problematica</label>
                         <textarea name="mensaje" ea class="form-control" cols="30" rows="10">{{ $formulario->mensaje }}</textarea>
                     </div>
                 </div>
