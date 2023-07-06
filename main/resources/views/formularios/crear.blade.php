@@ -1,7 +1,7 @@
 @extends('layouts.base')
 
 @section('titulo')
-    Crear formulario
+    Crear Problemtaica
 @endsection
 
 @section('css-extra')

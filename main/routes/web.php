@@ -107,4 +107,5 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/problems/getall', [ProblemController::class, 'getAll'])->name('problems.getAll');
     Route::get('/problems/{id}/edit', [ProblemController::class, 'edit'])->name('problems.edit');
     Route::get('/problems/{id}/delete', [ProblemController::class, 'destroy'])->name('problems.destroy');
+    Route::put('/problems/{id}/update', [ProblemController::class, 'update'])->name('problems.update');
 });

@@ -105,6 +105,47 @@ class ProblemController extends Controller
     }
 
     /**
+     * The function updates a problem in a database and returns a success message if the update is
+     * successful, or an error message if it fails.
+     * 
+     * @param StoreRequest request The  parameter is an instance of the StoreRequest class,
+     * which is a custom request class that handles the validation and authorization logic for storing
+     * a new resource.
+     * @param id The "id" parameter is the unique identifier of the problem that needs to be updated.
+     * It is used to find the specific problem in the database and update its details.
+     * 
+     * @return RedirectResponse a RedirectResponse.
+     */
+    public function update(StoreRequest $request, $id): RedirectResponse
+    {
+        $problem = Formulario::findOrFail($id);
+
+        if ($problem->estado == true || !$problem) {
+            return back()->with('error', 'No se puede editar un problema resuelto');
+        }
+
+        $problem->update([
+            'propietario_id' => $request->creador,
+            'identificacion' => $request->identificacion,
+            'nombre' => $request->nombres,
+            'apellido' => $request->apellidos,
+            'telefono' => $request->telefono,
+            'direccion' => $request->direccion,
+            'puesto_votacion' => $request->puesto,
+            'estado' => false,
+            'genero' => $request->genero,
+            'email' => $request->email,
+            'vinculo' => $request->vinculo,
+            'mensaje' => $request->descripcion,
+        ]);
+
+        if ($problem) {
+            return redirect()->route('problems.index')->with('success', 'Problema actualizado correctamente');
+        }
+        return back()->with('error', 'Error al actualizar el problema');
+    }
+
+    /**
      * The function destroys a problem and its associated formularios from the database, and returns a
      * redirect response with a success message if successful, or an error message if there was an
      * error.

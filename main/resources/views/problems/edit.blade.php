@@ -1,7 +1,7 @@
 @extends('layouts.base')
 
 @section('titulo')
-Crear formulario
+Editar Problematica
 @endsection
 
 @section('css-extra')
@@ -26,7 +26,8 @@ Crear formulario
 <div class="container">
 
     <div class="d-flex justify-content-center align-items-center w-75" style="margin-left: auto; margin-right: auto;">
-        <form action="{{route('problems.store')}}" method="POST" novalidate>
+        <form action="{{route('problems.update', $problem->id)}}" method="POST" novalidate>
+            @method('PUT')
             @csrf
             <div class="row">
                 <div class="col-md-12 mb-2">
@@ -144,7 +145,7 @@ Crear formulario
 
             <div class="row mt-3">
                 <div class="col-md-12 d-flex justify-content-between">
-                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <button type="submit" class="btn btn-primary">Actualizar</button>
                     <a href="{{route('problems.index')}}" class="btn btn-danger">Cancelar</a>
                 </div>
             </div>
