@@ -19,7 +19,7 @@
         <div class="form-group">
           <label for="exampleFormControlInput1">Celula</label>
           <input type="number" class="form-control" id="ID" name="ID" placeholder="123456789" >
-          <input type="text" id="formulario_id" name="formulario_id" value="">
+          <input type="hidden" id="formulario_id" name="formulario_id" value="">
         </div>
         <div class="form-group">
             <label for="exampleFormControlInput1">Nombre</label>
@@ -176,7 +176,7 @@
                 var ID = this.value.trim(); 
                 
                 $.ajax({
-                    url: '/votos-deploy/matrizSeguimiento/userForm', 
+                    url: '/matrizSeguimiento/userForm', 
                     type: 'GET', 
                     dataType: 'json', 
                     data: { id: ID },

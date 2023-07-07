@@ -38,8 +38,7 @@ class FormularioController extends Controller
     {
         $formularios = $this->model::query();
         $formularios->join('barrios', 'formularios.zona', '=', 'barrios.id')->join('comunas','barrios.comuna_id','=','comunas.id');
-        $formularios->join('veredas', 'formularios.zona', '=', 'veredas.id')->join('corregimientos','veredas.corregimiento_id','=','corregimientos.id')
-            ->where('formularios.estado', true);
+        $formularios->join('veredas', 'formularios.zona', '=', 'veredas.id')->join('corregimientos','veredas.corregimiento_id','=','corregimientos.id');
         if(!empty($request->candidato)){$formularios->where('formularios.candidato_id',$request->candidato);}
         if(!empty($request->creador)){$formularios->where('formularios.propietario_id',$request->creador);}
         if(!empty($request->cedula)){$formularios->where('formularios.identificacion',$request->cedula);}
@@ -64,7 +63,8 @@ class FormularioController extends Controller
        $formularios->select('formularios.id as id','formularios.propietario_id as propietario_id','formularios.identificacion as identificacion','formularios.nombre as nombre',
                             'formularios.apellido as apellido','formularios.email as email','formularios.telefono as telefono',
                             'formularios.direccion as direccion', 'formularios.puesto_votacion as puesto_votacion',
-                            'formularios.updated_at as updated_at');
+                            'formularios.updated_at as updated_at')
+                    ->where('formularios.estado', true);
 
         return Datatables::of($formularios)
             ->addColumn('creador', function ($col) {
