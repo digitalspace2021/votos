@@ -282,9 +282,9 @@
 
                 $("#tipo_zona").change(function() {
                     if ($(this).val() == 'Corregimiento') {
-                        $("#label_zona").html('Corregimiento');
+                        $("#label_zona").html('Vereda');
                     } else {
-                        $("#label_zona").html('Comuna');
+                        $("#label_zona").html('Barrio');
                     }
                 });
             });
