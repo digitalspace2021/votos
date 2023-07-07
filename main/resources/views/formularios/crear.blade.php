@@ -1,7 +1,7 @@
 @extends('layouts.base')
 
 @section('titulo')
-    Crear formulario
+    Crear Problemtaica
 @endsection
 
 @section('css-extra')
@@ -138,7 +138,7 @@
                         </div>
 
                         <div class="col-6">
-                            <label for="zona" class="form-label">Comuna / Corregimiento</label>
+                            <label for="zona" class="form-label" id="label_zona">Comuna / Corregimiento</label>
                             <select class="form-control" name="zona" id="zona" required></select>
                             {{-- <input type="text" class="form-control" id="zona" name="zona"
                                 placeholder="Comuna" required> --}}
@@ -157,7 +157,7 @@
                         </div>
 
                         <div class="col-12">
-                            <label for="mensaje" class="form-label">Mensaje <span
+                            <label for="mensaje" class="form-label">Problematica <span
                                     class="text-muted">(Opcional)</span></label>
                             <textarea class="form-control" name="mensaje" id="mensaje" cols="30" rows="10"></textarea>
                         </div>
@@ -279,6 +279,14 @@
                         }, false)
                     })
                 })()
-            })
+
+                $("#tipo_zona").change(function() {
+                    if ($(this).val() == 'Corregimiento') {
+                        $("#label_zona").html('Vereda');
+                    } else {
+                        $("#label_zona").html('Barrio');
+                    }
+                });
+            });
         </script>
     @endsection
