@@ -1,7 +1,7 @@
 @extends('layouts.base')
 
 @section('titulo')
-Problematicas
+Posibles Votantes
 @endsection
 
 @section('css-extra')
@@ -19,8 +19,8 @@ Problematicas
 
 @section('cabecera')
 <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
-    <h1 class="display-4 fw-normal">Problematicas</h1>
-    <p class="fs-5 text-muted">Aqui podras encontrar la gestion de problematicas, solo los administradores pueden crear,
+    <h1 class="display-4 fw-normal">Posibles Votantes</h1>
+    <p class="fs-5 text-muted">Aqui podras encontrar la gestion de Posibles Votantes, solo los administradores pueden crear,
         editar y eliminar usuarios. Teniendo en cuenta que esta seccion tiene relacion con la parte de los formularios
     </p>
 </div>
@@ -36,7 +36,7 @@ Problematicas
     <div class="col-10">
     </div>
     <div class="col-2 mb-2 text-right">
-        <a href="{{ route('problems.create') }}" class="btn btn-success">Crear Problematica</a>
+        <a href="{{ route('problems.create') }}" class="btn btn-success">Crear Posible Votante</a>
     </div>
 </div>
 @endsection

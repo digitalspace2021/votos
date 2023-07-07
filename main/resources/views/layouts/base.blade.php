@@ -156,7 +156,7 @@
                     <a class="me-3 py-2 text-dark text-decoration-none"
                         href="{{ route('formularios') }}">Formularios</a>
                     <a class="me-3 py-2 text-dark text-decoration-none"
-                        href="{{ route('problems.index') }}">Problematicas</a>
+                        href="{{ route('problems.index') }}">Posibles Votantes</a>
 
                     @if (Auth::user()->hasRole('administrador'))
                     <a class="me-3 py-2 text-dark text-decoration-none" href="{{ route('usuarios') }}">Usuarios</a>
@@ -181,7 +181,7 @@
                     </form>
                     @else
                     <a class="me-3 py-2 text-dark text-decoration-none"
-                        href="{{ route('problems.index') }}">Problematicas</a>
+                        href="{{ route('problems.index') }}">Posibles Votantes</a>
                     <a class="me-3 py-2 text-dark text-decoration-none" href="{{ route('login') }}">Login</a>
                     @endauth
                 </nav>

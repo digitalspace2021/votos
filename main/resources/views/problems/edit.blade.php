@@ -1,7 +1,7 @@
 @extends('layouts.base')
 
 @section('titulo')
-Editar Problematica
+Editar Posible Votante
 @endsection
 
 @section('css-extra')
@@ -12,7 +12,7 @@ Editar Problematica
 
 @section('cabecera')
 <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
-    <h1 class="display-4 fw-normal">Editar Problematica</h1>
+    <h1 class="display-4 fw-normal">Editar Posible Votante</h1>
 </div>
 
 @if (session('error'))
