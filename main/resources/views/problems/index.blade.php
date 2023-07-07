@@ -51,6 +51,7 @@ Problematicas
                 <th>Telefono</th>
                 <th>Direccion</th>
                 <th>Responsable</th>
+                <th>Creado</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -93,6 +94,10 @@ Problematicas
                     {
                         data: 'name',
                         name: 'name'
+                    },
+                    {
+                        data: 'created_at',
+                        name: 'created_at'
                     },
                     {
                         data: 'acciones',
