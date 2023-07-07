@@ -145,7 +145,7 @@
                     <th>Telefono</th>
                     <th>Dirección</th>
                     <th>Puesto de votacion</th>
-                    <th>Fecha actualizacion</th>
+                    <th>Fecha Creado</th>
                     <th>Accion</th>
                 </tr>
             </thead>
@@ -235,8 +235,8 @@
                         name: 'puesto_votacion'
                     },
                     {
-                        data: 'updated_at',
-                        name: 'updated_at'
+                        data: 'created_at',
+                        name: 'created_at'
                     },
                     {
                         data: 'acciones',

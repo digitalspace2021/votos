@@ -9,7 +9,7 @@ class Formulario extends Model
 {
     use HasFactory;
 
-    protected $fillable=[
+    protected $fillable = [
         'propietario_id',
         'candidato_id',
         'identificacion',
@@ -22,6 +22,8 @@ class Formulario extends Model
         'tipo_zona',
         'zona',
         'puesto_votacion',
-        'mensaje'
+        'mensaje',
+        'estado',
+        'vinculo'
     ];
 }

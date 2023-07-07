@@ -38,7 +38,8 @@ class FormularioController extends Controller
     {
         $formularios = $this->model::query();
         $formularios->join('barrios', 'formularios.zona', '=', 'barrios.id')->join('comunas','barrios.comuna_id','=','comunas.id');
-        $formularios->join('veredas', 'formularios.zona', '=', 'veredas.id')->join('corregimientos','veredas.corregimiento_id','=','corregimientos.id');
+        $formularios->join('veredas', 'formularios.zona', '=', 'veredas.id')->join('corregimientos','veredas.corregimiento_id','=','corregimientos.id')
+            ->where('formularios.estado', true);
         if(!empty($request->candidato)){$formularios->where('formularios.candidato_id',$request->candidato);}
         if(!empty($request->creador)){$formularios->where('formularios.propietario_id',$request->creador);}
         if(!empty($request->cedula)){$formularios->where('formularios.identificacion',$request->cedula);}
@@ -73,14 +74,14 @@ class FormularioController extends Controller
             ->editColumn('nombre', function ($col) {
                 return $col->nombre . ' ' . $col->apellido;
             })
-            ->editColumn('updated_at', function ($col) {
-                return Carbon::parse($col->updated_at)->format('d-m-Y H:i:s');
+            ->editColumn('created_at', function ($col) {
+                return Carbon::parse($col->created_at)->format('d-m-Y H:i:s');
             })
             ->addColumn('acciones', function ($col) {
-                $btn =  '<a href="' . route(trans($this->plural) . '.ver', $col->id) . '" class="btn btn-outline-secondary" title="Ver ' . trans($this->singular) . '"><i class="fa fa-eye"></i></a>';
+                $btn =  '<a href="' . route(trans($this->plural) . '.ver', $col->id) . '" class="btn btn-outline-secondary btn-sm" title="Ver ' . trans($this->singular) . '"><i class="fa fa-eye"></i></a>';
                 if (Auth::user()->hasRole('administrador')) {
-                    $btn .= '<a href="' . route(trans($this->plural) . '.actualizar', $col->id) . '" class="btn btn-outline-primary m-2" title="Editar ' . trans($this->singular) . '"><i class="fa fa-edit"></i></a>';
-                    $btn .= '<a href="' . route(trans($this->plural) . '.eliminar', $col->id) . '" class="btn btn-outline-danger" title="Eliminar ' . trans($this->singular) . '"><i class="fa fa-times"></i></a>';
+                    $btn .= '<a href="' . route(trans($this->plural) . '.actualizar', $col->id) . '" class="btn btn-outline-primary m-2 btn-sm" title="Editar ' . trans($this->singular) . '"><i class="fa fa-edit"></i></a>';
+                    $btn .= '<a href="' . route(trans($this->plural) . '.eliminar', $col->id) . '" class="btn btn-outline-danger btn-sm" title="Eliminar ' . trans($this->singular) . '"><i class="fa fa-times"></i></a>';
                 }
                 return $btn;
             })
