@@ -105,7 +105,13 @@ class ProblemController extends Controller
         ]);
 
         if ($problem) {
-            return redirect()->route('problems.index')->with('success', 'Problema creado correctamente');
+            if (auth()->check()) {
+                return redirect()->route('problems.index')->with('success', 'Problema creado correctamente');
+            }
+
+            if (!auth()->check()) {
+                return redirect()->route('problems.create')->with('success', 'Problema creado correctamente');
+            }
         }
         return back()->with('error', 'Error al crear el problema');
     }

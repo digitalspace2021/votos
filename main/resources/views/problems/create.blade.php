@@ -15,9 +15,9 @@ Crear formulario
     <h1 class="display-4 fw-normal">Nuevos Posibles Votantes</h1>
 </div>
 
-@if (session('error'))
-<div class="alert alert-danger">
-    {{ session('error') }}
+@if (session('success') || session('error'))
+<div class="alert alert-{{session('success') ? 'success' : 'danger'}} mx-2">
+    {{session('success') ?? session('error')}}
 </div>
 @endif
 @endsection
