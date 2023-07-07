@@ -154,8 +154,7 @@
                     <a class="me-3 py-2 text-dark text-decoration-none" href="{{ route('inicio') }}">Inicio</a>
                     <a class="me-3 py-2 text-dark text-decoration-none"
                         href="{{ route('formularios') }}">Formularios</a>
-                    <a class="me-3 py-2 text-dark text-decoration-none"
-                        href="{{ route('problems.index') }}">Problematicas</a>
+                    
                     @if (Auth::user()->hasRole('administrador'))
                     <a class="me-3 py-2 text-dark text-decoration-none" href="{{ route('usuarios') }}">Usuarios</a>
                     @endif
@@ -178,6 +177,8 @@
                         @csrf
                     </form>
                     @else
+                    <a class="me-3 py-2 text-dark text-decoration-none"
+                        href="{{ route('problems.index') }}">Problematicas</a>
                     <a class="me-3 py-2 text-dark text-decoration-none" href="{{ route('login') }}">Login</a>
                     @endauth
                 </nav>

@@ -32,9 +32,11 @@ class ProblemController extends Controller
             })
             ->addColumn('acciones', function ($problem) {
                 $btn = '<a href="' . route('problems.show', $problem->id) . '" class="btn btn-outline-secondary btn-sm" title="Ver problema"><i class="fa fa-eye"></i></a>';
-                $btn .= '<a href="' . route('problems.edit', $problem->id) . '" class="btn btn-outline-primary m-2 btn-sm" title="Editar problema"><i class="fa fa-edit"></i></a>';
-                $btn .= '<a href="' . route('problems.destroy', $problem->id) . '" class="btn btn-outline-danger btn-sm" title="Eliminar problema"><i class="fa fa-times"></i></a>';
-                $btn .= '<button prid="' . $problem->id . '" class="btn btn-outline-success m-2 status btn-sm" title="Cambiar estado"><i class="fa fa-check"></i></button>';
+                if (auth()->check()) {
+                    $btn .= '<a href="' . route('problems.edit', $problem->id) . '" class="btn btn-outline-primary m-2 btn-sm" title="Editar problema"><i class="fa fa-edit"></i></a>';
+                    $btn .= '<a href="' . route('problems.destroy', $problem->id) . '" class="btn btn-outline-danger btn-sm" title="Eliminar problema"><i class="fa fa-times"></i></a>';
+                    $btn .= '<button prid="' . $problem->id . '" class="btn btn-outline-success m-2 status btn-sm" title="Cambiar estado"><i class="fa fa-check"></i></button>';
+                }
 
                 return $btn;
             })

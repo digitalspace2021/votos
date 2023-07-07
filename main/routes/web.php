@@ -101,13 +101,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('get_veredas_and_comunas', [UtilityController::class, 'getVeredasAndComunas']);
     Route::get('/statitics/{candidato_id?}', [HighchartController::class, 'handleChart']);
 
-    Route::get('/problems', [ProblemController::class, 'index'])->name('problems.index');
-    Route::get('/problems/create', [ProblemController::class, 'create'])->name('problems.create');
-    Route::post('/problems/create', [ProblemController::class, 'store'])->name('problems.store');
-    Route::get('/problems/getall', [ProblemController::class, 'getAll'])->name('problems.getAll');
     Route::get('/problems/{id}/edit', [ProblemController::class, 'edit'])->name('problems.edit');
     Route::get('/problems/{id}/delete', [ProblemController::class, 'destroy'])->name('problems.destroy');
     Route::put('/problems/{id}/update', [ProblemController::class, 'update'])->name('problems.update');
     Route::put('/problem/{id}/status', [ProblemController::class, 'changeStatus'])->name('problems.changeStatus');
-    Route::get('/problems/{id}/show', [ProblemController::class, 'show'])->name('problems.show');
 });
+Route::get('/problems', [ProblemController::class, 'index'])->name('problems.index');
+Route::get('/problems/getall', [ProblemController::class, 'getAll'])->name('problems.getAll');
+Route::get('/problems/create', [ProblemController::class, 'create'])->name('problems.create');
+Route::post('/problems/create', [ProblemController::class, 'store'])->name('problems.store');
+Route::get('/problems/{id}/show', [ProblemController::class, 'show'])->name('problems.show');
