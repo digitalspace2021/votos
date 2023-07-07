@@ -63,7 +63,7 @@
                 const candidato = $(this).val();
                 console.log(candidato);
             $.ajax({
-                    url: '/politicos-jvn/votos/matrizSeguimiento/statistics', 
+                    url: '/matrizSeguimiento/statistics', 
                     type: 'GET', 
                     dataType: 'json', 
                     data: {candidato:candidato},
