@@ -14,7 +14,7 @@ class AddTipoZonaToFormularios extends Migration
     public function up()
     {
         Schema::table('formularios', function (Blueprint $table) {
-            $table->string('tipo_zona');
+            $table->string('tipo_zona')->nullable();
         });
     }
 
