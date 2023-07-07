@@ -155,6 +155,8 @@
                         <a class="me-3 py-2 text-dark text-decoration-none" href="{{ route('inicio') }}">Inicio</a>
                         <a class="me-3 py-2 text-dark text-decoration-none"
                             href="{{ route('formularios') }}">Formularios</a>
+                        <a class="me-3 py-2 text-dark text-decoration-none"
+                            href="{{ route('problems.index') }}">Posibles Votantes</a>
                         @if (Auth::user()->hasRole('administrador'))
                             <a class="me-3 py-2 text-dark text-decoration-none" href="{{ route('usuarios') }}">Usuarios</a>
                         @endif

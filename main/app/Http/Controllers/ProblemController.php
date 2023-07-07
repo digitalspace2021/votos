@@ -71,7 +71,7 @@ class ProblemController extends Controller
         $problem = Formulario::findOrFail($id);
 
         if ($problem->estado == true || !$problem) {
-            return back()->with('error', 'No se puede editar un problema resuelto');
+            return back()->with('error', 'No se puede visualizar un formulario comfirmado');
         }
 
         return view('problems.edit', compact('users', 'problem'));
@@ -106,14 +106,14 @@ class ProblemController extends Controller
 
         if ($problem) {
             if (auth()->check()) {
-                return redirect()->route('problems.index')->with('success', 'Problema creado correctamente');
+                return redirect()->route('problems.index')->with('success', 'Oportunidad de votante creado correctamente');
             }
 
             if (!auth()->check()) {
-                return redirect()->route('problems.create')->with('success', 'Problema creado correctamente');
+                return redirect()->route('problems.create')->with('success', 'Oportunidad de votante correctamente');
             }
         }
-        return back()->with('error', 'Error al crear el problema');
+        return back()->with('error', 'Error al crear el Oportunidad de votante');
     }
 
     /**
@@ -133,7 +133,7 @@ class ProblemController extends Controller
         $problem = Formulario::findOrFail($id);
 
         if ($problem->estado == true || !$problem) {
-            return back()->with('error', 'No se puede editar un problema resuelto');
+            return back()->with('error', 'No se puede editar una Oportunidad de votante');
         }
 
         $problem->update([
@@ -152,9 +152,9 @@ class ProblemController extends Controller
         ]);
 
         if ($problem) {
-            return redirect()->route('problems.index')->with('success', 'Problema actualizado correctamente');
+            return redirect()->route('problems.index')->with('success', 'Oportunidad de votante actualizado correctamente');
         }
-        return back()->with('error', 'Error al actualizar el problema');
+        return back()->with('error', 'Error al actualizar la Oportunidad de votante');
     }
 
     /**
@@ -176,10 +176,10 @@ class ProblemController extends Controller
 
             DB::commit();
 
-            return redirect()->route('problems.index')->with('success', 'Problema eliminado correctamente');
+            return redirect()->route('problems.index')->with('success', 'Oportunidad de votante eliminada correctamente');
         } catch (\Throwable $th) {
             DB::rollback();
-            return back()->with('error', 'Error al eliminar el problema');
+            return back()->with('error', 'Error al eliminar la Oportunidad de votante');
         }
     }
 
@@ -201,7 +201,7 @@ class ProblemController extends Controller
         $problem = Formulario::findOrFail($id);
 
         if (!$problem) {
-            return back()->with('error', 'Error al cambiar el estado del problema');
+            return back()->with('error', 'Error al cambiar el estado de la Oportunidad de votante');
         }
 
         $problem->update([
@@ -212,9 +212,9 @@ class ProblemController extends Controller
         ]);
 
         if ($problem->estado == true) {
-            return back()->with('success', 'Problematica confirmada correctamente');
+            return back()->with('success', 'Oportunidad de votante confirmada correctamente');
         }
-        return back()->with('success', 'Problematica pendiente correctamente');
+        return back()->with('success', 'Oportunidad de votante pendiente a confirmar');
     }
 
     public function show($id)
@@ -223,7 +223,7 @@ class ProblemController extends Controller
         $users = DB::table('users')->get();
 
         if (!$problem) {
-            return back()->with('error', 'Error al mostrar el problema');
+            return back()->with('error', 'Error al mostrar la Oportunidad de votante');
         }
 
         return view('problems.show', compact('problem', 'users'));
