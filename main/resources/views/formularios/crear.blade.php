@@ -213,7 +213,7 @@
                     ajax: {
                         dataType: 'json',
                         url: function(params) {
-                            return "/get_veredas_and_comunas?type=" + $('#tipo_zona').val();
+                            return "/politicos-jvn/votos/get_veredas_and_comunas?type=" + $('#tipo_zona').val();
                         },
                         type: "get",
                         delay: 250,

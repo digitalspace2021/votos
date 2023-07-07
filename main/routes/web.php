@@ -7,8 +7,10 @@ use App\Http\Controllers\FileManagementController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\FormularioController;
 use App\Http\Controllers\HighchartController;
+use App\Http\Controllers\MatrizSeguimientoController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\UtilityController;
+use App\Models\MatrizSeguimiento;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -99,4 +101,17 @@ Route::middleware(['auth'])->group(function () {
     // utils
     Route::get('get_veredas_and_comunas', [UtilityController::class, 'getVeredasAndComunas']);
     Route::get('/statitics/{candidato_id?}', [HighchartController::class, 'handleChart']);
+
+    //matriz seguimiento
+    Route::get('/matrizSeguimiento',[MatrizSeguimientoController::class,'index'])->name('matriz');
+    Route::get('/matrizSeguimiento/create',[MatrizSeguimientoController::class,'create'])->name('matriz.create');
+    Route::get('/matrizSeguimiento/userForm',[MatrizSeguimientoController::class,'getUserForm']);
+    Route::get('/matrizSeguimiento/statisticsIndex',[MatrizSeguimientoController::class,'statisticsIndex'])->name('statistics');
+    Route::get('/matrizSeguimiento/statistics',[MatrizSeguimientoController::class,'getStatistics']);
+    Route::get('/matrizSeguimiento/tabla', [MatrizSeguimientoController::class, 'tabla'])->name('matriz.tabla');
+    Route::post('/matrizSeguimiento',[MatrizSeguimientoController::class,'store'])->name('matriz_create');
+    Route::get('/matrizSeguimiento/delete/{id}',[MatrizSeguimientoController::class,'delete'])->name('matriz.delete');
+    Route::get('/matrizSeguimiento/edit/{id}',[MatrizSeguimientoController::class,'edit'])->name('matriz.edit');
+    Route::get('/matrizSeguimiento/view/{id}',[MatrizSeguimientoController::class,'view'])->name('matriz.view');
+    Route::put('/matrizSeguimiento/update/{id}',[MatrizSeguimientoController::class,'update'])->name('matriz.update');
 });

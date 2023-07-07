@@ -165,7 +165,7 @@
                     ajax: {
                         dataType: 'json',
                         url: function(params) {
-                            return "/get_veredas_and_comunas?type=" + $('#tipo_zona').val();
+                            return "/politicos-jvn/votos/get_veredas_and_comunas?type=" + $('#tipo_zona').val();
                         },
                         type: "get",
                         delay: 250,
@@ -186,7 +186,7 @@
 
                 await $.ajax({
                     type: 'GET',
-                    url: '/get_veredas_and_comunas?type=' + zona + '&id=' + '{{ $formulario->zona }}',
+                    url: '/politicos-jvn/votos/get_veredas_and_comunas?type=' + zona + '&id=' + '{{ $formulario->zona }}',
                     data: function(params) {
                         return {
                             search: params.term

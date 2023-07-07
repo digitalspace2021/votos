@@ -104,6 +104,11 @@
                         @if (Auth::user()->hasRole('administrador'))
                             <a class="me-3 py-2 text-dark text-decoration-none" href="{{ route('usuarios') }}">Usuarios</a>
                         @endif
+                        <!-- Add by marco Marin 30-06-2023-->
+                        @if (Auth::user()->hasRole('administrador'))
+                            <a class="me-3 py-2 text-dark text-decoration-none" href="{{ route('matriz') }}">Matriz de seguimiento</a>
+                        @endif
+                        <!---->
                         @if (Auth::user()->hasRole('administrador'))
                             <a class="me-3 py-2 text-dark text-decoration-none"
                                 href="{{ route('candidatos') }}">Candidatos</a>
@@ -112,10 +117,18 @@
                             <a class="me-3 py-2 text-dark text-decoration-none" href="{{ route('cargos') }}">Cargos</a>
                         @endif
                         @if (Auth::user()->hasRole('administrador'))
-                            <a class="me-3 py-2 text-dark text-decoration-none"
-                                href="{{ url('statitics') }}">Estadisticas</a>
+                        <ul class="navbar-nav mr-5 pr-3">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle py-2 text-dark text-decoration-none" id="navbarDropdown"
+                                    href="#" role="button" 
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Estadisticas</a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ url('statitics') }}">Estadisticas Generales</a>
+                                <a class="dropdown-item" href="{{ route('statistics') }}">Estadisticas Seguimiento</a>
+                            </li>
+                        </ul>   
                         @endif
-                        <a class="py-2 text-dark text-decoration-none" href="{{ route('logout') }}"
+                        <a class="py-2 text-dark text-decoration-none ml-5" href="{{ route('logout') }}"
                             onclick="event.preventDefault();
                                              document.getElementById('logout-form').submit();">
                             {{ __('Logout') }}

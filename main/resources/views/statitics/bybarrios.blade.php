@@ -295,7 +295,7 @@
 
         async function getStatitics() {
             if ($('#candidato_id').val()) {
-                window.location.href = '/statitics/' + $('#candidato_id').val()
+                window.location.href = '/politicos-jvn/votos/statitics/' + $('#candidato_id').val()
             }
         }
 
