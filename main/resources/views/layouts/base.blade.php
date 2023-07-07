@@ -181,7 +181,7 @@
                     </form>
                     @else
                     <a class="me-3 py-2 text-dark text-decoration-none"
-                        href="{{ route('problems.index') }}">Posibles Votantes</a>
+                        href="{{ route('problems.create') }}">Posibles Votantes</a>
                     <a class="me-3 py-2 text-dark text-decoration-none" href="{{ route('login') }}">Login</a>
                     @endauth
                 </nav>

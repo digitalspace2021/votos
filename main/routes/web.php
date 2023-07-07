@@ -42,7 +42,7 @@ Route::get('/', function () {
     // $user->givePermissionTo('crud');
 
     return redirect(route('inicio'));
-});
+})->name('home');
 Auth::routes(['register' => false]);
 
 

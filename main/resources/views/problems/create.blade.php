@@ -33,7 +33,8 @@ Crear formulario
                     <label for="creador" class="form-label">Quien lo diligencia</label>
                     <select class="form-control" name="creador" id="creador" required>
                         @foreach ($users as $user)
-                        <option value="{{ $user->id }}" {{old('creador') == $user->id ? 'selected' : ''}} >{{ $user->name }}</option>
+                        <option value="{{ $user->id }}" {{old('creador')==$user->id ? 'selected' : ''}} >{{ $user->name
+                            }}</option>
                         @endforeach
                     </select>
                     @error('creador')
@@ -44,7 +45,8 @@ Crear formulario
                 </div>
                 <div class="col-md-12 mb-2">
                     <label for="identificacion">Identificacion</label>
-                    <input type="number" name="identificacion" id="" class="form-control" value="{{old('identificacion')}}" required>
+                    <input type="number" name="identificacion" id="" class="form-control"
+                        value="{{old('identificacion')}}" required>
                     @error('identificacion')
                     <div class="text-danger">
                         {{ $message }}
@@ -83,9 +85,9 @@ Crear formulario
                     <label for="genero" class="form-label">Genero</label>
                     <select name="genero" id="" class="form-select">
                         <option value="">Selecciona un genero</option>
-                        <option value="Hombre" {{old('genero') == 'Hombre' ? 'selected' : ''}}>Hombre</option>
-                        <option value="Mujer" {{old('genero') == 'Mujer' ? 'selected' : ''}}>Mujer</option>
-                        <option value="Otro" {{old('genero') == 'Otro' ? 'selected' : ''}}>Otro</option>
+                        <option value="Hombre" {{old('genero')=='Hombre' ? 'selected' : '' }}>Hombre</option>
+                        <option value="Mujer" {{old('genero')=='Mujer' ? 'selected' : '' }}>Mujer</option>
+                        <option value="Otro" {{old('genero')=='Otro' ? 'selected' : '' }}>Otro</option>
                     </select>
                     @error('genero')
                     <div class="text-danger">
@@ -131,7 +133,8 @@ Crear formulario
                 </div>
                 <div class="col-md-12" id="desc_problem">
                     <label for="descripcion">Problematica</label>
-                    <textarea name="descripcion" id="" cols="30" rows="5" class="form-control"required>{{old('descripcion')}}</textarea>
+                    <textarea name="descripcion" id="" cols="30" rows="5" class="form-control"
+                        required>{{old('descripcion')}}</textarea>
 
                     @error('descripcion')
                     <div class="text-danger">
@@ -144,7 +147,11 @@ Crear formulario
             <div class="row mt-3">
                 <div class="col-md-12 d-flex justify-content-between">
                     <button type="submit" class="btn btn-primary">Guardar</button>
-                    <a href="{{route('problems.index')}}" class="btn btn-danger">Cancelar</a>
+                    <a href="@if (auth()->check())
+                        {{route('problems.index')}}
+                        @else
+                        {{route('home')}}
+                        @endif" class="btn btn-danger">Cancelar</a>
                 </div>
             </div>
         </form>
