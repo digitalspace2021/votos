@@ -13,6 +13,10 @@
                         <input type="hidden" name="problem_id">
                         <div class="row">
                             <div class="col-md-12 mb-2">
+                                <label for="candidato_id" class="form-label">Candidato</label>
+                                <select class="form-control" name="candidato_id" id="candidato_id" required></select>
+                            </div>
+                            <div class="col-md-12 mb-2">
                                 <div class="form-group">
                                     <label for="tipo_zona">Tipo de Ubicacion</label>
                                     <select name="tipo_zona" id="tipo_zona" class="form-select" required>

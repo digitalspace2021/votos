@@ -202,6 +202,7 @@ class ProblemController extends Controller
             'estado' => !$problem->estado,
             'zona' => $request->zona,
             'tipo_zona' => $request->tipo_zona,
+            'candidato_id' => $request->candidato_id,
         ]);
 
         if ($problem->estado == true) {

@@ -163,6 +163,34 @@ Problematicas
                     $("#label_zona").html('Comuna');
                 }
             });
+
+
+            $('#candidato_id').select2({
+                    theme: "bootstrap",
+                    ajax: {
+                        dataType: 'json',
+                        url: "{!! route('util.lista_candidatos') !!}",
+                        type: "get",
+                        delay: 250,
+                        data: function(params) {
+                            return {
+                                search: params.term
+                            };
+                        },
+                        processResults: function(response) {
+                            return {
+                                results: response
+                            };
+                        },
+                        cache: true
+                    }
+
+            });
+
+            $('#candidato_id').on('select2:select', function(e) {
+                var data = e.params.data;
+                $('#candidato_id').val(data.id);
+            });
         });
     </script>
 @endsection

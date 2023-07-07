@@ -86,7 +86,7 @@
             transition: background-color 0.3s ease;
         }
 
-        #navbar{
+        #navbar {
             display: block;
         }
 
@@ -133,7 +133,8 @@
 
     <div class="container py-3">
         <header>
-            <div class="{{-- d-flex --}} flex-column flex-md-row align-items-center pb-3 mb-4 border-bottom" id="content-nav">
+            <div class="{{-- d-flex --}} flex-column flex-md-row align-items-center pb-3 mb-4 border-bottom"
+                id="content-nav">
                 <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
                     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="32" class="me-2" viewBox="0 0 118 94"
                         role="img">
@@ -154,7 +155,9 @@
                     <a class="me-3 py-2 text-dark text-decoration-none" href="{{ route('inicio') }}">Inicio</a>
                     <a class="me-3 py-2 text-dark text-decoration-none"
                         href="{{ route('formularios') }}">Formularios</a>
-                    
+                    <a class="me-3 py-2 text-dark text-decoration-none"
+                        href="{{ route('problems.index') }}">Problematicas</a>
+
                     @if (Auth::user()->hasRole('administrador'))
                     <a class="me-3 py-2 text-dark text-decoration-none" href="{{ route('usuarios') }}">Usuarios</a>
                     @endif
