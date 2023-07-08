@@ -13,20 +13,53 @@ use Yajra\DataTables\Facades\DataTables;
 
 class ProblemController extends Controller
 {
-    public function index()
+    /**
+     * The function retrieves all users from the database and passes them to the view.
+     * 
+     * @return View a view called 'problems.index' and passing the variable 'creadores' to the view.
+     */
+    public function index(): View
     {
-        return view('problems.index');
+        $creadores = DB::table('users')->get();
+        return view('problems.index', compact('creadores'));
     }
 
-    public function getAll()
+    /**
+     * The function retrieves a list of problems from a database based on various filters and returns
+     * the results in a formatted DataTables response.
+     * 
+     * @param Request request The  parameter is an instance of the Request class, which
+     * represents an HTTP request. It contains information about the current request, such as the
+     * request method, URL, headers, and any request parameters or data.
+     * 
+     * @return the `$problems` variable, which is the result of querying the database and formatting
+     * the data using the DataTables library.
+     */
+    public function getAll(Request $request)
     {
-        /* colums nombre completo from formularios nombre+apellido, telefono, direccion, responsable, pruesto_votacion from table formularios and columns acciones view, edit and status */
-        $problems = DataTables::of(DB::table('formularios')
+        $problems = DB::table('formularios')
             ->join('users', 'formularios.propietario_id', '=', 'users.id')
-            ->select('formularios.id', 'formularios.identificacion', 'formularios.nombre', 'formularios.apellido', 'formularios.telefono', 'formularios.direccion', 'users.name', 'formularios.puesto_votacion', 'formularios.estado', 'formularios.created_at')
+            ->select('formularios.id', 'formularios.identificacion', 'formularios.nombre', 'formularios.apellido', 'formularios.telefono', 'formularios.direccion', 'users.name', 'users.id as creator_id', 'formularios.puesto_votacion', 'formularios.estado', 'formularios.created_at')
             ->addSelect(DB::raw("CONCAT(formularios.nombre, ' ', formularios.apellido) AS nombre_completo"))
             ->where('formularios.estado', false)
-            ->get())
+            /* filter for cedula, nombre+apellido, created_at or creator_id */
+            ->when($request->get('cedula'), function ($query, $cedula) {
+                return $query->where('formularios.identificacion', 'like', '%' . $cedula . '%');
+            })
+            ->when($request->get('nombre'), function ($query, $nombre_completo) {
+                return $query->where(DB::raw("CONCAT(formularios.nombre, ' ', formularios.apellido)"), 'like', '%' . $nombre_completo . '%');
+            })
+            ->when($request->get('created_at'), function ($query, $created_at) {
+                return $query->whereDate('formularios.created_at', $created_at);
+            })
+            ->when($request->get('creador'), function ($query, $creator_id) {
+                return $query->where('users.id', $creator_id);
+            })
+            ->orderBy('formularios.created_at', 'desc')
+            ->get();
+
+        /* colums nombre completo from formularios nombre+apellido, telefono, direccion, responsable, pruesto_votacion from table formularios and columns acciones view, edit and status */
+        $problems = DataTables::of($problems)
             ->editColumn('created_at', function ($col) {
                 return Carbon::parse($col->created_at)->format('d-m-Y H:i:s');
             })

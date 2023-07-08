@@ -5,26 +5,66 @@ Posibles Votantes
 @endsection
 
 @section('css-extra')
-    <link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css"
-        rel="stylesheet" />
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css"
+    rel="stylesheet" />
 
-    <style>
-    .select2-container{
-        z-index:100000;
+<style>
+    .select2-container {
+        z-index: 100000;
     }
-    </style>
+</style>
 @endsection
 
 @section('cabecera')
 <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
     <h1 class="display-4 fw-normal">Posibles Votantes</h1>
-    <p class="fs-5 text-muted">Aqui podras encontrar la gestion de Posibles Votantes, solo los administradores pueden crear,
+    <p class="fs-5 text-muted">Aqui podras encontrar la gestion de Posibles Votantes, solo los administradores pueden
+        crear,
         editar y eliminar usuarios. Teniendo en cuenta que esta seccion tiene relacion con la parte de los formularios
     </p>
 </div>
 
+
+<div class="container m-3">
+    <!-- filtros -->
+
+    <div class="row">
+        <div class="col-md-6">
+            <label for="">Por cedula</label>
+            <input type="text" class="form-control" placeholder="123456789" aria-label="First name" id="InputCedula">
+        </div>
+        <div class="col-md-6">
+            <label for="">Por nombre</label>
+            <input type="text" class="form-control" placeholder="Nombre" aria-label="First name" id="InputNombre">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <label for="">Por fecha</label>
+            <input class="form-control" type="date" id="inputDate">
+        </div>
+
+        <div class="col-md-4">
+            <label for="">Por creador</label>
+            <select class="form-select" aria-label="Default select example" id="selectCreador">
+                <option value="" selected>Filtrar por creador</option>
+                @foreach ($creadores as $creador)
+                <option value="{{$creador->id}}">{{$creador->name}}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-md-4 d-flex justify-content-around align-items-center mt-4">
+            <button class="btn btn-danger" id="btnClear">Limpiar</button>
+            <button class="btn btn-warning" id="btnFiltrar">Filtrar</button>
+        </div>
+
+    </div>
+    <!-- End filtros -->
+    <hr>
+</div>
 
 @if (session('success') || session('error'))
 <div class="alert alert-{{session('success') ? 'success' : 'danger'}} mx-2">
@@ -36,7 +76,7 @@ Posibles Votantes
     <div class="col-10">
     </div>
     <div class="col-2 mb-2 text-right">
-        <a href="{{ route('problems.create') }}" class="btn btn-success">Crear Posible Votante</a>
+        <a href="{{ route('problems.create') }}" class="btn btn-sm btn-success">Crear Votante</a>
     </div>
 </div>
 @endsection
@@ -63,19 +103,48 @@ Posibles Votantes
 
 
 @section('js-extra')
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
-    <script>
-        $(document).ready(function() {
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function() {
+            viewData();
+
+            $('#btnFiltrar').click(function() {
+                let cedula = $('#InputCedula').val();
+                let nombre = $('#InputNombre').val();
+                let fecha = $('#inputDate').val();
+                let creador = $('#selectCreador').val();
+                $('#table_problem').DataTable().destroy();
+                viewData(cedula, nombre, fecha, creador);
+            });
+
+            $('#btnClear').click(function() {
+                $('#InputCedula').val('');
+                $('#InputNombre').val('');
+                $('#inputDate').val('');
+                $('#selectCreador').val('');
+                $('#table_problem').DataTable().destroy();
+                viewData();
+            });
+        });
+
+        function viewData(cedula = null, nombre = null, fecha = null, creador = null) {
             $('#table_problem').DataTable({
                 processing: true,
                 serverSide: true,
                 language: {
                     url: '//cdn.datatables.net/plug-ins/1.13.1/i18n/es-ES.json',
                 },
-                ajax: "{!! route('problems.getAll') !!}",
-                columns: [
-                    {
+                ajax: {
+                    url: "{!! route('problems.getAll') !!}",
+                    data: {
+                        cedula: cedula,
+                        nombre: nombre,
+                        fecha: fecha,
+                        creador: creador
+                    }
+                },
+                columns: [{
                         data: 'identificacion',
                         name: 'identificacion'
                     },
@@ -107,11 +176,11 @@ Posibles Votantes
                     }
                 ]
             });
-        })
-    </script>
+        }
+</script>
 
-    <script>
-        /* $("#changeStatus").modal('show'); */
+<script>
+    /* $("#changeStatus").modal('show'); */
         /* redady doc */
         $(document).ready(function() {
             /* change status */
@@ -192,5 +261,5 @@ Posibles Votantes
                 $('#candidato_id').val(data.id);
             });
         });
-    </script>
+</script>
 @endsection
