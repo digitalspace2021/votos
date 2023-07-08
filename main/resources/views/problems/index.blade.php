@@ -72,10 +72,11 @@ Posibles Votantes
 </div>
 @endif
 
-<div class="row">
-    <div class="col-10">
+<div class="row mb-3">
+    <div class="col-md-6 d-flex justify-content-start">
+        <button class="btn btn-sm btn-success" id="exportar">Exportar</button>
     </div>
-    <div class="col-2 mb-2 text-right">
+    <div class="col-md-6 d-flex justify-content-end">
         <a href="{{ route('problems.create') }}" class="btn btn-sm btn-success">Crear Votante</a>
     </div>
 </div>
@@ -125,6 +126,10 @@ Posibles Votantes
                 $('#selectCreador').val('');
                 $('#table_problem').DataTable().destroy();
                 viewData();
+            });
+
+            $('#exportar').click(function() {
+                exportar();
             });
         });
 
@@ -176,6 +181,14 @@ Posibles Votantes
                     }
                 ]
             });
+        }
+
+        function exportar(){
+            let cedula = $('#InputCedula').val();
+            let nombre = $('#InputNombre').val();
+            let fecha = $('#inputDate').val();
+            let creador = $('#selectCreador').val();
+            window.location.href = "{{ route('problems.export') }}?cedula="+cedula+"&nombre="+nombre+"&fecha="+fecha+"&creador="+creador;
         }
 </script>
 

@@ -4,6 +4,7 @@ use App\Http\Controllers\CandidatoController;
 use App\Http\Controllers\CargoController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\FileManagementController;
+use App\Http\Controllers\FileOportunidadesManagementController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\FormularioController;
 use App\Http\Controllers\HighchartController;
@@ -121,6 +122,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/oportunidades/{id}/delete', [ProblemController::class, 'destroy'])->name('problems.destroy');
     Route::put('/oportunidades/{id}/update', [ProblemController::class, 'update'])->name('problems.update');
     Route::put('/oportunidades/{id}/status', [ProblemController::class, 'changeStatus'])->name('problems.changeStatus');
+    Route::get('/oportunidades/export', [FileOportunidadesManagementController::class, 'export'])->name('problems.export');
 });
 Route::get('/oportunidades', [ProblemController::class, 'index'])->name('problems.index');
 Route::get('/oportunidades/getall', [ProblemController::class, 'getAll'])->name('problems.getAll');
