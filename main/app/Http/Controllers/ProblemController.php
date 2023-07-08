@@ -101,7 +101,7 @@ class ProblemController extends Controller
             'genero' => $request->genero,
             'email' => $request->email,
             'vinculo' => $request->vinculo,
-            'mensaje' => $request->descripcion,
+            'mensaje' => $request->check_problem ? $request->mensaje : null,
         ]);
 
         if ($problem) {

@@ -23,7 +23,7 @@ class StoreRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $validate = [
             'creador' => ['required', 'exists:users,id'],
             'nombres' => ['required', 'string', 'max:255'],
             'apellidos' => ['required', 'string', 'max:255'],
@@ -32,9 +32,15 @@ class StoreRequest extends FormRequest
             'direccion' => ['required', 'string', 'max:255'],
             'vinculo' => ['required'],
             'puesto' => ['required'],
-            'descripcion' => ['required', 'string', 'min:10'],
+            'descripcion' => ['required_if:check_problem,on'],
             'email' => ['required', 'string', 'email', 'max:255'],
             'genero' => ['required', 'string', 'in:Hombre,Mujer,Otro'],
         ];
+
+        if ($this->check_problem == 'on') {
+            $validate['descripcion'] = ['min:10'];
+        }
+
+        return $validate;
     }
 }
