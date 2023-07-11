@@ -39,7 +39,7 @@ class FileManagementController extends Controller
                 Excel::import(new FormImport($data), $file->store('temp'));
             }
 
-            Session::flash('message', 'Documentos subidos correctamente!!');
+            Session::flash('message', 'Documentos subidos correctamente!! Recuerda Aprobarlos en la sección de Pre-Formularios');
             Session::flash('alert-class', 'alert-success');
 
             return back();

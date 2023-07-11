@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Formulario;
+use App\Models\PreFormulario;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -37,14 +38,14 @@ class FormImport implements ToModel,  WithValidation, WithHeadingRow
         ];
 
         if ($this->validateIdNumber($row['identificacion'])) {
-            return new Formulario(array_merge($new_data, $this->data));
+            return new PreFormulario(array_merge($new_data, $this->data));
         }
     }
 
 
     public function validateIdNumber($identificacion): bool
     {
-        if (Formulario::firstWhere('identificacion', $identificacion)) {
+        if (PreFormulario::firstWhere('identificacion', $identificacion)) {
             return false;
         }
         return true;

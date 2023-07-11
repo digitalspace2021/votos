@@ -9,6 +9,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\FormularioController;
 use App\Http\Controllers\HighchartController;
 use App\Http\Controllers\MatrizSeguimientoController;
+use App\Http\Controllers\PreFormularioController;
 use App\Http\Controllers\ProblemController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\UtilityController;
@@ -54,6 +55,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/util/candidatos', [CandidatoController::class, 'lista_candidatos'])->name('util.lista_candidatos');
 
     Route::get('/inicio', [HomeController::class, 'index'])->name('inicio');
+
+    Route::get('/pre-formularios', [PreFormularioController::class, 'index'])->name('pre-formularios');
+    Route::get('/pre-formularios/getall', [PreFormularioController::class, 'getAll'])->name('pre-formularios.tabla');
+    Route::get('/pre-formularios/{id}/show', [PreFormularioController::class, 'show'])->name('pre-formularios.show');
+    Route::get('/pre-formularios/{id}/edit', [PreFormularioController::class, 'edit'])->name('pre-formularios.edit');
+    Route::put('/pre-formularios/{id}/update', [PreFormularioController::class, 'update'])->name('pre-formularios.update');
+    Route::put('/pre-formularios/{id}/aprobar', [PreFormularioController::class, 'approvedInfo'])->name('pre-formularios.aprobar');
+    Route::get('/pre-formularios/{id}/delete', [PreFormularioController::class, 'destroy'])->name('pre-formularios.destroy');
+
 
     Route::get('/formularios', [FormularioController::class, 'index'])->name('formularios');
     Route::get('/formularios/tabla', [FormularioController::class, 'tabla'])->name('formularios.tabla');
