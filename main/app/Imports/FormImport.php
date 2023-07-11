@@ -10,6 +10,12 @@ use Maatwebsite\Excel\Concerns\WithValidation;
 
 class FormImport implements ToModel,  WithValidation, WithHeadingRow
 {
+    private $data;
+
+    public function __construct(array $data)
+    {
+        $this->data = $data;
+    }
     /**
      * @param array $row
      *
@@ -18,29 +24,21 @@ class FormImport implements ToModel,  WithValidation, WithHeadingRow
 
     public function model(array $row)
     {
-        // try {
+        $new_data = [
+            'nombre' => $row['nombres'],
+            'apellido' => $row['apellidos'],
+            'email' => $row['email'],
+            'telefono' => $row['telefono'],
+            'genero' => $row['genero'],
+            'direccion' => $row['direccion'],
+            'puesto_votacion' => $row['puesto_votacion'],
+            'mensaje' => $row['mensaje'],
+            'identificacion' => $row['identificacion']
+        ];
 
         if ($this->validateIdNumber($row['identificacion'])) {
-
-            return  new Formulario([
-                'propietario_id' => request()->get('creador_id'),
-                'candidato_id' => request()->get('candidato_id'),
-                'nombre' => $row['nombres'],
-                'apellido' => $row['apellidos'],
-                'email' => $row['email'],
-                'telefono' => $row['telefono'],
-                'genero' => $row['genero'],
-                'direccion' => $row['direccion'],
-                'tipo_zona' => request()->get('tipo_zona'),
-                'zona' => request()->get('zona'),
-                'puesto_votacion' => $row['puesto_votacion'],
-                'mensaje' => $row['mensaje'],
-                'identificacion' => $row['identificacion']
-            ]);
+            return new Formulario(array_merge($new_data, $this->data));
         }
-        // } catch (\Exception $th) {
-        //     return null;
-        // }
     }
 
 
@@ -60,17 +58,9 @@ class FormImport implements ToModel,  WithValidation, WithHeadingRow
                 'required',
                 'string',
             ],
-            // 'creador_id' => [
-            //     'required',
-            //     'string',
-            // ],
             'identificacion' => [
                 'required',
             ],
-            // 'candidato_id' => [
-            //     'required',
-            //     'string',
-            // ],
             'mensaje' => [
                 'required',
                 'string',
@@ -79,10 +69,6 @@ class FormImport implements ToModel,  WithValidation, WithHeadingRow
                 'required',
                 'string',
             ],
-            // 'zona' => [
-            //     'required',
-            //     'string',
-            // ],
             'direccion' => [
                 'required',
                 'string',

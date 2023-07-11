@@ -20,18 +20,29 @@ class FileManagementController extends Controller
         return view('formularios.import');
     }
 
-    public function importFormulario()
+    public function importFormulario(Request $request)
     {
+        /* dd(request()->all()); */
         try {
+            $files = $request->file('file');
+            $tipoZona = $request->input('tipo_zona');
+            $zona = $request->input('zona');
 
-            Excel::import(new FormImport, request()->file('file')->store('temp'));
+            foreach ($files as $index => $file) {
+                $data = [
+                    'propietario_id' => $request->input('creador_id'),
+                    'candidato_id' => $request->input('candidato_id'),
+                    'tipo_zona' => $tipoZona[$index],
+                    'zona' => $zona[$index],
+                ];
+
+                Excel::import(new FormImport($data), $file->store('temp'));
+            }
 
             Session::flash('message', 'Documentos subidos correctamente!!');
-
             Session::flash('alert-class', 'alert-success');
 
             return back();
-
         } catch (\Throwable $th) {
             Session::flash('message', $th->getMessage());
             Session::flash('alert-class', 'alert-danger');
