@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\FormularioExport;
+use App\Exports\MatrizSeguimientoExport;
 use App\Imports\FormImport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -37,5 +38,10 @@ class FileManagementController extends Controller
             Session::flash('alert-class', 'alert-danger');
             return back();
         }
+    }
+
+    //for matriz de seguimiento
+    public function exportMatrizSeguimiento(Request $request){
+        return Excel::download(new MatrizSeguimientoExport($request->candidato,$request->pregunta,$request->cedula,$request->barrio,$request->corregimiento), 'matrizSeguimiento.xlsx');
     }
 }

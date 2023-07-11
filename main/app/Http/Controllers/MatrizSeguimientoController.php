@@ -54,7 +54,7 @@ class MatrizSeguimientoController extends Controller
         $ouput = null;
         $usersForm = Formulario::where('formularios.identificacion', $id)
         ->join('users', 'formularios.propietario_id', '=', 'users.id')
-        ->select('formularios.*', 'users.name as referido')
+        ->select('formularios.id as id_form','formularios.*', 'users.name as referido')
         ->get();
 
         if ($usersForm->isEmpty()) {

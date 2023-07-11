@@ -102,6 +102,7 @@ Route::middleware(['auth'])->group(function () {
     // utils
     Route::get('get_veredas_and_comunas', [UtilityController::class, 'getVeredasAndComunas']);
     Route::get('/statitics/{candidato_id?}', [HighchartController::class, 'handleChart']);
+    Route::get('/statitics/{candidato_id?}/{zona?}/{zona_id?}', [HighchartController::class, 'handleChart']);
 
     //matriz seguimiento
     Route::get('/matrizSeguimiento',[MatrizSeguimientoController::class,'index'])->name('matriz');
@@ -115,6 +116,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/matrizSeguimiento/edit/{id}',[MatrizSeguimientoController::class,'edit'])->name('matriz.edit');
     Route::get('/matrizSeguimiento/view/{id}',[MatrizSeguimientoController::class,'view'])->name('matriz.view');
     Route::put('/matrizSeguimiento/update/{id}',[MatrizSeguimientoController::class,'update'])->name('matriz.update');
+    //exportar matriz
+    Route::get('/export/matrizSeguimiento', [FileManagementController::class, 'exportMatrizSeguimiento'])->name('export.matriz');
 
     /*  */
     Route::get('/oportunidades/{id}/edit', [ProblemController::class, 'edit'])->name('problems.edit');

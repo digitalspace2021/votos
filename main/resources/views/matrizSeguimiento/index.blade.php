@@ -71,14 +71,15 @@
               </select>
               </select>
         </div>
-        <div class="col">
-            <button class="btn btn-success" id="btnFiltrar">Filtrar</button>
+        <div class="col text-center">
+            <button class="btn btn-success mt-4" id="btnFiltrar">Filtrar</button>
         </div>
+      </div>
 
         <div class="row mt-5">
             @if (Auth::user()->hasRole(['administrador']))
                 <div class="col-10">
-                    <a href="{{ route('export.forms') }}" class="btn  btn-sm btn-success">Exportar</a>
+                    <a id="btnExport" class="btn  btn-sm btn-success">Exportar</a>
                 </div>
             @endif
             @if (Auth::user()->hasRole(['administrador', 'simple']))
@@ -139,6 +140,18 @@
             viewTable(candidato,pregunta,cedula,barrio,corregimiento); 
             console.log('Opción seleccionada: ' + candidato);
         });
+
+        //Generate xls file
+        $('#btnExport').click(function() {
+            candidato = document.getElementById('selectCandidato').value;
+            pregunta = document.getElementById('selectPregunta').value;
+            cedula = document.getElementById('cedula').value;
+            barrio = document.getElementById('selectBarrio').value;
+            corregimiento = document.getElementById('selectCorregimiento').value;
+            
+            exportMatriz(candidato,pregunta,cedula,barrio,corregimiento); 
+            console.log('Opción seleccionada: ' + candidato);
+        });
         
     });
 
@@ -150,7 +163,7 @@
                 url: "{{ route('matriz.tabla') }}",
                 type: "GET",
                 data: {
-                    // Datos a enviar
+                    // Data to send
                     candidato: candidato,
                     pregunta: pregunta,
                     cedula: cedula,
@@ -176,6 +189,42 @@
                 { data: 'acciones', name: 'acciones'}
             ]
         });
+    }
+
+    //function generate XLS
+    function exportMatriz(candidato,pregunta,cedula,barrio,corregimiento){
+        $.ajax({
+            url: "{{ route('export.matriz') }}", 
+            method: 'GET',
+            xhrFields: {
+                responseType: 'blob' // Indicate that the response is of type Blob
+            },
+            data: {
+                    // Data to send
+                    candidato: candidato,
+                    pregunta: pregunta,
+                    cedula: cedula,
+                    barrio: barrio,
+                    corregimiento: corregimiento       
+            },
+            success: function(response) {
+                var downloadLink = document.createElement('a');
+                downloadLink.href = URL.createObjectURL(response);
+                downloadLink.download = 'matrizSeguimiento.xlsx'; // File name to download
+
+                // Add the link to the document and click it to start the download
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+
+                // Remove document link
+                document.body.removeChild(downloadLink);
+            },
+            error: function(xhr, status, error) {
+                // An error occurred during the request
+                console.error(error);
+            }
+        });
+
     }
 </script>
 @endsection

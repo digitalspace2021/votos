@@ -126,7 +126,9 @@
             </div>
         </div>
 
-        <a href="{{route('matriz')}}" class="btn btn-danger">Volver</a>
+        <div class="text-center">
+            <a href="{{route('matriz')}}" class="btn btn-danger">Cancelar</a>
+        </div>
       </form>
     <!-- end form -->
 @endsection
