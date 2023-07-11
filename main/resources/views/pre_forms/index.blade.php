@@ -119,15 +119,6 @@ Preview Formularios
     {{session('success') ?? session('error')}}
 </div>
 @endif
-
-<div class="row mb-3">
-    <div class="col-md-6 d-flex justify-content-start">
-        <button class="btn btn-sm btn-success" id="exportar">Exportar</button>
-    </div>
-    <div class="col-md-6 d-flex justify-content-end">
-        <a href="{{ route('problems.create') }}" class="btn btn-sm btn-success">Crear Votante</a>
-    </div>
-</div>
 @endsection
 
 @section('cuerpo')

@@ -69,8 +69,17 @@
                         <nav class="nav flex-column">
                             @auth
                                 <a class="me-3 py-2 text-dark text-decoration-none btn-hover" href="{{ route('inicio') }}"><i class="fa fa-home" aria-hidden="true"></i> Inicio</a>
-                                <a class="me-3 py-2 text-dark text-decoration-none btn-hover"
-                                    href="{{ route('formularios') }}"><i class="fa fa-file" aria-hidden="true"></i> Formularios</a>
+                                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle btn-hover" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa fa-file" aria-hidden="true"></i> Formularios
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item btn-hover" href="{{ route('formularios') }}">Formularios Oficiales</a></li>
+                                        <li><a class="dropdown-item btn-hover" href="{{ route('pre-formularios') }}">Pre-Formularios</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
                                 <a class="me-3 py-2 text-dark text-decoration-none btn-hover"
                                     href="{{ route('problems.index') }}"><i class="fa fa-users" aria-hidden="true"></i> Posibles Votantes</a>
                                 @if (Auth::user()->hasRole('administrador'))
