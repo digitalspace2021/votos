@@ -78,14 +78,45 @@
                         </div>
 
                         <div class="col-6">
-                            <label for="zona" class="form-label">Comuna / Corregimiento</label>
+                            <label for="zona" class="form-label" id="label_zona">Comuna / Corregimiento</label>
                             <select class="form-control" name="zona" id="zona" required></select>
                             <div class="invalid-feedback">
                                 Por favor ingresa tu Comuna / Corregimiento.
                             </div>
                         </div>
 
-                        <input type="file" class="custom-up" name="file" id="fileUp">
+                        {{-- <input type="file" class="custom-up" name="file" id="fileUp"> --}}
+
+                        <div class="row d-flex justify-content-center align-items-center mt-3">
+                            <div class="btn btn-warning btn-lg" id="add_files" type="button">
+                                <i class="fas fa-plus"></i>
+                                Agregar archivos
+                            </div>
+                        </div>
+
+
+                        <div class="mt-2" id="content_files" style="width: 100%">
+                            {{-- <div class="row">
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <input type="file" name="" id="" class="form-control">
+                                        <button class="btn btn-danger" title="Quitar">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <select name="tipo_zona" id="tipo_zona" class="form-control" required>
+                                        <option value="0">Seleccion el tipo de zona</option>
+                                        <option value="Comuna">Comuna</option>
+                                        <option value="Corregimiento">Corregimiento</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-control" name="zona" id="zona" required></select>
+                                </div>
+                            </div> --}}
+                        </div>
 
                     </div>
 
@@ -188,6 +219,78 @@
                 $('#candidato_id').on('select2:select', function(e) {
                     var data = e.params.data;
                     $('#candidato_id').val(data.id);
+                });
+
+                $("#add_files").click(function() {
+                    addFilesField();
+                });
+
+
+                /* create function for filesField and with two select tipo_zona and zona who identify with each other, files type excel and with option for delete files field  */
+
+                function addFilesField(){
+                    let container = $("#content_files");
+                    let zona = $("#zona");
+                    let tipo_zona = $("#tipo_zona");
+
+
+                    /* <div class="row">
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <input type="file" name="" id="" class="form-control">
+                                        <button class="btn btn-danger" title="Quitar">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <select name="tipo_zona" id="tipo_zona" class="form-control" required>
+                                        <option value="0">Seleccion el tipo de zona</option>
+                                        <option value="Comuna">Comuna</option>
+                                        <option value="Corregimiento">Corregimiento</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-control" name="zona" id="zona" required></select>
+                                </div>
+                            </div> */
+
+                    /* with template string */
+                    let template = `
+                        <div class="row mb-2">
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="file" name="file[]" class="form-control">
+                                    <button type="button" class="btn btn-danger" id="delete_field" title="Quitar">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <h5>${tipo_zona.find('option:selected').text()}</h5>
+                                <input type="hidden" name="tipo_zona[]" value="${tipo_zona.val()}">
+                            </div>
+
+                            <div class="col-md-4">
+                                <h5>${zona.find('option:selected').text()}</h5>
+                                <input type="hidden" name="zona[]" value="${zona.val()}">
+                            </div>
+                        </div>
+                    `;
+
+                    container.append(template);
+
+                    $("#delete_field").click(function(){
+                        $(this).parent().parent().parent().remove();
+                    });
+                }
+
+                $("#tipo_zona").change(function() {
+                    if ($(this).val() == 'Corregimiento') {
+                        $("#label_zona").html('Vereda');
+                    } else {
+                        $("#label_zona").html('Barrio');
+                    }
                 });
             })
         </script>
