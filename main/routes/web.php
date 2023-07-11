@@ -15,6 +15,7 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\UtilityController;
 use App\Models\MatrizSeguimiento;
 use App\Models\User;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Permission;
@@ -142,3 +143,9 @@ Route::get('/oportunidades/getall', [ProblemController::class, 'getAll'])->name(
 Route::get('/oportunidades/create', [ProblemController::class, 'create'])->name('problems.create');
 Route::post('/oportunidades/create', [ProblemController::class, 'store'])->name('problems.store');
 Route::get('/oportunidades/{id}/show', [ProblemController::class, 'show'])->name('problems.show');
+
+/* route storage link command */
+Route::get('/storage-link', function () {
+    Artisan::call('storage:link');
+    return 'success';
+});
