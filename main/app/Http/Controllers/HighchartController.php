@@ -9,17 +9,22 @@ use Illuminate\Support\Facades\DB;
 
 class HighchartController extends Controller
 {
-    public function handleChart($candidato = null)
+    public function handleChart($candidato=null,$zona=null,$zona_id=null)
     {
+        //veredas y barrios
+        $veredas = DB::table('veredas')->select('id','name')->get();
+        $barrios = DB::table('barrios')->select('id','name')->get();
 
         $candidatos = Candidato::get(['name', 'id']);
 
         $DataUsers = (object)collect([]);
         $DataComunas = (object)collect([]);
         $DataCorregimientos = (object)collect([]);
+        $dataVeredas = (object)collect([]);
+        $dataBarrios = (object)collect([]);
 
         if (!$candidato) {
-            return view('statitics.bybarrios', compact('DataCorregimientos', 'DataComunas', 'DataUsers', 'candidatos', 'candidato'));
+            return view('statitics.bybarrios', compact('DataCorregimientos', 'DataComunas', 'DataUsers', 'candidatos', 'candidato','dataVeredas','dataBarrios'));
         }
 
         /****************************************************************************************************************************************** */
@@ -50,6 +55,34 @@ class HighchartController extends Controller
             ->groupBy('users.name')
             ->get();
 
-        return view('statitics.bybarrios', compact('DataCorregimientos', 'DataComunas', 'DataUsers', 'candidatos', 'candidato'));
+
+        if($zona == 'ver'){
+            $dataVeredas = Formulario::select('veredas.name as drilldown', 'veredas.name as name', DB::raw("COUNT(formularios.id) as y"), 'formularios.tipo_zona')
+            ->join('veredas', 'formularios.zona', '=', 'veredas.id')
+            ->join('corregimientos', 'veredas.corregimiento_id', '=', 'corregimientos.id')
+            ->join('users', 'users.id', '=', 'formularios.propietario_id')
+            ->where('formularios.tipo_zona', 'Corregimiento')
+            ->where('veredas.id',$zona_id)
+            ->where('candidato_id', $candidato)
+            ->where('formularios.estado', true)
+            ->groupBy('formularios.tipo_zona', 'veredas.name')
+            ->get();
+        }
+
+        if($zona == 'bar'){
+            $dataBarrios = Formulario::select('barrios.name as drilldown', 'barrios.name as name', DB::raw("COUNT(formularios.id) as y"), 'formularios.tipo_zona')
+            ->join('barrios', 'formularios.zona', '=', 'barrios.id')
+            ->join('comunas', 'barrios.comuna_id', '=', 'comunas.id')
+            ->join('users', 'users.id', '=', 'formularios.propietario_id')
+            ->where('formularios.tipo_zona', 'Comuna')
+            ->where('barrios.id',$zona_id)
+            ->where('candidato_id', $candidato)
+            ->where('formularios.estado', true)
+            ->groupBy('formularios.tipo_zona', 'barrios.name')
+            ->get();
+        }
+
+
+        return view('statitics.bybarrios', compact('DataCorregimientos', 'DataComunas', 'DataUsers', 'candidatos', 'candidato','veredas','barrios','dataVeredas','dataBarrios'));
     }
 }

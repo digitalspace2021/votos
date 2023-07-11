@@ -120,7 +120,7 @@
     <div class="row mt-5">
         @if (Auth::user()->hasRole(['administrador']))
             <div class="col-10">
-                <a href="{{ route('export.forms') }}" class="btn  btn-sm btn-success">Exportar</a>
+                <a href="{{ route('export.forms') }}" class="btn  btn-sm btn-warning">Exportar</a>
             </div>
         @endif
         @if (Auth::user()->hasRole(['administrador', 'simple']))

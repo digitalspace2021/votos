@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Http\Requests\Problem;
+namespace App\Http\Requests\PreFormulario;
+
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -23,24 +24,21 @@ class StoreRequest extends FormRequest
      */
     public function rules()
     {
-        $validate = [
-            'creador' => ['required', 'exists:users,id'],
+        /* dd($this->all()); */
+        return [
             'nombres' => ['required', 'string', 'max:255'],
             'apellidos' => ['required', 'string', 'max:255'],
             'identificacion' => ['required', 'string', 'min:8', 'max:15'],
-            'telefono' => ['required', 'string', 'max:255'],
-            'direccion' => ['required', 'string', 'max:255'],
-            'vinculo' => ['required'],
+            'telefono' => ['required', 'max:255'],
+            'direccion' => ['required', 'max:255'],
             'puesto' => ['required'],
-            'descripcion' => ['required_if:check_problem,on'],
-            'email' => ['required', 'string', 'email', 'max:255'],
+            'descripcion' => ['required', 'min:10'],
+            'email' => ['required', 'email', 'max:255'],
             'genero' => ['required', 'string', 'in:Hombre,Mujer,Otro'],
+            'tipo_zona' => ['required', 'string', 'in:Comuna,Corregimiento'],
+            'zona' => ['required'],
         ];
 
-        if ($this->check_problem == 'on') {
-            $validate['descripcion'] = ['min:10'];
-        }
-
-        return $validate;
+        /* return $validate; */
     }
 }

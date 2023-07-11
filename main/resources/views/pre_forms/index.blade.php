@@ -1,7 +1,7 @@
 @extends('layouts.base')
 
 @section('titulo')
-Posibles Votantes
+Preview Formularios
 @endsection
 
 @section('css-extra')
@@ -19,10 +19,10 @@ Posibles Votantes
 
 @section('cabecera')
 <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
-    <h1 class="display-4 fw-normal">Posibles Votantes</h1>
-    <p class="fs-5 text-muted">Aqui podras encontrar la gestion de Posibles Votantes, solo los administradores pueden
-        crear,
-        editar y eliminar usuarios. Teniendo en cuenta que esta seccion tiene relacion con la parte de los formularios
+    <h1 class="display-4 fw-normal">Preview Formularios</h1>
+    <p class="fs-5 text-muted">Aqui se gestionara los formularios de los votantes que hallan sido importados desde la
+        aplicacion, con el fin de primero confirmar la informacion para posterior contarla en las metricas de la
+        aplicacion.
     </p>
 </div>
 
@@ -56,11 +56,59 @@ Posibles Votantes
                 @endforeach
             </select>
         </div>
-        <div class="col-md-4 d-flex justify-content-around align-items-center mt-4">
+        <div class="col">
+            <label for="">Por candidato</label>
+            <select class="form-select" aria-label="Default select example" id="selectCandidato">
+                <option value="" selected>Filtrar por candidato</option>
+                @foreach ($candidatos as $candidato)
+                <option value="{{$candidato->id}}">{{$candidato->name}}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <label for="">Por Comuna</label>
+            <select class="form-select" aria-label="Default select example" id="selectComuna">
+                <option value="" selected>Filtrar por comuna</option>
+                @foreach ($comunas as $comuna)
+                <option value="{{$comuna->id}}">{{$comuna->name}}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="">Por Barrio</label>
+            <select class="form-select" aria-label="Default select example" id="selectBarrio">
+                <option value="" selected>Filtrar por barrio</option>
+                @foreach ($barrios as $barrio)
+                <option value="{{$barrio->id}}">{{$barrio->name}}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="">Por corregimiento</label>
+            <select class="form-select" aria-label="Default select example" id="selectCorregimiento">
+                <option value="" selected>Filtrar por corregimiento</option>
+                @foreach ($corregimientos as $corregimiento)
+                <option value="{{$corregimiento->id}}">{{$corregimiento->name}}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="">Por Vereda</label>
+            <select class="form-select" aria-label="Default select example" id="selectVereda">
+                <option value="" selected>Filtrar por vereda</option>
+                @foreach ($veredas as $vereda)
+                <option value="{{$vereda->id}}">{{$vereda->name}}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 d-flex justify-content-around align-items-center mt-4">
             <button class="btn btn-danger" id="btnClear">Limpiar</button>
             <button class="btn btn-warning" id="btnFiltrar">Filtrar</button>
         </div>
-
     </div>
     <!-- End filtros -->
     <hr>
@@ -71,15 +119,6 @@ Posibles Votantes
     {{session('success') ?? session('error')}}
 </div>
 @endif
-
-<div class="row mb-3">
-    <div class="col-md-6 d-flex justify-content-start">
-        <button class="btn btn-sm btn-success" id="exportar">Exportar</button>
-    </div>
-    <div class="col-md-6 d-flex justify-content-end">
-        <a href="{{ route('problems.create') }}" class="btn btn-sm btn-success">Crear Votante</a>
-    </div>
-</div>
 @endsection
 
 @section('cuerpo')
@@ -91,6 +130,7 @@ Posibles Votantes
                 <th>Nombre Completo</th>
                 <th>Telefono</th>
                 <th>Direccion</th>
+                <th>Email</th>
                 <th>Responsable</th>
                 <th>Creado</th>
                 <th>Acciones</th>
@@ -100,7 +140,7 @@ Posibles Votantes
 </div>
 @endsection
 
-@include('problems.modals.address-modal')
+@include('pre_forms.modals.address-modal')
 
 
 @section('js-extra')
@@ -115,8 +155,14 @@ Posibles Votantes
                 let nombre = $('#InputNombre').val();
                 let fecha = $('#inputDate').val();
                 let creador = $('#selectCreador').val();
+                let candidato = $('#selectCandidato').val();
+                let comuna = $('#selectComuna').val();
+                let barrio = $('#selectBarrio').val();
+                let corregimiento = $('#selectCorregimiento').val();
+                let vereda = $('#selectVereda').val();
+
                 $('#table_problem').DataTable().destroy();
-                viewData(cedula, nombre, fecha, creador);
+                viewData(cedula, nombre, fecha, creador, candidato, comuna, barrio, corregimiento, vereda);
             });
 
             $('#btnClear').click(function() {
@@ -125,6 +171,12 @@ Posibles Votantes
                 $('#inputDate').val('');
                 $('#selectCreador').val('');
                 $('#table_problem').DataTable().destroy();
+                $('#selectCandidato').val('');
+                $('#selectComuna').val('');
+                $('#selectBarrio').val('');
+                $('#selectCorregimiento').val('');
+                $('#selectVereda').val('');
+
                 viewData();
             });
 
@@ -133,7 +185,7 @@ Posibles Votantes
             });
         });
 
-        function viewData(cedula = null, nombre = null, fecha = null, creador = null) {
+        function viewData(cedula = null, nombre = null, fecha = null, creador = null, candidato = null, comuna = null, barrio = null, corregimiento = null, vereda = null) {
             $('#table_problem').DataTable({
                 processing: true,
                 serverSide: true,
@@ -141,12 +193,17 @@ Posibles Votantes
                     url: '//cdn.datatables.net/plug-ins/1.13.1/i18n/es-ES.json',
                 },
                 ajax: {
-                    url: "{!! route('problems.getAll') !!}",
+                    url: "{!! route('pre-formularios.tabla') !!}",
                     data: {
                         cedula: cedula,
                         nombre: nombre,
                         fecha: fecha,
-                        creador: creador
+                        creador: creador,
+                        candidato: candidato,
+                        comuna: comuna,
+                        barrio: barrio,
+                        corregimiento: corregimiento,
+                        vereda: vereda
                     }
                 },
                 columns: [{
@@ -164,6 +221,10 @@ Posibles Votantes
                     {
                         data: 'direccion',
                         name: 'direccion'
+                    },
+                    {
+                        data: 'email',
+                        name: 'email'
                     },
                     {
                         data: 'name',
@@ -199,7 +260,7 @@ Posibles Votantes
             /* change status */
             $(document).on('click', '.status', function() {
                 let id = $(this).attr('prid');
-                let url = "{{ route('problems.changeStatus', ':id') }}";
+                let url = "{{ route('pre-formularios.aprobar', ':id') }}";
                 url = url.replace(':id', id);
                 $("#changeStatus form").attr('action', url);
                 /* call attribute in prid get value */

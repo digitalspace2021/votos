@@ -77,7 +77,11 @@ Posibles Votantes
                     <label for="puesto" class="form-label">Puesto de votacion</label>
                     <input type="number" class="form-control" name="puesto" value="{{$problem->puesto_votacion}}" required disabled>
                 </div>
-                <div class="col-md-12" id="desc_problem">
+                <div class="col-md-12 mb-2">
+                    <input type="checkbox" name="check_problem" id="check_problem" class="form-check-input" @if ($problem->mensaje) checked @endif disabled>
+                    <label for="check_problem" class="form-check-label">¿Tiene alguna problemática?</label>
+                </div>
+                <div class="col-md-12" id="desc_problem" style="display: none;">
                     <label for="descripcion">Problematica</label>
                     <textarea name="descripcion" id="" cols="30" rows="5" class="form-control"
                         required disabled>{{$problem->mensaje}}</textarea>
@@ -124,6 +128,13 @@ Posibles Votantes
             var data = e.params.data;
             $('#creador_id').val(data.id);
         });
+
+        let  check = document.getElementById('check_problem');
+        let form = document.getElementById('desc_problem');
+
+        if (check.checked) {
+            form.style.display = 'block'
+        }
     });
 </script>
 @endsection

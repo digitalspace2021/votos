@@ -27,7 +27,7 @@
             @endforeach
 
             </label>
-            <select class="form-control" name="candidato_id" id="candidato_id" onchange="getStatitics()" required></select>
+            <select class="form-control" name="candidato_id" id="candidato_id" onchange="getStatitics({{$candidato}})" required></select>
             <div class="invalid-feedback">
                 Este campo es requerido.
             </div>
@@ -36,7 +36,9 @@
         <div class="w3-bar w3-black">
             <button class="btn btn-white btn-sm" onclick="openCity('container1')">Por Registrador</button>
             <button class="btn btn-white btn-sm" onclick="openCity('container2')">Por Corregimientos</button>
+            <button class="btn btn-white btn-sm" onclick="openCity('container4')">Por Veredas</button>
             <button class="btn btn-white btn-sm" onclick="openCity('container3')">Por Comunas</button>
+            <button class="btn btn-white btn-sm" onclick="openCity('container5')">Por Barrios</button>
         </div>
     </div>
 @endsection
@@ -46,11 +48,33 @@
 
     <div id="container1" class="city"></div>
 
-    <div id="container2" class="city" style="display:none">
-
-    </div>
+    <div id="container2" class="city" style="display:none"></div>
 
     <div id="container3" class="city" style="display:none"></div>
+
+    <div id="container4" class="city" style="display:none">
+        <select class="form-select" name="vereda_id" id="vereda_id"  onchange="getStatitics({{$candidato}})">
+            <option value="" selected>Seleccione la vereda</option>
+            @if(!empty($veredas))
+                @foreach($veredas as $vereda)
+                    <option value="{{$vereda->id}}">{{$vereda->name}}</option>
+                @endforeach
+            @endif
+          </select>
+          <div id="container44"></div>
+    </div>
+
+    <div id="container5" class="city" style="display:none">
+        <select class="form-select" name="barrio_id" id="barrio_id"  onchange="getStatitics({{$candidato}})">
+            <option value="" selected>Seleccione el barrio</option>
+            @if(!empty($barrios))
+                @foreach($barrios as $barrio)
+                    <option value="{{$barrio->id}}">{{$barrio->name}}</option>
+                @endforeach
+            @endif
+          </select>
+          <div id="container55"></div>
+    </div>
 
     <!--</figure>-->
 @endsection
@@ -63,10 +87,14 @@
             let data1 = <?= $DataUsers ?>;
             let data2 = <?= $DataCorregimientos ?>;
             let data3 = <?= $DataComunas ?>;
+            let data4 = <?= $dataVeredas ?>;
+            let data5 = <?= $dataBarrios ?>;
 
             let result1 = [];
             let result2 = [];
             let result3 = [];
+            let result4 = [];
+            let result5 = [];
 
             await data1.forEach(element => {
                 result1.push(element)
@@ -91,6 +119,24 @@
             });
 
             result3 = result3.map(obj => ({
+                ...obj,
+                y: parseInt(obj.y)
+            }));
+
+            await data4.forEach(element => {
+                result4.push(element)
+            });
+
+            result4 = result4.map(obj => ({
+                ...obj,
+                y: parseInt(obj.y)
+            }));
+
+            await data5.forEach(element => {
+                result5.push(element)
+            });
+
+            result5 = result5.map(obj => ({
                 ...obj,
                 y: parseInt(obj.y)
             }));
@@ -269,6 +315,126 @@
                     },
                 }
             });
+
+            //chart veredas
+            const chart4 = await Highcharts.chart('container44', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    align: 'left',
+                    text: 'Votos por Veredas'
+                },
+                subtitle: {
+                    align: 'left',
+                    text: 'Discrimiado por Veredas.'
+                },
+                accessibility: {
+                    announceNewData: {
+                        enabled: true
+                    }
+                },
+                xAxis: {
+                    type: 'category'
+                },
+                yAxis: {
+                    title: {
+                        text: 'Total votos'
+                    }
+
+                },
+                legend: {
+                    enabled: false
+                },
+                plotOptions: {
+                    series: {
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.y:.1f}'
+                            // format: '{point.y:.1f}%'
+                        }
+                    }
+                },
+
+                tooltip: {
+                    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b><br/>'
+                },
+
+                series: [{
+                    name: 'Formularios',
+                    colorByPoint: true,
+                    data: result4
+                }],
+                drilldown: {
+                    breadcrumbs: {
+                        position: {
+                            align: 'right'
+                        }
+                    },
+                }
+            });
+
+            //chart Barrios
+            const chart5 = await Highcharts.chart('container55', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    align: 'left',
+                    text: 'Votos por Barrios'
+                },
+                subtitle: {
+                    align: 'left',
+                    text: 'Discrimiado por Barrios.'
+                },
+                accessibility: {
+                    announceNewData: {
+                        enabled: true
+                    }
+                },
+                xAxis: {
+                    type: 'category'
+                },
+                yAxis: {
+                    title: {
+                        text: 'Total votos'
+                    }
+
+                },
+                legend: {
+                    enabled: false
+                },
+                plotOptions: {
+                    series: {
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.y:.1f}'
+                            // format: '{point.y:.1f}%'
+                        }
+                    }
+                },
+
+                tooltip: {
+                    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b><br/>'
+                },
+
+                series: [{
+                    name: 'Formularios',
+                    colorByPoint: true,
+                    data: result5
+                }],
+                drilldown: {
+                    breadcrumbs: {
+                        position: {
+                            align: 'right'
+                        }
+                    },
+                }
+            });
         }
 
         $('#candidato_id').select2({
@@ -293,10 +459,22 @@
 
         });
 
-        async function getStatitics() {
-            if ($('#candidato_id').val()) {
-                window.location.href = '/statitics/' + $('#candidato_id').val()
+        async function getStatitics(can) {
+            
+            if ($('#candidato_id').val() !="") {
+              if($('#vereda_id').val() == "" && $('#barrio_id').val() == "" )  {
+                window.location.href = '/statitics/' + $('#candidato_id').val();
+              }
+              if($('#vereda_id').val() != "" && $('#barrio_id').val() == "" )  {
+                window.location.href = '/statitics/' + can + '/ver/' + $('#vereda_id').val();
+              }
+              if($('#vereda_id').val() == "" && $('#barrio_id').val() != "" )  {
+                window.location.href = '/statitics/' + can + '/bar/' + $('#barrio_id').val();
+              }
+                
             }
+            
+                
         }
 
         async function openCity(cityName) {

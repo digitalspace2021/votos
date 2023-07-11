@@ -9,119 +9,151 @@
 @endsection
 
 @section('cabecera')
-<h1>Matriz de seguimiento</h1>
+    <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+        <h1 class="display-4 fw-normal">Crear Matriz de Seguimiento</h1>
+    </div>
 @endsection
 
 @section('cuerpo')
     <!-- Form -->
     <form action="{{route('matriz_create')}}" method="POST">
         @csrf
-        <div class="form-group">
-          <label for="exampleFormControlInput1">Celula</label>
-          <input type="number" class="form-control" id="ID" name="ID" placeholder="123456789" >
-          <input type="hidden" id="formulario_id" name="formulario_id" value="">
-        </div>
-        <div class="form-group">
-            <label for="exampleFormControlInput1">Nombre</label>
-            <input type="text" class="form-control" id="name" name="name" placeholder="Su nombre" readonly>
-        </div>
-        <div class="form-group">
-            <label for="exampleFormControlInput1">Direccion</label>
-            <input type="text" class="form-control" id="address" name="address" placeholder="Su direccion" readonly>
-        </div>
-        <div class="form-group">
-            <label for="exampleFormControlInput1">Telefono</label>
-            <input type="number" class="form-control" id="phone" name="phone" placeholder="5555555" readonly>
-        </div>
-        <div class="form-group">
-            <label for="exampleFormControlInput1">Referido</label>
-            <input type="text" class="form-control" id="referred" name="referred" placeholder="" readonly>
-        </div>
-        <div class="form-group">
-            <label for="">Se le enseño a votar?</label>
-            <div class="input-group-text">
-                <label for="">Si</label>
-                <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta1" value="1" class="grupo1">
-                <label for="">No</label>
-                <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta1" value="0" class="grupo1">
+        <div class="row">
+            <div class="col">
+                <label for="exampleFormControlInput1">Celula</label>
+                <input type="number" class="form-control" id="ID" name="ID" placeholder="123456789" >
+                <input type="hidden" id="formulario_id" name="formulario_id" value="">
+              </div>
+              <div class="col">
+                  <label for="exampleFormControlInput1">Nombre</label>
+                  <input type="text" class="form-control" id="name" name="name" placeholder="Su nombre" readonly>
               </div>
         </div>
-
-        <div class="form-group">
-            <label for="">Se le pego publicidad?</label>
-            <div class="input-group-text">
-                <label for="">Si</label>
-                <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta2" value="1" class="grupo2">
-                <label for="">No</label>
-                <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta2" value="0" class="grupo2">
-              </div>
+        
+        <div class="row">
+            <div class="col">
+                <label for="exampleFormControlInput1">Direccion</label>
+                <input type="text" class="form-control" id="address" name="address" placeholder="Su direccion" readonly>
+            </div>
+            <div class="col">
+                <label for="exampleFormControlInput1">Telefono</label>
+                <input type="number" class="form-control" id="phone" name="phone" placeholder="5555555" readonly>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col">
+                <label for="exampleFormControlInput1">Referido</label>
+                <input type="text" class="form-control" id="referred" name="referred" placeholder="" readonly>
+            </div>
+        </div>
+        <div class="text-center mt-2">
+            <a id="edit_form" href="#" class="btn btn-primary" style="display: none">Editar</a>
         </div>
 
-        <div class="form-group">
-            <label for="">Tiene carro o moto para ir a votar?</label>
-            <div class="input-group-text">
-                <label for="">Si</label>
-                <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta3" value="1" class="grupo3">
-                <label for="">No</label>
-                <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta3" value="0" class="grupo3">
-              </div>
-        </div>
+        <!-- Encuesta -->
+        <div class="mt-5 mb-5 p-3 bg-light">
+            <div class="row">
+                <div class="col">
+                    <label for="">Se le enseño a votar?</label>
+                    <div class="input-group-text">
+                        <label for="">Si</label>
+                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta1" value="1" class="grupo1">
+                        <label for="">No</label>
+                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta1" value="0" class="grupo1">
+                      </div>
+                </div>
+        
+                <div class="col">
+                    <label for="">Se le pego publicidad?</label>
+                    <div class="input-group-text">
+                        <label for="">Si</label>
+                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta2" value="1" class="grupo2">
+                        <label for="">No</label>
+                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta2" value="0" class="grupo2">
+                      </div>
+                </div>
+            </div>
+    
+            <div class="row">
+                <div class="col">
+                    <label for="">Tiene carro o moto para ir a votar?</label>
+                    <div class="input-group-text">
+                        <label for="">Si</label>
+                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta3" value="1" class="grupo3">
+                        <label for="">No</label>
+                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta3" value="0" class="grupo3">
+                      </div>
+                </div>
+        
+                <div class="col">
+                    <label for="">Se le ha echo seguimiento constante?</label>
+                    <div class="input-group-text">
+                        <label for="">Si</label>
+                        <input id="pregunta4" type="checkbox" aria-label="Checkbox for following text input" name="pregunta4" value="1" class="grupo4">
+                        <label for="">No</label>
+                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta4" value="0" class="grupo4">
+                    </div>
+                    
+                    <div class="form-group" id="visit4" style="display: none;">
+                        <label for="">En que fecha se le ha llamado?</label>
+                        <input type="date" name="date_visit4" id="date_call">
+                        <button class="btn btn-primary" type="button" onclick="addDate('datesLabelCall','date_call','datesInputCall','call')">add</button>
+                        <button class="btn btn-danger" type="button" onclick="deleteDate('datesLabelCall','date_call','datesInputCall','call')">del</button>
+                        <hr>
+                        <label id="datesLabelCall">Fechas Seleccionadas: </label>
+                        <hr>
+                        
+                        <input type="hidden" name="datesInputCall" id="datesInputCall">
+                        
+                    </div>
+                </div>
+                
+            </div>
+    
+            <div class="row">
+                <div class="col">
+                    <label for="">Se le ha visitado?</label>
+                    <div class="input-group-text">
+                        <label for="">Si</label>
+                        <input id="pregunta5" type="checkbox" aria-label="Checkbox for following text input" name="pregunta5" value="1" class="grupo5">
+                        <label for="">No</label>
+                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta5" value="0" class="grupo5">
+                    </div>
+                    
+                    <div class="form-group" id="visit5" style="display: none;">
+                        <label for="">En que fecha se le ha visitado?</label>
+                        <input type="date" name="date_visit5" id="date_visit">
+                        <button class="btn btn-primary" type="button" onclick="addDate('datesLabelVisit','date_visit','datesInputVisit','visit')">add</button>
+                        <button class="btn btn-danger" type="button" onclick="deleteDate('datesLabelVisit','date_visit','datesInputVisit','visit')">del</button>
+                        <hr>
+                        <label id="datesLabelVisit">Fechas Seleccionadas: </label>
+                        <hr>
+                        
+                        <input type="hidden" name="datesInputVisit" id="datesInputVisit">
+                    </div>
 
-        <div class="form-group">
-            <label for="">Se le ha echo seguimiento constante?</label>
-            <div class="input-group-text">
-                <label for="">Si</label>
-                <input id="pregunta4" type="checkbox" aria-label="Checkbox for following text input" name="pregunta4" value="1" class="grupo4">
-                <label for="">No</label>
-                <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta4" value="0" class="grupo4">
-              </div>
+                </div>
+                
+        
+                <div class="col">
+                    <label for="">El lugar de votacion es cerca a su casa?</label>
+                    <div class="input-group-text">
+                        <label for="">Si</label>
+                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta6" value="1" class="grupo6">
+                        <label for="">No</label>
+                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta6" value="0" class="grupo6">
+                      </div>
+                </div>
+            </div>
         </div>
-        <div class="form-group" id="visit4" style="display: none;">
-            <label for="">En que fecha se le ha llamado?</label>
-            <input type="date" name="date_visit4" id="date_call">
-            <button class="btn btn-primary" type="button" onclick="addDate('datesLabelCall','date_call','datesInputCall','call')">add</button>
-            <button class="btn btn-danger" type="button" onclick="deleteDate('datesLabelCall','date_call','datesInputCall','call')">del</button>
-            <hr>
-            <label id="datesLabelCall">Fechas Seleccionadas: </label>
-            <hr>
-            
-            <input type="hidden" name="datesInputCall" id="datesInputCall">
-            
-        </div>
+        <!-- end Encuesta-->
 
-        <div class="form-group">
-            <label for="">Se le ha visitado?</label>
-            <div class="input-group-text">
-                <label for="">Si</label>
-                <input id="pregunta5" type="checkbox" aria-label="Checkbox for following text input" name="pregunta5" value="1" class="grupo5">
-                <label for="">No</label>
-                <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta5" value="0" class="grupo5">
-              </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a href="{{route('matriz')}}" class="btn btn-danger">Cancelar</a>
         </div>
-        <div class="form-group" id="visit5" style="display: none;">
-            <label for="">En que fecha se le ha visitado?</label>
-            <input type="date" name="date_visit5" id="date_visit">
-            <button class="btn btn-primary" type="button" onclick="addDate('datesLabelVisit','date_visit','datesInputVisit','visit')">add</button>
-            <button class="btn btn-danger" type="button" onclick="deleteDate('datesLabelVisit','date_visit','datesInputVisit','visit')">del</button>
-            <hr>
-            <label id="datesLabelVisit">Fechas Seleccionadas: </label>
-            <hr>
-            
-            <input type="hidden" name="datesInputVisit" id="datesInputVisit">
-        </div>
-
-        <div class="form-group">
-            <label for="">El lugar de votacion es cerca a su casa?</label>
-            <div class="input-group-text">
-                <label for="">Si</label>
-                <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta6" value="1" class="grupo6">
-                <label for="">No</label>
-                <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta6" value="0" class="grupo6">
-              </div>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Guardar</button>
-      </form>
+    </form>
     <!-- end form -->
 @endsection
 
@@ -168,6 +200,7 @@
       <script>
         //Peticion, obtener datos de usuarios del formulario
         $(document).ready(function() {
+            
 
             const input = document.getElementById('ID');
 
@@ -182,11 +215,18 @@
                     data: { id: ID },
                     success: function(response) {
                         //console.log('Respuesta del servidor:', response[0].nombre);
-                        document.getElementById('formulario_id').value = response[0].id;
+                        document.getElementById('formulario_id').value = response[0].id_form;
                         document.getElementById('name').value = response[0].nombre +' '+response[0].apellido;
                         document.getElementById('address').value = response[0].direccion;
                         document.getElementById('phone').value = response[0].telefono;
                         document.getElementById('referred').value = response[0].referido;
+
+                        //mostrar btn editar
+                        const editForm = document.getElementById('edit_form');
+                        editForm.style.display = 'block';
+                        //asignar href para editar info de formulario
+                        var url = "/formularios/"+ response[0].id_form +"/actualizar";
+                        $("#edit_form").attr("href", url);
 
                         
                     },

@@ -4,15 +4,18 @@ use App\Http\Controllers\CandidatoController;
 use App\Http\Controllers\CargoController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\FileManagementController;
+use App\Http\Controllers\FileOportunidadesManagementController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\FormularioController;
 use App\Http\Controllers\HighchartController;
 use App\Http\Controllers\MatrizSeguimientoController;
+use App\Http\Controllers\PreFormularioController;
 use App\Http\Controllers\ProblemController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\UtilityController;
 use App\Models\MatrizSeguimiento;
 use App\Models\User;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Permission;
@@ -53,6 +56,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/util/candidatos', [CandidatoController::class, 'lista_candidatos'])->name('util.lista_candidatos');
 
     Route::get('/inicio', [HomeController::class, 'index'])->name('inicio');
+
+    Route::get('/pre-formularios', [PreFormularioController::class, 'index'])->name('pre-formularios');
+    Route::get('/pre-formularios/getall', [PreFormularioController::class, 'getAll'])->name('pre-formularios.tabla');
+    Route::get('/pre-formularios/{id}/show', [PreFormularioController::class, 'show'])->name('pre-formularios.show');
+    Route::get('/pre-formularios/{id}/edit', [PreFormularioController::class, 'edit'])->name('pre-formularios.edit');
+    Route::put('/pre-formularios/{id}/update', [PreFormularioController::class, 'update'])->name('pre-formularios.update');
+    Route::put('/pre-formularios/{id}/aprobar', [PreFormularioController::class, 'approvedInfo'])->name('pre-formularios.aprobar');
+    Route::get('/pre-formularios/{id}/delete', [PreFormularioController::class, 'destroy'])->name('pre-formularios.destroy');
+
 
     Route::get('/formularios', [FormularioController::class, 'index'])->name('formularios');
     Route::get('/formularios/tabla', [FormularioController::class, 'tabla'])->name('formularios.tabla');
@@ -102,6 +114,7 @@ Route::middleware(['auth'])->group(function () {
     // utils
     Route::get('get_veredas_and_comunas', [UtilityController::class, 'getVeredasAndComunas']);
     Route::get('/statitics/{candidato_id?}', [HighchartController::class, 'handleChart']);
+    Route::get('/statitics/{candidato_id?}/{zona?}/{zona_id?}', [HighchartController::class, 'handleChart']);
 
     //matriz seguimiento
     Route::get('/matrizSeguimiento',[MatrizSeguimientoController::class,'index'])->name('matriz');
@@ -115,15 +128,24 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/matrizSeguimiento/edit/{id}',[MatrizSeguimientoController::class,'edit'])->name('matriz.edit');
     Route::get('/matrizSeguimiento/view/{id}',[MatrizSeguimientoController::class,'view'])->name('matriz.view');
     Route::put('/matrizSeguimiento/update/{id}',[MatrizSeguimientoController::class,'update'])->name('matriz.update');
+    //exportar matriz
+    Route::get('/export/matrizSeguimiento', [FileManagementController::class, 'exportMatrizSeguimiento'])->name('export.matriz');
 
     /*  */
     Route::get('/oportunidades/{id}/edit', [ProblemController::class, 'edit'])->name('problems.edit');
     Route::get('/oportunidades/{id}/delete', [ProblemController::class, 'destroy'])->name('problems.destroy');
     Route::put('/oportunidades/{id}/update', [ProblemController::class, 'update'])->name('problems.update');
     Route::put('/oportunidades/{id}/status', [ProblemController::class, 'changeStatus'])->name('problems.changeStatus');
+    Route::get('/oportunidades/export', [FileOportunidadesManagementController::class, 'export'])->name('problems.export');
 });
 Route::get('/oportunidades', [ProblemController::class, 'index'])->name('problems.index');
 Route::get('/oportunidades/getall', [ProblemController::class, 'getAll'])->name('problems.getAll');
 Route::get('/oportunidades/create', [ProblemController::class, 'create'])->name('problems.create');
 Route::post('/oportunidades/create', [ProblemController::class, 'store'])->name('problems.store');
 Route::get('/oportunidades/{id}/show', [ProblemController::class, 'show'])->name('problems.show');
+
+/* route storage link command */
+Route::get('/storage-link', function () {
+    Artisan::call('storage:link');
+    return 'success';
+});

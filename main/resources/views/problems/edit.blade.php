@@ -130,7 +130,11 @@ Editar Posible Votante
                     </div>
                     @enderror
                 </div>
-                <div class="col-md-12" id="desc_problem">
+                <div class="col-md-12 mb-2">
+                    <input type="checkbox" name="check_problem" id="check_problem" class="form-check-input" @if ($problem->mensaje) checked @endif>
+                    <label for="check_problem" class="form-check-label">¿Tiene alguna problemática?</label>
+                </div>
+                <div class="col-md-12" id="desc_problem" style="display: none;">
                     <label for="descripcion">Problematica</label>
                     <textarea name="descripcion" id="" cols="30" rows="5" class="form-control"
                         required>{{$problem->mensaje}}</textarea>
@@ -184,6 +188,21 @@ Editar Posible Votante
             var data = e.params.data;
             $('#creador_id').val(data.id);
         });
+
+        let  check = document.getElementById('check_problem');
+        let form = document.getElementById('desc_problem');
+       
+        check.addEventListener('click', function(){
+            if (this.checked) {
+                form.style.display = 'block'
+            }else{
+                form.style.display = 'none'
+            }
+        })
+
+        if (check.checked) {
+            form.style.display = 'block'
+        }
     });
 </script>
 @endsection
