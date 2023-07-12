@@ -169,18 +169,18 @@
             viewTable(candidato,creador,cedula,nombre,comuna,barrio,corregimiento,vereda,fecha);
 
             $('#btnFiltrar').click(function() {
-            candidato = document.getElementById('selectCandidato').value;
-            creador = document.getElementById('selectCreador').value;
-            cedula = document.getElementById('InputCedula').value;
-            nombre = document.getElementById('InputNombre').value;
-            comuna = document.getElementById('selectComuna').value;
-            barrio = document.getElementById('selectBarrio').value;
-            corregimiento = document.getElementById('selectCorregimiento').value;
-            vereda = document.getElementById('selectVereda').value;
-            fecha = document.getElementById('inputDate').value;
-            $('#tablas-formularios').DataTable().destroy();
-            viewTable(candidato,creador,cedula,nombre,comuna,barrio,corregimiento,vereda,fecha);
-        });
+                candidato = document.getElementById('selectCandidato').value;
+                creador = document.getElementById('selectCreador').value;
+                cedula = document.getElementById('InputCedula').value;
+                nombre = document.getElementById('InputNombre').value;
+                comuna = document.getElementById('selectComuna').value;
+                barrio = document.getElementById('selectBarrio').value;
+                corregimiento = document.getElementById('selectCorregimiento').value;
+                vereda = document.getElementById('selectVereda').value;
+                fecha = document.getElementById('inputDate').value;
+                $('#tablas-formularios').DataTable().destroy();
+                viewTable(candidato,creador,cedula,nombre,comuna,barrio,corregimiento,vereda,fecha);
+            });
         });
 
         function viewTable(candidato,creador,cedula,nombre,comuna,barrio,corregimiento,vereda,fecha){

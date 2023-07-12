@@ -251,6 +251,42 @@ Preview Formularios
             let creador = $('#selectCreador').val();
             window.location.href = "{{ route('problems.export') }}?cedula="+cedula+"&nombre="+nombre+"&fecha="+fecha+"&creador="+creador;
         }
+
+        /* select2 for selectCandidato */
+        $('#selectCandidato').select2({
+            placeholder: "Seleccione un candidato",
+            allowClear: true
+        });
+
+        /* select2 for selectCreador */
+        $('#selectCreador').select2({
+            placeholder: "Seleccione un creador",
+            allowClear: true
+        });
+
+        /* select2 for selectComuna */
+        $('#selectComuna').select2({
+            placeholder: "Seleccione una comuna",
+            allowClear: true
+        });
+
+        /* select2 for selectBarrio */
+        $('#selectBarrio').select2({
+            placeholder: "Seleccione un barrio",
+            allowClear: true
+        });
+
+        /* select2 for selectCorregimiento */
+        $('#selectCorregimiento').select2({
+            placeholder: "Seleccione un corregimiento",
+            allowClear: true
+        });
+
+        /* select2 for selectVereda */
+        $('#selectVereda').select2({
+            placeholder: "Seleccione una vereda",
+            allowClear: true
+        });
 </script>
 
 <script>
