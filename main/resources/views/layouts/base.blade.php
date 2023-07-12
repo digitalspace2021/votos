@@ -94,7 +94,7 @@
                                     </li>
                                 </ul>
                                 <a class="me-3 py-2 text-dark text-decoration-none btn-hover"
-                                    href="{{ route('problems.index') }}"><i class="fa fa-users" aria-hidden="true"></i> Posibles Votantes</a>
+                                    href="{{ auth()->check() ? route('problems.index') : route('problems.create') }}"><i class="fa fa-users" aria-hidden="true"></i> Posibles Votantes</a>
                                 @if (Auth::user()->hasRole('administrador'))
                                     <a class="me-3 py-2 text-dark text-decoration-none btn-hover" href="{{ route('usuarios') }}"><i class="fa fa-user" aria-hidden="true"></i> Usuarios</a>
                                 @endif

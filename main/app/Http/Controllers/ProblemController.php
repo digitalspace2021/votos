@@ -7,6 +7,7 @@ use App\Models\Formulario;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
@@ -58,7 +59,7 @@ class ProblemController extends Controller
             ->orderBy('formularios.created_at', 'desc')
             ->get();
 
-        if (auth()->user()->hasRole('simple')) {
+        if (Auth::user()->hasRole('simple')) {
             $problems = $problems->where('propietario_id', auth()->user()->id);
         }
 
@@ -69,7 +70,7 @@ class ProblemController extends Controller
             })
             ->addColumn('acciones', function ($problem) {
                 $btn = '<a href="' . route('problems.show', $problem->id) . '" class="btn btn-outline-secondary btn-sm" title="Ver problema"><i class="fa fa-eye"></i></a>';
-                if (auth()->user()->hasRole('admin')) {
+                if (Auth::user()->hasRole('administrador')) {
                     $btn .= '<a href="' . route('problems.destroy', $problem->id) . '" class="btn btn-outline-danger btn-sm" title="Eliminar problema"><i class="fa fa-times"></i></a>';
                 }
                 $btn .= '<a href="' . route('problems.edit', $problem->id) . '" class="btn btn-outline-primary m-2 btn-sm" title="Editar problema"><i class="fa fa-edit"></i></a>';

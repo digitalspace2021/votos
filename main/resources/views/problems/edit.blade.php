@@ -33,7 +33,7 @@ Editar Posible Votante
                 <div class="col-md-12 mb-2">
                     <label for="creador" class="form-label">Quien lo diligencia</label>
                     <select class="form-control" name="creador" id="creador" required 
-                        {{auth()->user()->hasRole('admin') ? '' : 'disabled'}}>
+                        {{Auth::user()->hasRole('administrador') ? '' : 'disabled'}}>
                         @foreach ($users as $user)
                         <option value="{{ $user->id }}" @if ($user->id == $problem->propietario_id) selected @endif>{{ $user->name }}</option>
                         @endforeach

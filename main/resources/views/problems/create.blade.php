@@ -32,10 +32,14 @@ Crear formulario
                 <div class="col-md-12 mb-2">
                     <label for="creador" class="form-label">Quien lo diligencia</label>
                     <select class="form-control" name="creador" id="creador" required
-                        {{auth()->user()->hasRole('admin') ? '' : 'disabled'}}>
+                        @if (auth()->check()) 
+                            {{Auth::user()->hasRole('administrador') ? '' : 'disabled'}}
+                        @endif>
                         @foreach ($users as $user)
                         <option value="{{ $user->id }}" {{old('creador')==$user->id ? 'selected' : ''}}
-                            {{auth()->user()->id==$user->id ? 'selected' : ''}}
+                            @if (auth()->check()) 
+                                {{auth()->user()->id==$user->id ? 'selected' : ''}}
+                            @endif
                             >{{ $user->name }}</option>
                         @endforeach
                     </select>

@@ -10,6 +10,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
@@ -67,7 +68,7 @@ class PreFormularioController extends Controller
             ->orderBy('pre_formularios.created_at', 'desc')
             ->get();
 
-        if (auth()->user()->hasRole('simple')) {
+        if (Auth::user()->hasRole('simple')) {
             $pre_forms = $pre_forms->where('propietario_id', auth()->user()->id);
         }
 
@@ -80,7 +81,9 @@ class PreFormularioController extends Controller
                 /* $btn = ''; */
                 $btn = '<a href="' . route('pre-formularios.show', $pre_form->id) . '" class="btn btn-outline-secondary btn-sm" title="Ver problema"><i class="fa fa-eye"></i></a>';
                 $btn .= '<a href="' . route('pre-formularios.edit', $pre_form->id) . '" class="btn btn-outline-primary m-2 btn-sm" title="Editar problema"><i class="fa fa-edit"></i></a>';
-                $btn .= '<a href="' . route('pre-formularios.destroy', $pre_form->id) . '" class="btn btn-outline-danger btn-sm" title="Eliminar problema"><i class="fa fa-times"></i></a>';
+                if(Auth::user()->hasRole('administrador')){
+                    $btn .= '<a href="' . route('pre-formularios.destroy', $pre_form->id) . '" class="btn btn-outline-danger btn-sm" title="Eliminar problema"><i class="fa fa-times"></i></a>';
+                }
                 $btn .= '<button prid="' . $pre_form->id . '" class="btn btn-outline-success m-2 status btn-sm" title="Cambiar estado"><i class="fa fa-check"></i></button>';
 
                 return $btn;

@@ -48,7 +48,7 @@ Posibles Votantes
         </div>
 
         <div class="col-md-4">
-            @if (auth()->user()->hasRole('admin'))
+            @if (Auth::user()->hasRole('administrador'))
                 <label for="">Por creador</label>
                 <select class="form-select" aria-label="Default select example" id="selectCreador">
                     <option value="" selected>Filtrar por creador</option>
@@ -76,7 +76,7 @@ Posibles Votantes
 
 <div class="row mb-3">
     <div class="col-md-6 d-flex justify-content-start">
-        @if (auth()->user()->hasRole('admin'))
+        @if (Auth::user()->hasRole('administrador'))
             <button class="btn btn-sm btn-success" id="exportar">Exportar</button>
         @endif
     </div>
