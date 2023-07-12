@@ -41,15 +41,17 @@ Preview Formularios
             <input class="form-control" type="date" id="inputDate">
         </div>
 
-        <div class="col-md-4">
-            <label for="">Por creador</label>
-            <select class="form-select" aria-label="Default select example" id="selectCreador">
-                <option value="" selected>Filtrar por creador</option>
-                @foreach ($creadores as $creador)
-                <option value="{{$creador->id}}">{{$creador->name}}</option>
-                @endforeach
-            </select>
-        </div>
+        @if (auth()->user()->hasRole('admin')) 
+            <div class="col-md-4">
+                <label for="">Por creador</label>
+                <select class="form-select" aria-label="Default select example" id="selectCreador">
+                    <option value="" selected>Filtrar por creador</option>
+                    @foreach ($creadores as $creador)
+                    <option value="{{$creador->id}}">{{$creador->name}}</option>
+                    @endforeach
+                </select>
+            </div>
+        @endif
         <div class="col">
             <label for="">Por candidato</label>
             <select class="form-select" aria-label="Default select example" id="selectCandidato">
