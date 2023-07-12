@@ -227,7 +227,9 @@ Posibles Votantes
                         };
                     },
                     cache: true
-                }
+                },
+                placeholder: 'Seleccione una zona',
+                dropdownParent: $("#changeStatus"),
             });
             $('#zona').on('select2:select', function(e) {
                 var data = e.params.data;
@@ -265,7 +267,9 @@ Posibles Votantes
                             };
                         },
                         cache: true
-                    }
+                    },
+                    placeholder: 'Buscar candidato',
+                    dropdownParent: $("#changeStatus")
 
             });
 
@@ -274,5 +278,9 @@ Posibles Votantes
                 $('#candidato_id').val(data.id);
             });
         });
+
+        $('#candidato_id').on('click', function(event) {
+  event.stopPropagation();
+});
 </script>
 @endsection
