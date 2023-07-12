@@ -75,7 +75,7 @@ Posibles Votantes
                 </div>
                 <div class="col-md-6 mb-2">
                     <label for="puesto" class="form-label">Puesto de votacion</label>
-                    <input type="number" class="form-control" name="puesto" value="{{$problem->puesto_votacion}}" required disabled>
+                    <input type="text" class="form-control" name="puesto" value="{{$problem->puesto_votacion}}" required disabled>
                 </div>
                 <div class="col-md-12 mb-2">
                     <input type="checkbox" name="check_problem" id="check_problem" class="form-check-input" @if ($problem->mensaje) checked @endif disabled>
