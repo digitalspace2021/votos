@@ -8,7 +8,11 @@
 @endsection
 
 @section('css-extra')
-    
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+<!-- Or for RTL support -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.rtl.min.css" />
+
 @endsection
 
 @section('cabecera')
@@ -27,8 +31,8 @@
                 @foreach ($candidatos as $candidato)
                 <option value="{{$candidato->id}}">{{$candidato->name}}</option>
                 @endforeach
-              </select>
-              </select>
+            </select>
+              
         </div>
         <div class="col">
             <label for="">Por pregunta</label>
@@ -120,8 +124,28 @@
 
 @section('js-extra')
 <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    //inicializar select 2 (funcion de busqueda en los selects)
+    $(document).ready(function() {
+    $('#selectCandidato').select2({
+            theme: 'bootstrap-5'
+    });
+    $('#selectPregunta').select2({
+        theme: 'bootstrap-5'
+    });
+    $('#selectBarrio').select2({
+        theme: 'bootstrap-5'
+    });
+    $('#selectCorregimiento').select2({
+        theme: 'bootstrap-5'
+    });
+});
+
+</script>
 <script>
     $(document).ready(function() {
+
         var candidato = null;
         var pregunta = null;
         var cedula = null;
@@ -180,12 +204,12 @@
                 { data: 'candidato', name: 'candidato' },
                 { data: 'direccion', name: 'direccion' },
                 { data: 'telefono', name: 'telefono' },
-                { data: 'res_uno', name: 'res_uno', render: function(data) {const colorClass = (data === 1) ? 'text-success' : 'text-danger'; return '<span class="' + colorClass + '">' +((data === 1) ? 'SI' : 'NO')+ '</span>';}},
-                { data: 'res_dos', name: 'res_dos', render: function(data) {const colorClass = (data === 1) ? 'text-success' : 'text-danger'; return '<span class="' + colorClass + '">' +((data === 1) ? 'SI' : 'NO')+ '</span>';} },
-                { data: 'res_tres', name: 'res_tres', render: function(data) {const colorClass = (data === 1) ? 'text-success' : 'text-danger'; return '<span class="' + colorClass + '">' +((data === 1) ? 'SI' : 'NO')+ '</span>';} },
-                { data: 'res_cuatro', name: 'res_cuatro', render: function(data) {const colorClass = (data === 1) ? 'text-success' : 'text-danger'; return '<span class="' + colorClass + '">' +((data === 1) ? 'SI' : 'NO')+ '</span>';} },
-                { data: 'res_cinco', name: 'res_cinco', render: function(data) {const colorClass = (data === 1) ? 'text-success' : 'text-danger'; return '<span class="' + colorClass + '">' +((data === 1) ? 'SI' : 'NO')+ '</span>';} },
-                { data: 'res_seis', name: 'res_seis', render: function(data) {const colorClass = (data === 1) ? 'text-success' : 'text-danger'; return '<span class="' + colorClass + '">' +((data === 1) ? 'SI' : 'NO')+ '</span>';} },
+                { data: 'res_uno', name: 'res_uno', render: function(data) {const colorClass = (data == 1) ? 'text-success' : 'text-danger'; return '<span class="' + colorClass + '">' +((data == 1) ? 'SI' : 'NO')+ '</span>';}},
+                { data: 'res_dos', name: 'res_dos', render: function(data) {const colorClass = (data == 1) ? 'text-success' : 'text-danger'; return '<span class="' + colorClass + '">' +((data == 1) ? 'SI' : 'NO')+ '</span>';} },
+                { data: 'res_tres', name: 'res_tres', render: function(data) {const colorClass = (data == 1) ? 'text-success' : 'text-danger'; return '<span class="' + colorClass + '">' +((data == 1) ? 'SI' : 'NO')+ '</span>';} },
+                { data: 'res_cuatro', name: 'res_cuatro', render: function(data) {const colorClass = (data == 1) ? 'text-success' : 'text-danger'; return '<span class="' + colorClass + '">' +((data == 1) ? 'SI' : 'NO')+ '</span>';} },
+                { data: 'res_cinco', name: 'res_cinco', render: function(data) {const colorClass = (data == 1) ? 'text-success' : 'text-danger'; return '<span class="' + colorClass + '">' +((data == 1) ? 'SI' : 'NO')+ '</span>';} },
+                { data: 'res_seis', name: 'res_seis', render: function(data) {const colorClass = (data == 1) ? 'text-success' : 'text-danger'; return '<span class="' + colorClass + '">' +((data == 1) ? 'SI' : 'NO')+ '</span>';} },
                 { data: 'acciones', name: 'acciones'}
             ]
         });

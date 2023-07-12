@@ -15,6 +15,12 @@ Preview Formularios
         z-index: 100000;
     }
 </style>
+
+<!-- Select 2 -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+<!-- Or for RTL support -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.rtl.min.css" />
 @endsection
 
 @section('cabecera')
@@ -146,6 +152,30 @@ Preview Formularios
 @section('js-extra')
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+<script>
+    //inicializar select 2 (funcion de busqueda en los selects)
+    $(document).ready(function() {
+    $('#selectCandidato').select2({
+            theme: 'bootstrap-5'
+    });
+    $('#selectCreador').select2({
+        theme: 'bootstrap-5'
+    });
+    $('#selectComuna').select2({
+        theme: 'bootstrap-5'
+    });
+    $('#selectBarrio').select2({
+        theme: 'bootstrap-5'
+    });
+    $('#selectCorregimiento').select2({
+        theme: 'bootstrap-5'
+    });
+    $('#selectVereda').select2({
+        theme: 'bootstrap-5'
+    });
+});
+
+</script>
 <script>
     $(document).ready(function() {
             viewData();
