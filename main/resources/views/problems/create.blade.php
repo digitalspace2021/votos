@@ -123,7 +123,7 @@ Crear formulario
                 </div>
                 <div class="col-md-6 mb-2">
                     <label for="puesto" class="form-label">Puesto de votacion</label>
-                    <input type="number" class="form-control" name="puesto" value="{{old('puesto')}}" required>
+                    <input type="text" class="form-control" name="puesto" value="{{old('puesto')}}" required>
                     @error('puesto')
                     <div class="text-danger">
                         {{ $message }}

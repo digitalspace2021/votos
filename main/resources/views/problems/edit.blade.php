@@ -123,7 +123,7 @@ Editar Posible Votante
                 </div>
                 <div class="col-md-6 mb-2">
                     <label for="puesto" class="form-label">Puesto de votacion</label>
-                    <input type="number" class="form-control" name="puesto" value="{{$problem->puesto_votacion}}" required>
+                    <input type="text" class="form-control" name="puesto" value="{{$problem->puesto_votacion}}" required>
                     @error('puesto')
                     <div class="text-danger">
                         {{ $message }}
