@@ -67,6 +67,10 @@ class PreFormularioController extends Controller
             ->orderBy('pre_formularios.created_at', 'desc')
             ->get();
 
+        if (auth()->user()->hasRole('simple')) {
+            $pre_forms = $pre_forms->where('propietario_id', auth()->user()->id);
+        }
+
         /* colums nombre completo from pre_formularios nombre+apellido, telefono, direccion, responsable, pruesto_votacion from table pre_formularios and columns acciones view, edit and status */
         $pre_forms = DataTables::of($pre_forms)
             ->editColumn('created_at', function ($col) {

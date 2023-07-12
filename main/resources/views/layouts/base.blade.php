@@ -25,6 +25,13 @@
             background-color: #f8f8f8;
             color: #333;
         }
+
+        /* view mobiles */
+        @media (max-width: 767px) {
+            #btn-pVotantes {
+                display: none;
+            }
+        }
     </style>
     @yield('css-extra')
 </head>
@@ -40,16 +47,22 @@
         <header>
             <div class="{{-- d-flex --}} flex-column flex-md-row align-items-center pb-3 mb-4 border-bottom"
                 id="content-nav">
-                
+
                 <nav class="navbar bg-body-tertiary fixed-top">
                     <div class="container-fluid">
                         <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
                             <img src="{{asset('img/Politicos.png')}}" alt="" class="me-2" width="60" height="52">
                             <span class="fs-4">Politicos</span>
                         </a>
-                      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                      </button>
+
+                      <div>
+                        @if (!auth()->check())
+                        <a class="me-3 py-2 text-dark text-decoration-none btn-hover" href="{{ route('problems.create') }}" id="btn-pVotantes"><i class="fa fa-users" aria-hidden="true"></i> Posibles Votantes</a>
+                        @endif
+                          <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                          </button>
+                      </div>  
                     </div>
                 </nav>
                   

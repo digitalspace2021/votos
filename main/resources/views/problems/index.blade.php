@@ -48,13 +48,15 @@ Posibles Votantes
         </div>
 
         <div class="col-md-4">
-            <label for="">Por creador</label>
-            <select class="form-select" aria-label="Default select example" id="selectCreador">
-                <option value="" selected>Filtrar por creador</option>
-                @foreach ($creadores as $creador)
-                <option value="{{$creador->id}}">{{$creador->name}}</option>
-                @endforeach
-            </select>
+            @if (auth()->user()->hasRole('admin'))
+                <label for="">Por creador</label>
+                <select class="form-select" aria-label="Default select example" id="selectCreador">
+                    <option value="" selected>Filtrar por creador</option>
+                    @foreach ($creadores as $creador)
+                    <option value="{{$creador->id}}">{{$creador->name}}</option>
+                    @endforeach
+                </select>
+            @endif
         </div>
         <div class="col-md-4 d-flex justify-content-around align-items-center mt-4">
             <button class="btn btn-danger" id="btnClear">Limpiar</button>
@@ -74,7 +76,9 @@ Posibles Votantes
 
 <div class="row mb-3">
     <div class="col-md-6 d-flex justify-content-start">
-        <button class="btn btn-sm btn-success" id="exportar">Exportar</button>
+        @if (auth()->user()->hasRole('admin'))
+            <button class="btn btn-sm btn-success" id="exportar">Exportar</button>
+        @endif
     </div>
     <div class="col-md-6 d-flex justify-content-end">
         <a href="{{ route('problems.create') }}" class="btn btn-sm btn-success">Crear Votante</a>
@@ -227,7 +231,9 @@ Posibles Votantes
                         };
                     },
                     cache: true
-                }
+                },
+                placeholder: 'Seleccione una zona',
+                dropdownParent: $("#changeStatus"),
             });
             $('#zona').on('select2:select', function(e) {
                 var data = e.params.data;
@@ -265,7 +271,9 @@ Posibles Votantes
                             };
                         },
                         cache: true
-                    }
+                    },
+                    placeholder: 'Buscar candidato',
+                    dropdownParent: $("#changeStatus")
 
             });
 
@@ -274,5 +282,9 @@ Posibles Votantes
                 $('#candidato_id').val(data.id);
             });
         });
+
+        $('#candidato_id').on('click', function(event) {
+  event.stopPropagation();
+});
 </script>
 @endsection

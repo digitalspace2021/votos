@@ -60,7 +60,7 @@ class UsuarioController extends Controller
         $usuario = new $this->model();
         $usuario->name = $request->nombre;
         $usuario->email = $request->email;
-        $usuario->password = $request->password ?? Hash::make('Password@1!');
+        $usuario->password = bcrypt($request->password);
         $usuario->save();
 
         if ($request->rol == 'admin') {
