@@ -33,8 +33,7 @@ Crear formulario
                     <label for="creador" class="form-label">Quien lo diligencia</label>
                     <select class="form-control" name="creador" id="creador" required>
                         @foreach ($users as $user)
-                        <option value="{{ $user->id }}" {{old('creador')==$user->id ? 'selected' : ''}} >{{ $user->name
-                            }}</option>
+                        <option value="{{ $user->id }}" {{old('creador')==$user->id ? 'selected' : ''}} >{{ $user->name }}</option>
                         @endforeach
                     </select>
                     @error('creador')
@@ -146,6 +145,20 @@ Crear formulario
                     </div>
                     @enderror
                 </div>
+
+                {{-- <div class="col-md-12">
+                    <label for="foto">Foto</label>
+                    <input type="file" name="foto" id="foto" class="form-control mt-2" accept="image/*" required>
+                    @error('foto')
+                    <div class="text-danger">
+                        {{ $message }}
+                    </div>
+                    @enderror
+                </div> --}}
+
+                <div class="d-flex justify-content-center">
+                    <img src="" alt="" style="display: none; width: 35%;" id="preview_img">
+                </div>
             </div>
 
             <div class="row mt-3">
@@ -169,29 +182,8 @@ Crear formulario
 <script>
     $(document).ready(function() {
         $('#creador').select2({
-            theme: "bootstrap",
-            ajax: {
-                dataType: 'json',
-                url: "{!! route('util.lista_usuarios') !!}",
-                type: "get",
-                delay: 250,
-                width: '100%',
-                data: function(params) {
-                    return {
-                        search: params.term
-                    };
-                },
-                processResults: function(response) {
-                    return {
-                        results: response
-                    };
-                },
-                cache: true
-            }
-        });
-        $('#creador').on('select2:select', function(e) {
-            var data = e.params.data;
-            $('#creador_id').val(data.id);
+            placeholder: "Seleccione una comuna",
+            allowClear: true
         });
 
 
@@ -209,6 +201,22 @@ Crear formulario
         if (check.checked) {
             form.style.display = 'block'
         }
+
+        /* let foto = $('#foto');
+        let preview = $('#preview_img');
+
+        foto.change(function(){
+            let file = this.files[0];
+
+            /* if null clear else show */
+            if (file == null) {
+                preview.hide();
+                preview.attr('src', '');
+            }else{
+                preview.show();
+                preview.attr('src', URL.createObjectURL(file));
+            }
+        }) */
     });
 </script>
 @endsection

@@ -143,7 +143,7 @@ class ProblemController extends Controller
             }
 
             if (!auth()->check()) {
-                return redirect()->route('problems.create')->with('success', 'Oportunidad de votante correctamente');
+                return redirect()->route('login')->with('success', 'Oportunidad de votante correctamente');
             }
         }
         return back()->with('error', 'Error al crear el Oportunidad de votante');

@@ -57,7 +57,7 @@
 
                       <div>
                         @if (!auth()->check())
-                        <a class="me-3 py-2 text-dark text-decoration-none btn-hover" href="{{ route('problems.index') }}" id="btn-pVotantes"><i class="fa fa-users" aria-hidden="true"></i> Posibles Votantes</a>
+                        <a class="me-3 py-2 text-dark text-decoration-none btn-hover" href="{{ route('problems.create') }}" id="btn-pVotantes"><i class="fa fa-users" aria-hidden="true"></i> Posibles Votantes</a>
                         @endif
                           <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" aria-label="Toggle navigation">
                             <span class="navbar-toggler-icon"></span>
