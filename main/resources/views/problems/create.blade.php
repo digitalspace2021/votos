@@ -214,8 +214,7 @@ Crear formulario
 
         foto.change(function(){
             let file = this.files[0];
-
-            /* if null clear else show */
+            
             if (file == null) {
                 preview.hide();
                 preview.attr('src', '');
