@@ -240,18 +240,24 @@ class ProblemController extends Controller
      */
     public function destroy(int $id): RedirectResponse
     {
-        DB::beginTransaction();
+        $problem = Formulario::findOrFail($id);
 
-        try {
-            DB::table('formularios')->where('id', $id)->delete();
-
-            DB::commit();
-
-            return redirect()->route('problems.index')->with('success', 'Oportunidad de votante eliminada correctamente');
-        } catch (\Throwable $th) {
-            DB::rollback();
+        if (!$problem) {
             return back()->with('error', 'Error al eliminar la Oportunidad de votante');
         }
+
+        if ($problem) {
+            $edil = Edil::where('formulario_id', $problem->id)->first();
+            if ($edil) {
+                $edil->delete();
+            }
+            $problem->delete();
+        }
+
+        if ($problem) {
+            return redirect()->route('problems.index')->with('success', 'Oportunidad de votante eliminado correctamente');
+        }
+        return back()->with('error', 'Error al eliminar la Oportunidad de votante');
     }
 
 
