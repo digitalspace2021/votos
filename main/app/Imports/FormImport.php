@@ -5,12 +5,15 @@ namespace App\Imports;
 use App\Models\Formulario;
 use App\Models\PreFormulario;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 
 class FormImport implements ToModel,  WithValidation, WithHeadingRow
 {
+    use Importable;
     private $data;
 
     public function __construct(array $data)
@@ -25,20 +28,25 @@ class FormImport implements ToModel,  WithValidation, WithHeadingRow
 
     public function model(array $row)
     {
-        $new_data = [
-            'nombre' => $row['nombres'],
-            'apellido' => $row['apellidos'],
-            'email' => $row['email'],
-            'telefono' => $row['telefono'],
-            'genero' => $row['genero'],
-            'direccion' => $row['direccion'],
-            'puesto_votacion' => $row['puesto_votacion'],
-            'mensaje' => $row['mensaje'],
-            'identificacion' => $row['identificacion']
-        ];
+        try {
+            $new_data = [
+                'nombre' => $row['nombres'],
+                'apellido' => $row['apellidos'],
+                'email' => $row['email'],
+                'telefono' => $row['telefono'],
+                'genero' => $row['genero'],
+                'direccion' => $row['direccion'],
+                'puesto_votacion' => $row['puesto_votacion'],
+                'mensaje' => $row['mensaje'],
+                'identificacion' => $row['identificacion']
+            ];
 
-        if ($this->validateIdNumber($row['identificacion'])) {
+            /* using validations of method rules */
+            Validator::make($new_data, $this->rules());
+
             return new PreFormulario(array_merge($new_data, $this->data));
+        } catch (\Exception $e) {
+            dd($e);
         }
     }
 
@@ -61,6 +69,8 @@ class FormImport implements ToModel,  WithValidation, WithHeadingRow
             ],
             'identificacion' => [
                 'required',
+                'unique:pre_formularios,identificacion',
+                'unique:formularios,identificacion'
             ],
             'mensaje' => [
                 'required',
