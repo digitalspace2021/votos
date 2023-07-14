@@ -109,12 +109,13 @@ class ProblemController extends Controller
         $users = DB::table('users')->get();
 
         $problem = Formulario::findOrFail($id);
+        $edils = DB::table('usuarios_ediles')->get();
 
         if ($problem->estado == true || !$problem) {
             return back()->with('error', 'No se puede visualizar un formulario comfirmado');
         }
 
-        return view('problems.edit', compact('users', 'problem'));
+        return view('problems.edit', compact('users', 'problem', 'edils'));
     }
 
     /**
@@ -150,7 +151,7 @@ class ProblemController extends Controller
             $edil->edil_id = $request->user_edil;
             $edil->concejo = $request->concejo;
 
-            if($request->apoyo == 1){
+            if ($request->apoyo == 1) {
                 $edil->alcaldia = (bool)$request->alcaldia;
                 $edil->gobernacion = (bool)$request->gobernacion;
             }
@@ -204,6 +205,22 @@ class ProblemController extends Controller
             'vinculo' => $request->vinculo,
             'mensaje' => $request->descripcion,
         ]);
+
+        if ($request->edil == 1) {
+            $edil = new Edil();
+            $edil->createOrUpdate([
+                'formulario_id' => $problem->id,
+                'edil_id' => $request->user_edil,
+                'concejo' => $request->concejo,
+                'alcaldia' => $request->apoyo == 1 ? (bool)$request->alcaldia : null,
+                'gobernacion' => $request->apoyo == 1 ? (bool)$request->gobernacion : null,
+            ]);
+        } else {
+            $edil = Edil::where('formulario_id', $problem->id)->first();
+            if ($edil) {
+                $edil->delete();
+            }
+        }
 
         if ($problem) {
             return redirect()->route('problems.index')->with('success', 'Oportunidad de votante actualizado correctamente');

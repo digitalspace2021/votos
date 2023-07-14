@@ -23,4 +23,19 @@ class Edil extends Model
     {
         return $this->belongsTo(UserEdiles::class, 'edil_id');
     }
+
+
+    /* method create or update */
+    public static function createOrUpdate($dataForm)
+    {
+        $edil = Edil::where('formulario_id', $dataForm['formulario_id'])->first();
+
+        if ($edil) {
+            $edil->update($dataForm);
+        } else {
+            $edil = Edil::create($dataForm);
+        }
+
+        return $edil;
+    }
 }
