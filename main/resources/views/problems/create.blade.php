@@ -60,6 +60,11 @@ Crear formulario
     <div class="d-flex justify-content-center align-items-center w-75" style="margin-left: auto; margin-right: auto;">
         <form action="{{route('problems.store')}}" method="POST" novalidate>
             @csrf
+            @if (Auth::check())
+                @if (Auth::user()->hasRole('simple'))
+                    <input type="hidden" name="creador" value="{{Auth::user()->id}}">
+                @endif
+            @endif
             <div class="row" id="step1">
                 <div class="col-md-12 mb-2">
                     <label for="creador" class="form-label">Quien lo diligencia</label>
@@ -69,7 +74,7 @@ Crear formulario
                         @foreach ($users as $user)
                         <option value="{{ $user->id }}" {{old('creador')==$user->id ? 'selected' : ''}}
                             @if (auth()->check())
-                            {{auth()->user()->id==$user->id ? 'selected' : ''}}
+                            {{Auth::user()->id==$user->id ? 'selected' : ''}}
                             @endif
                             >{{ $user->name }}</option>
                         @endforeach
@@ -377,7 +382,8 @@ Crear formulario
     $(document).ready(function() {
         $('#creador').select2({
             placeholder: "Seleccione una comuna",
-            allowClear: true
+            allowClear: true,
+            language: "es",
         });
 
 
