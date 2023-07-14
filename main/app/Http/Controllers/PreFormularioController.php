@@ -34,7 +34,7 @@ class PreFormularioController extends Controller
             ->join('users', 'pre_formularios.propietario_id', '=', 'users.id')
             ->join('barrios', 'pre_formularios.zona', '=', 'barrios.id')->join('comunas', 'barrios.comuna_id', '=', 'comunas.id')
             ->join('veredas', 'pre_formularios.zona', '=', 'veredas.id')->join('corregimientos', 'veredas.corregimiento_id', '=', 'corregimientos.id')
-            ->select('pre_formularios.id', 'pre_formularios.identificacion', 'pre_formularios.nombre', 'pre_formularios.apellido', 'pre_formularios.telefono', 'pre_formularios.direccion', 'users.name', 'users.id as creator_id', 'pre_formularios.puesto_votacion', 'pre_formularios.created_at', 'pre_formularios.email')
+            ->select('pre_formularios.id', 'pre_formularios.identificacion', 'pre_formularios.nombre', 'pre_formularios.apellido', 'pre_formularios.telefono', 'pre_formularios.direccion', 'users.name', 'users.id as creator_id', 'pre_formularios.puesto_votacion', 'pre_formularios.created_at', 'pre_formularios.email', 'pre_formularios.propietario_id')
             ->addSelect(DB::raw("CONCAT(pre_formularios.nombre, ' ', pre_formularios.apellido) AS nombre_completo"))
             /* filter for cedula, nombre+apellido, created_at or creator_id */
             ->when($request->get('cedula'), function ($query, $cedula) {
@@ -65,15 +65,14 @@ class PreFormularioController extends Controller
                 return $query->where('formularios.tipo_zona', 'comuna')
                     ->where('pre_formularios.zona', $vereda);
             })
-            ->orderBy('pre_formularios.created_at', 'desc')
-            ->get();
+            ->orderBy('pre_formularios.created_at', 'desc');
 
         if (Auth::user()->hasRole('simple')) {
-            $pre_forms = $pre_forms->where('propietario_id', auth()->user()->id);
+            $pre_forms = $pre_forms->where('propietario_id', Auth::user()->id);
         }
 
         /* colums nombre completo from pre_formularios nombre+apellido, telefono, direccion, responsable, pruesto_votacion from table pre_formularios and columns acciones view, edit and status */
-        $pre_forms = DataTables::of($pre_forms)
+        $pre_forms = DataTables::of($pre_forms->get())
             ->editColumn('created_at', function ($col) {
                 return Carbon::parse($col->created_at)->format('d-m-Y H:i:s');
             })
