@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Problem\StoreRequest;
+use App\Models\Edil;
 use App\Models\Formulario;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
@@ -99,7 +100,8 @@ class ProblemController extends Controller
     public function create(): View
     {
         $users = DB::table('users')->get();
-        return view('problems.create', compact('users'));
+        $edils = DB::table('usuarios_ediles')->get();
+        return view('problems.create', compact('users', 'edils'));
     }
 
     public function edit($id)
@@ -141,6 +143,20 @@ class ProblemController extends Controller
             'vinculo' => $request->vinculo,
             'mensaje' => $request->check_problem ? $request->mensaje : null,
         ]);
+
+        if ($problem && $request->edil == 1) {
+            $edil = new Edil();
+            $edil->formulario_id = $problem->id;
+            $edil->edil_id = $request->user_edil;
+            $edil->concejo = $request->concejo;
+
+            if($request->apoyo == 1){
+                $edil->alcaldia = (bool)$request->alcaldia;
+                $edil->gobernacion = (bool)$request->gobernacion;
+            }
+
+            $edil->save();
+        }
 
         if ($problem) {
             if (auth()->check()) {

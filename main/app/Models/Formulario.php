@@ -26,4 +26,9 @@ class Formulario extends Model
         'estado',
         'vinculo'
     ];
+
+    public function edil()
+    {
+        return $this->hasOne(Edil::class, 'formulario_id');
+    }
 }

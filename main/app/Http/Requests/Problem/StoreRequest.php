@@ -35,12 +35,36 @@ class StoreRequest extends FormRequest
             'descripcion' => ['required_if:check_problem,on'],
             'email' => ['required', 'string', 'email', 'max:255'],
             'genero' => ['required', 'string', 'in:Hombre,Mujer,Otro'],
+            'edil' => ['required'],
+            'cons' => ['required']
         ];
 
-        if ($this->check_problem == 'on') {
-            $validate['descripcion'] = ['min:10'];
+        if ($this->edil) {
+            $validate['concejo'] = ['required'];
+            $validate['apoyo'] = ['required'];
+            $validate['user_edil'] = ['required', 'exists:usuarios_ediles,id'];
+        }
+
+        if ($this->apoyo) {
+            $validate['alcaldia'] = ['required'];
+            $validate['gobernacion'] = ['required'];
         }
 
         return $validate;
+    }
+
+    public function attributes()
+    {
+        return [
+            'cons' => 'tratamiento de datos',
+            'user_edil' => 'usuario edil',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'cons.required' => 'Debe aceptar el tratamiento de datos'
+        ];
     }
 }
