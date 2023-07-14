@@ -106,6 +106,8 @@
                                 @if (Auth::user()->hasRole('administrador'))
                                     <a class="me-3 py-2 text-dark text-decoration-none btn-hover"
                                         href="{{ route('candidatos') }}"><i class="fa fa-user-plus" aria-hidden="true"></i> Candidatos</a>
+                                    <a class="me-3 py-2 text-dark text-decoration-none btn-hover"
+                                        href="{{ route('users-edils.index') }}"><i class="fa fa-user-plus" aria-hidden="true"></i> Ediles</a>
                                 @endif
                                 @if (Auth::user()->hasRole('administrador'))
                                     <a class="me-3 py-2 text-dark text-decoration-none btn-hover" href="{{ route('cargos') }}"><i class="fa fa-list-ol" aria-hidden="true"></i> Cargos</a>
