@@ -105,7 +105,7 @@ class FormularioController extends Controller
             'nombres' => 'required|max:255',
             'apellidos' => 'required|max:255',
             'email' => 'required|email|max:255',
-            'identificacion' => 'required|max:12',
+            'identificacion' => 'required|max:12|unique:formularios,identificacion',
             'telefono' => 'required|max:255',
             'genero' => 'required|max:255',
             'direccion' => 'required|max:255',
