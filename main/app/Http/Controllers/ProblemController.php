@@ -22,7 +22,15 @@ class ProblemController extends Controller
      */
     public function index(): View
     {
-        $creadores = DB::table('users')->get();
+        $creadores = DB::table('users');
+        if(env('USERS_TEST')){
+            $creadores = $creadores->where(function ($query){
+                $query->where('name', '!=', 'Admin')
+                    ->where('name', '!=', 'simple');
+            });
+        }
+        $creadores = $creadores->get();
+
         return view('problems.index', compact('creadores'));
     }
 
@@ -98,7 +106,14 @@ class ProblemController extends Controller
      */
     public function create(): View
     {
-        $users = DB::table('users')->get();
+        $users = DB::table('users');
+        if(env('USERS_TEST')){
+            $users = $users->where(function ($query){
+                $query->where('name', '!=', 'Admin')
+                    ->where('name', '!=', 'simple');
+            });
+        }
+        $users = $users->get();
         $edils = DB::table('usuarios_ediles')->get();
         return view('problems.create', compact('users', 'edils'));
     }

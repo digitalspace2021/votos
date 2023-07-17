@@ -26,10 +26,18 @@ class FormularioController extends Controller
         $comunas = DB::table('comunas')->select('id','name')->get();
         $barrios = DB::table('barrios')->select('id','name')->get();
         $candidatos = Candidato::select('id','name')->get();
-        $creadores = User::select('id','name')->get();
+        $creadores = User::select('id','name');
+
+        if(env('USERS_TEST')){
+            $creadores = $creadores->where(function ($query){
+                $query->where('name', '!=', 'Admin')
+                    ->where('name', '!=', 'simple');
+            });
+        }
+
         $corregimientos = DB::table('corregimientos')->select('id','name')->get();
         $veredas = DB::table('veredas')->select('id','name')->get();
-        return view('formularios.index',['candidatos'=>$candidatos,'creadores'=>$creadores,
+        return view('formularios.index',['candidatos'=>$candidatos,'creadores'=>$creadores->get(),
                     'comunas'=>$comunas,'barrios'=>$barrios,'corregimientos'=>$corregimientos,
                     'veredas'=>$veredas]);
     }
