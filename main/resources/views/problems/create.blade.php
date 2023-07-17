@@ -192,7 +192,7 @@ Crear formulario
 
                 <div class="col-md-12 mb-2">
 
-                    <label for="">¿Es un edil?</label>
+                    <label for="">¿Usted desea votar por otro de los candidatos politicos?</label>
 
                     <div class="d-flex justify-space-around">
                         <div class="col-3">
