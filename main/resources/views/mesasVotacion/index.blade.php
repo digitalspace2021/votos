@@ -83,7 +83,7 @@
             <div class="col-10 mb-2 text-center"></div>
             @if (Auth::user()->hasRole(['administrador']))
                 <div class="col-2 mb-2 text-center">
-                    <a href="{{ route('mesas.create') }}" class="btn  btn-sm btn-success">Crear Puesto de Votacion</a>
+                    <a href="{{ route('mesas.create') }}" class="btn  btn-sm btn-success">Crear Mesa de Votacion</a>
                 </div>
             @endif
         </div>

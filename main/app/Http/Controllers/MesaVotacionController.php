@@ -165,10 +165,10 @@ class MesaVotacionController extends Controller
             return DataTables::eloquent($puestoVotacion)
             ->addColumn('acciones', function ($col) {
                 $btn =  '<a href="'.route('mesas.show',['id'=>$col->id]).'" class="btn btn-outline-secondary" title="Ver "><i class="fa fa-eye"></i></a>';
-                if (Auth::user()->hasRole('administrador')) {
+                /* if (Auth::user()->hasRole('administrador')) {
                     $btn .= '<a href="'.route('mesas.edit',['id'=>$col->id]).'" class="btn btn-outline-primary m-2" title="Editar "><i class="fa fa-edit"></i></a>';
                     $btn .= '<a href="'.route('mesas.delete',['id'=>$col->id]).'" class="btn btn-outline-danger" title="Eliminar "><i class="fa fa-times"></i></a>';
-                }
+                } */
                 return $btn;
             })
             ->rawColumns(['acciones'])

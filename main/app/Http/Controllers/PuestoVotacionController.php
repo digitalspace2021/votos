@@ -64,7 +64,7 @@ class PuestoVotacionController extends Controller
         $puestoVotacion -> save();
 
         Alert::success('puesto de votacion', 'Se ha creado el puesto de votacion con exito!');
-        return redirect()->route('puestoVotacion.create');
+        return redirect()->route('puestoVotacion.index');
     }
 
     /**
