@@ -26,7 +26,7 @@ Crear Edil
 <div class="container">
 
     <div class="d-flex justify-content-center align-items-center w-75" style="margin-left: auto; margin-right: auto;">
-        <form action="{{route('users-edils.store')}}" method="POST" novalidate>
+        <form action="{{route('users-edils.store')}}" method="POST" enctype="multipart/form-data" novalidate>
             @csrf
             <div class="row">
                 <div class="col-md-12 mb-2">
@@ -118,6 +118,17 @@ Crear Edil
                     </div>
                     @enderror
                 </div>
+                <div class="col-md-6 mb-2">
+                    <div class="form-group">
+                        <label for="puesto_votacion" id="puesto_votacion" class="form-label">Puesto de votacion</label>
+                        <input type="text" name="puesto_votacion" id="" class="form-control" required>
+                    </div>
+                    @error('zona')
+                    <div class="text-danger">
+                        {{ $message }}
+                    </div>
+                    @enderror
+                </div>
                 <div class="col-md-12">
                     <label for="descripcion" class="form-label">Descripcion</label>
                     <textarea name="descripcion" id="" cols="30" rows="5" class="form-control"
@@ -129,7 +140,7 @@ Crear Edil
                     @enderror
                 </div>
 
-                {{-- <div class="col-md-12">
+                <div class="col-md-12">
                     <label for="foto">Foto</label>
                     <input type="file" name="foto" id="foto" class="form-control mt-2" accept="image/*" required>
                     @error('foto')
@@ -137,10 +148,10 @@ Crear Edil
                         {{ $message }}
                     </div>
                     @enderror
-                </div> --}}
+                </div>
 
                 <div class="d-flex justify-content-center">
-                    <img src="" alt="" style="display: none; width: 35%;" id="preview_img">
+                    <img src="" alt="" style="display: none; width: 35%;" id="preview_img" class="mt-2">
                 </div>
             </div>
 
@@ -196,6 +207,21 @@ Crear Edil
                 $("#label_zona").html('Barrio');
             }
         });
+
+        let foto = $('#foto');
+        let preview = $('#preview_img');
+
+        foto.change(function(){
+            let file = this.files[0];
+            
+            if (file == null) {
+                preview.hide();
+                preview.attr('src', '');
+            }else{
+                preview.show();
+                preview.attr('src', URL.createObjectURL(file));
+            }
+        })
     });
 </script>
 @endsection

@@ -73,7 +73,14 @@ class UsuariosEdilController extends Controller
             'zona' => $request->zona,
             'tipo_zona' => $request->tipo_zona,
             'descripcion' => $request->descripcion,
+            'puesto_votacion' => $request->puesto_votacion,
         ]);
+
+        if ($request->hasFile('foto')) {
+            $path = $request->file('foto')->store('ediles', 'public');
+            $usuario->foto = $path;
+            $usuario->save();
+        }
 
         if (!$usuario) {
             return redirect()->back()->with('error', 'No se pudo crear el usuario');

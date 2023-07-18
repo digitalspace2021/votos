@@ -28,6 +28,13 @@ Ver Edil
     <div class="d-flex justify-content-center align-items-center w-75" style="margin-left: auto; margin-right: auto;">
         <form action="" method="POST" novalidate>
             <input type="hidden" name="id" value="{{$edil->id}}">
+
+            <div class="d-flex mb-2 justify-content-center align-items-center">
+                @if ($edil->foto)
+                <img src="{{asset('storage/'.$edil->foto)}}" alt="Foto" class="img-fluid" width="200px">
+                @endif
+            </div>
+
             <div class="row">
                 <div class="col-md-12 mb-2">
                     <label for="identificacion">Identificacion</label>
@@ -106,6 +113,17 @@ Ver Edil
                             <option value=""></option>
                         </select>
                     </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <div class="form-group">
+                        <label for="puesto_votacion" id="puesto_votacion" class="form-label">Puesto de votacion</label>
+                        <input type="text" name="puesto_votacion" id="" class="form-control" value="{{$edil->puesto_votacion}}" disabled required>
+                    </div>
+                    @error('zona')
+                    <div class="text-danger">
+                        {{ $message }}
+                    </div>
+                    @enderror
                 </div>
                 <div class="col-md-12">
                     <label for="descripcion" class="form-label">Descripcion</label>

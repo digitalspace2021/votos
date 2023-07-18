@@ -20,6 +20,8 @@ class UserEdiles extends Model
         'tipo_zona',
         'zona',
         'descripcion',
-        'genero'
+        'genero',
+        'puesto_votacion',
+        'foto'
     ];
 }

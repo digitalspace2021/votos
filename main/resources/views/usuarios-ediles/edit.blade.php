@@ -26,11 +26,14 @@ Editar Edil
 <div class="container">
 
     <div class="d-flex justify-content-center align-items-center w-75" style="margin-left: auto; margin-right: auto;">
-        <form action="{{route('users-edils.update', $edil->id)}}" method="POST" novalidate>
+        <form action="{{route('users-edils.update', $edil->id)}}" method="POST" enctype="multipart/form-dat" novalidate>
             @csrf
             @method('PUT')
             <input type="hidden" name="id" value="{{$edil->id}}">
             <div class="row">
+                {{-- @if ($edil->foto)
+                <img src="{{asset('storage/'.$edil->foto)}}" alt="Foto" class="img-fluid" width="200px">
+                @endif --}}
                 <div class="col-md-12 mb-2">
                     <label for="identificacion">Identificacion</label>
                     <input type="number" name="identificacion" id="" class="form-control"
@@ -112,6 +115,17 @@ Editar Edil
                         <select name="zona" id="zona" class="form-select" required>
                             <option value=""></option>
                         </select>
+                    </div>
+                    @error('zona')
+                    <div class="text-danger">
+                        {{ $message }}
+                    </div>
+                    @enderror
+                </div>
+                <div class="col-md-6 mb-2">
+                    <div class="form-group">
+                        <label for="puesto_votacion" id="puesto_votacion" class="form-label">Puesto de votacion</label>
+                        <input type="text" name="puesto_votacion" id="" class="form-control" value="{{$edil->puesto_votacion}}" disabled required>
                     </div>
                     @error('zona')
                     <div class="text-danger">
@@ -212,6 +226,18 @@ Editar Edil
                 $("#label_zona").html('Barrio');
             }
         });
+
+        /* foto.change(function(){
+            let file = this.files[0];
+            
+            if (file == null) {
+                preview.hide();
+                preview.attr('src', '');
+            }else{
+                preview.show();
+                preview.attr('src', URL.createObjectURL(file));
+            }
+        }) */
     });
 </script>
 @endsection
