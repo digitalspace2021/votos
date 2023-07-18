@@ -101,4 +101,11 @@ class FormImport implements ToModel,  WithValidation, WithHeadingRow
             ],
         ];
     }
+
+    public function customValidationMessages()
+    {
+        return [
+            'identificacion.unique' => 'El número de identificación ya se encuentra registrado',
+        ];
+    }
 }

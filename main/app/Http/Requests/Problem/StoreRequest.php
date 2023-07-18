@@ -27,13 +27,13 @@ class StoreRequest extends FormRequest
             'creador' => ['required', 'exists:users,id'],
             'nombres' => ['required', 'string', 'max:255'],
             'apellidos' => ['required', 'string', 'max:255'],
-            'identificacion' => ['required', 'string', 'min:8', 'max:15', 'unique:formularios,id,'. $this->id ?? 'NULL'],
+            'identificacion' => ['required', 'min:8', 'max:15', 'unique:formularios,identificacion,'. $this->id, 'unique:pre_formularios,identificacion,'. $this->id],
             'telefono' => ['required', 'string', 'max:255'],
             'direccion' => ['required', 'string', 'max:255'],
             'vinculo' => ['required'],
             'puesto' => ['required'],
             'descripcion' => ['required_if:check_problem,on'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:formularios,id,'. $this->id ?? 'NULL'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:formularios,id,'. $this->id],
             'genero' => ['required', 'string', 'in:Hombre,Mujer,Otro'],
             'edil' => ['required'],
             'cons' => ['required']
@@ -64,7 +64,8 @@ class StoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'cons.required' => 'Debe aceptar el tratamiento de datos'
+            'cons.required' => 'Debe aceptar el tratamiento de datos',
+            'identificacion.unique' => 'La identificación ya se encuentra registrada',
         ];
     }
 }
