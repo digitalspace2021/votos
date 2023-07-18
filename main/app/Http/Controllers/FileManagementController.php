@@ -68,12 +68,17 @@ class FileManagementController extends Controller
                 $errorMessage = implode('\n\n', $errorMessages);
                 Session::flash('message', $errorMessage);
                 Session::flash('alert-class', 'alert-danger');
+
+                return back();
             } else {
-                Session::flash('message', 'Documentos subidos correctamente!! Recuerda Aprobarlos en la sección de Pre-Formularios');
+                Session::flash('message', 'Documentos subidos correctamente!! Recuerda confirmar los datos antes de guardarlos.');
                 Session::flash('alert-class', 'alert-success');
+
+                return redirect()->route('pre-formularios');
             }
 
             return back();
+            
         } catch (\Throwable $th) {
             Session::flash('message', $th->getMessage());
             Session::flash('alert-class', 'alert-danger');
