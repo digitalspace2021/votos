@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Yajra\Datatables\Datatables;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -55,13 +56,21 @@ class UsuarioController extends Controller
             'email' => 'required|email|max:255',
             'rol' => 'required',
             'password' => 'required|confirmed|min:6',
+            'identificacion' => 'required|unique:users,identificacion|min:8|max:15',
+            'foto' => 'image|mimes:jpeg,png,jpg,gif,svg|nullable'
         ]);
 
         $usuario = new $this->model();
+        $usuario->identificacion = $request->identificacion;
         $usuario->name = $request->nombre;
         $usuario->email = $request->email;
         $usuario->password = bcrypt($request->password);
         $usuario->save();
+
+        if ($request->hasFile('foto')) {
+            $usuario->foto = $request->file('foto')->store('usuarios', 'public');
+            $usuario->save();
+        }
 
         if ($request->rol == 'admin') {
             $usuario->assignRole('administrador');
@@ -123,10 +132,12 @@ class UsuarioController extends Controller
         }
 
         $request->validate([
+            'identificacion' => 'required|min:8|max:15|unique:users,identificacion,' . $usuario->id,
             'nombre' => 'required|max:255',
             'email' => 'required|email|max:255',
             'rol' => 'required',
             'password' => 'nullable|confirmed',
+            'foto' => 'image|mimes:jpeg,png,jpg,gif,svg|nullable'
         ]);
 
         $usuario->name = $request->nombre;
@@ -136,6 +147,16 @@ class UsuarioController extends Controller
             $usuario->password = Hash::make($request->password);
         }
         $usuario->save();
+
+        if ($request->hasFile('foto')) {
+            if ($usuario->foto) {
+                Storage::disk('public')->delete($usuario->foto);
+            }
+
+            $path = $request->file('foto')->store('usuarios', 'public');
+            $usuario->foto = $path;
+            $usuario->save();
+        }
 
         if ($request->rol == 'admin') {
             $usuario->assignRole('administrador');

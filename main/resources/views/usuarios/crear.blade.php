@@ -28,14 +28,23 @@
                     @endforeach
                 </ul>
 
-                <form class="needs-validation" method="POST" action="{{ route('usuarios.crear.guardar') }}" novalidate>
+                <form class="needs-validation" method="POST" action="{{ route('usuarios.crear.guardar') }}" enctype="multipart/form-data" novalidate>
                     @csrf
 
                     <div class="row g-3">
+
+                        <div class="col-sm-12">
+                            <label for="identificacion" class="form-label">Identificacion</label>
+                            <input type="number" class="form-control" placeholder="1234567890" name="identificacion" value="{{old('identificacion')}}" required>
+                            <div class="invalid-feedback">
+                                Este campo es requerido.
+                            </div>
+                        </div>
+
                         <div class="col-sm-12">
                             <label for="nombres" class="form-label">Nombre completo</label>
                             <input type="text" class="form-control" id="nombre" name="nombre"
-                                placeholder="Nombre completo" value="" required>
+                                placeholder="Nombre completo" value="{{old('nombre')}}" required>
                             <div class="invalid-feedback">
                                 Este campo es requerido.
                             </div>
@@ -44,7 +53,7 @@
                         <div class="col-12">
                             <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control" id="email" name="email"
-                                placeholder="usuario@mail.com" required>
+                                placeholder="usuario@mail.com" value="{{old('email')}}" required>
                             <div class="invalid-feedback">
                                 Por favor ingresa un Email valido.
                             </div>
@@ -69,6 +78,20 @@
                                 <option value="simple">Usuario simple</option>
                                 <option value="admin">Administrador</option>
                             </select>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label for="foto">Foto</label>
+                            <input type="file" name="foto" id="foto" class="form-control mt-2" accept="image/*">
+                            @error('foto')
+                            <div class="text-danger">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+        
+                        <div class="d-flex justify-content-center">
+                            <img src="" alt="" style="display: none; width: 35%;" id="preview_img" class="mt-2">
                         </div>
                     </div>
 
@@ -103,6 +126,21 @@
                         }, false)
                     })
                 })()
+
+                let foto = $('#foto');
+                let preview = $('#preview_img');
+
+                foto.change(function(){
+                    let file = this.files[0];
+            
+                    if (file == null) {
+                        preview.hide();
+                        preview.attr('src', '');
+                    }else{
+                        preview.show();
+                        preview.attr('src', URL.createObjectURL(file));
+                    }
+                })
             })
         </script>
     @endsection

@@ -15,7 +15,17 @@
         <div class="row g-5">
             <div class="col-3"></div>
             <div class="col-7">
+                <div class="d-flex mb-2 justify-content-center align-items-center">
+                    @if ($usuario->foto)
+                        <img src="{{ asset('storage/' . $usuario->foto) }}" alt="Foto" class="img-fluid" width="200px">
+                    @endif
+                </div>
                 <div class="row g-3">
+
+                    <div class="col-sm-12">
+                        <label for="nombres" class="form-label">Identificacion</label>
+                        <input type="number" class="form-control" value="{{ $usuario->identificacion }}" readonly>
+                    </div>
 
                     <div class="col-sm-12">
                         <label for="nombres" class="form-label">Nombre completo</label>

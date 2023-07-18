@@ -22,10 +22,25 @@
             <div class="col-3"></div>
             <div class="col-7">
                 <form class="needs-validation" method="POST"
-                    action="{{ route('usuarios.actualizar.guardar', $usuario->id) }}" novalidate>
+                    action="{{ route('usuarios.actualizar.guardar', $usuario->id) }}" enctype="multipart/form-data" novalidate>
                     @csrf
 
+                    <div class="d-flex mb-2 justify-content-center align-items-center">
+                        @if ($usuario->foto)
+                            <img src="{{ asset('storage/' . $usuario->foto) }}" alt="Foto" class="img-fluid" width="200px">
+                        @endif
+                    </div>
+
                     <div class="row g-3">
+
+                        <div class="col-sm-12">
+                            <label for="identificacion" class="form-label">Identificacion</label>
+                            <input type="number" class="form-control" placeholder="1234567890" name="identificacion" value="{{$usuario->identificacion}}" required>
+                            <div class="invalid-feedback">
+                                Este campo es requerido.
+                            </div>
+                        </div>
+
                         <div class="col-sm-12">
                             <label for="nombres" class="form-label">Nombre completo</label>
                             <input type="text" class="form-control" id="nombre" name="nombre"
@@ -70,6 +85,20 @@
                             <label for="password" class="form-label">Contraseña (Opcional)</label>
                             <input type="password" class="form-control" id="password" name="password">
                         </div> --}}
+
+                        <div class="col-md-12">
+                            <label for="foto">Foto</label>
+                            <input type="file" name="foto" id="foto" class="form-control mt-2" accept="image/*">
+                            @error('foto')
+                            <div class="text-danger">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+        
+                        <div class="d-flex justify-content-center">
+                            <img src="" alt="" style="display: none; width: 35%;" id="preview_img" class="mt-2">
+                        </div>
                     </div>
 
                     <hr class="my-4">
@@ -104,6 +133,21 @@
                         }, false)
                     })
                 })()
+
+                let foto = $('#foto');
+                let preview = $('#preview_img');
+
+                foto.change(function(){
+                    let file = this.files[0];
+            
+                    if (file == null) {
+                        preview.hide();
+                        preview.attr('src', '');
+                    }else{
+                        preview.show();
+                        preview.attr('src', URL.createObjectURL(file));
+                    }
+                })
             })
         </script>
     @endsection

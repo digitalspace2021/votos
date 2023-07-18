@@ -9,6 +9,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 use Symfony\Component\String\Inflector\EnglishInflector;
 
@@ -58,6 +59,10 @@ class Controller extends BaseController
         }
 
         $usuario->delete();
+
+        if ($usuario->foto) {
+            Storage::disk('public')->delete($usuario->foto);
+        }
 
         Alert::success("$this->className", 'Se ha eliminado el usuario con exito.');
         return redirect()->route('usuarios');
