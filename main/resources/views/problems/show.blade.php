@@ -32,21 +32,25 @@ Posibles Votantes
                     <label for="creador" class="form-label">Quien lo diligencia</label>
                     <select class="form-control" name="creador" id="creador" required disabled>
                         @foreach ($users as $user)
-                        <option value="{{ $user->id }}" @if ($user->id == $problem->propietario_id) selected @endif>{{ $user->name }}</option>
+                        <option value="{{ $user->id }}" @if ($user->id == $problem->propietario_id) selected @endif>{{
+                            $user->name }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="col-md-12 mb-2">
                     <label for="identificacion">Identificacion</label>
-                    <input type="number" name="identificacion" id="" class="form-control" value="{{$problem->identificacion}}" required disabled>
+                    <input type="number" name="identificacion" id="" class="form-control"
+                        value="{{$problem->identificacion}}" required disabled>
                 </div>
                 <div class="col-md-6 mb-2">
                     <label for="nombres" class="form-label">Nombres</label>
-                    <input type="text" class="form-control" name="nombres" value="{{$problem->nombre}}" required disabled>
+                    <input type="text" class="form-control" name="nombres" value="{{$problem->nombre}}" required
+                        disabled>
                 </div>
                 <div class="col-md-6 mb-2">
                     <label for="apellidos" class="form-label">Apellidos</label>
-                    <input type="text" class="form-control" name="apellidos" value="{{$problem->apellido}}" required disabled>
+                    <input type="text" class="form-control" name="apellidos" value="{{$problem->apellido}}" required
+                        disabled>
                 </div>
                 <div class="col-md-6 mb-2">
                     <label for="email" class="form-label">Email</label>
@@ -63,19 +67,23 @@ Posibles Votantes
                 </div>
                 <div class="col-md-6 mb-2">
                     <label for="telefono" class="form-label">Telefono</label>
-                    <input type="text" class="form-control" name="telefono" value="{{$problem->telefono}}" required disabled>
+                    <input type="text" class="form-control" name="telefono" value="{{$problem->telefono}}" required
+                        disabled>
                 </div>
                 <div class="col-md-6 mb-2">
                     <label for="direccion" class="form-label">Direccion</label>
-                    <input type="text" class="form-control" name="direccion" value="{{$problem->direccion}}" required disabled>
+                    <input type="text" class="form-control" name="direccion" value="{{$problem->direccion}}" required
+                        disabled>
                 </div>
                 <div class="col-md-6 mb-2">
                     <label for="vinculo" class="form-label">Vinculo</label>
-                    <input type="text" class="form-control" name="vinculo" value="{{$problem->vinculo}}" required disabled>
+                    <input type="text" class="form-control" name="vinculo" value="{{$problem->vinculo}}" required
+                        disabled>
                 </div>
                 <div class="col-md-6 mb-2">
                     <label for="puesto" class="form-label">Puesto de votacion</label>
-                    <input type="text" class="form-control" name="puesto" value="{{$problem->puesto_votacion}}" required disabled>
+                    <input type="text" class="form-control" name="puesto" value="{{$problem->puesto_votacion}}" required
+                        disabled>
                 </div>
                 <div class="col-md-12 mb-2">
                     <input type="checkbox" name="check_problem" id="check_problem" class="form-check-input" @if ($problem->mensaje) checked @endif disabled>
@@ -83,10 +91,86 @@ Posibles Votantes
                 </div>
                 <div class="col-md-12" id="desc_problem" style="display: none;">
                     <label for="descripcion">Problematica</label>
-                    <textarea name="descripcion" id="" cols="30" rows="5" class="form-control"
-                        required disabled>{{$problem->mensaje}}</textarea>
+                    <textarea name="descripcion" id="" cols="30" rows="5" class="form-control" required
+                        disabled>{{$problem->mensaje}}</textarea>
                 </div>
             </div>
+
+            @if ($problem->edil ?? null)
+            <div class="row">
+                <div class="row" id="step2">
+
+                    <div class="col-md-12 mb-2">
+                        <label for="" class="form-label">Edil que apoya: </label>
+                        <div class="col-6">
+                            <input type="text" name="" id="" disabled
+                                value="{{$problem->edil->userEdil->nombres}} {{$problem->edil->userEdil->apellidos}}" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="col-12 mb-2">
+                        <label for="" class="form-label">¿Dara este mismo voto al concejo?</label>
+
+                        <div class="d-flex justify-space-around">
+                            <div class="col-3">
+                                <input type="radio" name="concejo" value="1" {{$problem->edil->concejo ? 'checked' : ''}} disabled>
+                                <label for="" class="form-label">Si</label>
+                            </div>
+                            <div class="col-3">
+                                <input type="radio" name="concejo" value="0" {{$problem->edil->concejo ? '' : 'checked'}} disabled>
+                                <label for="" class="form-label">No</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 mb-2">
+                        <label for="">¿Apoyara con el mismo voto a los candidatos de alcaldia y gobernación?</label>
+
+                        <div class="d-flex justify-space-around">
+                            <div class="col-3">
+                                <input type="radio" name="apoyo" id="apoyo1" value="1" @if ($problem->edil->alcaldia != null || $problem->edil->gobernacion != null) checked @endif disabled>
+                                <label for="" class="form-label">Si</label>
+                            </div>
+                            <div class="col-3">
+                                <input type="radio" name="apoyo" id="apoyo2" value="0" @if ($problem->edil->alcaldia == null && $problem->edil->gobernacion == null) checked @endif disabled>
+                                <label for="" class="form-label">No</label>
+                            </div>
+                        </div>
+                    </div>
+                    @if ($problem->edil->alcaldia != null || $problem->edil->gobernacion != null)
+                    <div id="apGobAl">
+                        <div class="col-12 mb-2">
+                            <label for="">¿Dara este mismo voto a la alcaldia?</label>
+
+                            <div class="d-flex justify-space-around">
+                                <div class="col-3">
+                                    <input type="radio" name="alcaldia" id="alcaldia1" value="1" {{$problem->edil->alcaldia ? 'checked' : ''}} disabled>
+                                    <label for="" class="form-label">Si</label>
+                                </div>
+                                <div class="col-3">
+                                    <input type="radio" name="alcaldia" id="alcaldia2" value="0" {{$problem->edil->alcaldia ? '' : 'checked'}} disabled>
+                                    <label for="" class="form-label">No</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 mb-2">
+                            <label for="">¿Dara este mismo voto a la gobernación?</label>
+
+                            <div class="d-flex justify-space-around">
+                                <div class="col-3">
+                                    <input type="radio" name="gobernacion" id="gobernacion1" value="1" {{$problem->edil->gobernacion ? 'checked' : ''}} disabled>
+                                    <label for="" class="form-label">Si</label>
+                                </div>
+                                <div class="col-3">
+                                    <input type="radio" name="gobernacion" id="gobernacion2" value="0" {{$problem->edil->gobernacion ? '' : 'checked'}} disabled>
+                                    <label for="" class="form-label">No</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+                </div>
+            </div>
+            @endif
 
             <div class="row mt-3">
                 <div class="col-md-12 d-flex justify-content-between">

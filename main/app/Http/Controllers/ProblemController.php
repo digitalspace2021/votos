@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Problem\StoreRequest;
+use App\Models\Edil;
 use App\Models\Formulario;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
@@ -21,7 +22,15 @@ class ProblemController extends Controller
      */
     public function index(): View
     {
-        $creadores = DB::table('users')->get();
+        $creadores = DB::table('users');
+        if(env('USERS_TEST')){
+            $creadores = $creadores->where(function ($query){
+                $query->where('name', '!=', 'Admin')
+                    ->where('name', '!=', 'simple');
+            });
+        }
+        $creadores = $creadores->get();
+
         return view('problems.index', compact('creadores'));
     }
 
@@ -40,7 +49,7 @@ class ProblemController extends Controller
     {
         $problems = DB::table('formularios')
             ->join('users', 'formularios.propietario_id', '=', 'users.id')
-            ->select('formularios.id', 'formularios.identificacion', 'formularios.nombre', 'formularios.apellido', 'formularios.telefono', 'formularios.direccion', 'users.name', 'users.id as creator_id', 'formularios.puesto_votacion', 'formularios.estado', 'formularios.created_at')
+            ->select('formularios.id', 'formularios.identificacion', 'formularios.nombre', 'formularios.apellido', 'formularios.telefono', 'formularios.direccion', 'users.name', 'users.id as creator_id', 'formularios.puesto_votacion', 'formularios.estado', 'formularios.created_at', 'formularios.propietario_id')
             ->addSelect(DB::raw("CONCAT(formularios.nombre, ' ', formularios.apellido) AS nombre_completo"))
             ->where('formularios.estado', false)
             /* filter for cedula, nombre+apellido, created_at or creator_id */
@@ -56,15 +65,14 @@ class ProblemController extends Controller
             ->when($request->get('creador'), function ($query, $creator_id) {
                 return $query->where('users.id', $creator_id);
             })
-            ->orderBy('formularios.created_at', 'desc')
-            ->get();
+            ->orderBy('formularios.created_at', 'desc');
 
         if (Auth::user()->hasRole('simple')) {
-            $problems = $problems->where('propietario_id', auth()->user()->id);
+            $problems = $problems->where('formularios.propietario_id', Auth::user()->id);
         }
 
         /* colums nombre completo from formularios nombre+apellido, telefono, direccion, responsable, pruesto_votacion from table formularios and columns acciones view, edit and status */
-        $problems = DataTables::of($problems)
+        $problems = DataTables::of($problems->get())
             ->editColumn('created_at', function ($col) {
                 return Carbon::parse($col->created_at)->format('d-m-Y H:i:s');
             })
@@ -72,9 +80,9 @@ class ProblemController extends Controller
                 $btn = '<a href="' . route('problems.show', $problem->id) . '" class="btn btn-outline-secondary btn-sm" title="Ver problema"><i class="fa fa-eye"></i></a>';
                 if (Auth::user()->hasRole('administrador')) {
                     $btn .= '<a href="' . route('problems.destroy', $problem->id) . '" class="btn btn-outline-danger btn-sm" title="Eliminar problema"><i class="fa fa-times"></i></a>';
+                    $btn .= '<a href="' . route('problems.edit', $problem->id) . '" class="btn btn-outline-primary m-2 btn-sm" title="Editar problema"><i class="fa fa-edit"></i></a>';
+                    $btn .= '<button prid="' . $problem->id . '" class="btn btn-outline-success m-2 status btn-sm" title="Cambiar estado"><i class="fa fa-check"></i></button>';
                 }
-                $btn .= '<a href="' . route('problems.edit', $problem->id) . '" class="btn btn-outline-primary m-2 btn-sm" title="Editar problema"><i class="fa fa-edit"></i></a>';
-                $btn .= '<button prid="' . $problem->id . '" class="btn btn-outline-success m-2 status btn-sm" title="Cambiar estado"><i class="fa fa-check"></i></button>';
 
                 return $btn;
             })
@@ -98,8 +106,16 @@ class ProblemController extends Controller
      */
     public function create(): View
     {
-        $users = DB::table('users')->get();
-        return view('problems.create', compact('users'));
+        $users = DB::table('users');
+        if(env('USERS_TEST')){
+            $users = $users->where(function ($query){
+                $query->where('name', '!=', 'Admin')
+                    ->where('name', '!=', 'simple');
+            });
+        }
+        $users = $users->get();
+        $edils = DB::table('usuarios_ediles')->get();
+        return view('problems.create', compact('users', 'edils'));
     }
 
     public function edit($id)
@@ -107,12 +123,13 @@ class ProblemController extends Controller
         $users = DB::table('users')->get();
 
         $problem = Formulario::findOrFail($id);
+        $edils = DB::table('usuarios_ediles')->get();
 
         if ($problem->estado == true || !$problem) {
             return back()->with('error', 'No se puede visualizar un formulario comfirmado');
         }
 
-        return view('problems.edit', compact('users', 'problem'));
+        return view('problems.edit', compact('users', 'problem', 'edils'));
     }
 
     /**
@@ -141,6 +158,20 @@ class ProblemController extends Controller
             'vinculo' => $request->vinculo,
             'mensaje' => $request->check_problem ? $request->mensaje : null,
         ]);
+
+        if ($problem && $request->edil == 1) {
+            $edil = new Edil();
+            $edil->formulario_id = $problem->id;
+            $edil->edil_id = $request->user_edil;
+            $edil->concejo = $request->concejo;
+
+            if ($request->apoyo == 1) {
+                $edil->alcaldia = (bool)$request->alcaldia;
+                $edil->gobernacion = (bool)$request->gobernacion;
+            }
+
+            $edil->save();
+        }
 
         if ($problem) {
             if (auth()->check()) {
@@ -189,6 +220,22 @@ class ProblemController extends Controller
             'mensaje' => $request->descripcion,
         ]);
 
+        if ($request->edil == 1) {
+            $edil = new Edil();
+            $edil->createOrUpdate([
+                'formulario_id' => $problem->id,
+                'edil_id' => $request->user_edil,
+                'concejo' => $request->concejo,
+                'alcaldia' => $request->apoyo == 1 ? (bool)$request->alcaldia : null,
+                'gobernacion' => $request->apoyo == 1 ? (bool)$request->gobernacion : null,
+            ]);
+        } else {
+            $edil = Edil::where('formulario_id', $problem->id)->first();
+            if ($edil) {
+                $edil->delete();
+            }
+        }
+
         if ($problem) {
             return redirect()->route('problems.index')->with('success', 'Oportunidad de votante actualizado correctamente');
         }
@@ -207,18 +254,24 @@ class ProblemController extends Controller
      */
     public function destroy(int $id): RedirectResponse
     {
-        DB::beginTransaction();
+        $problem = Formulario::findOrFail($id);
 
-        try {
-            DB::table('formularios')->where('id', $id)->delete();
-
-            DB::commit();
-
-            return redirect()->route('problems.index')->with('success', 'Oportunidad de votante eliminada correctamente');
-        } catch (\Throwable $th) {
-            DB::rollback();
+        if (!$problem) {
             return back()->with('error', 'Error al eliminar la Oportunidad de votante');
         }
+
+        if ($problem) {
+            $edil = Edil::where('formulario_id', $problem->id)->first();
+            if ($edil) {
+                $edil->delete();
+            }
+            $problem->delete();
+        }
+
+        if ($problem) {
+            return redirect()->route('problems.index')->with('success', 'Oportunidad de votante eliminado correctamente');
+        }
+        return back()->with('error', 'Error al eliminar la Oportunidad de votante');
     }
 
 

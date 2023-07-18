@@ -8,6 +8,30 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css"
         rel="stylesheet" />
+
+    <style>
+        .content_files{
+            margin-left: -5rem;
+        }
+        .file_excel{
+            position: inherit;
+            width: 75rem;
+            margin-left: -20%;
+        }
+
+        /* mobile */
+        @media (max-width: 768px) {
+            .file_excel{
+                position: unset;
+                width: 100%;
+                margin-left: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+            }
+        }
+    </style>
 @endsection
 
 @section('cabecera')

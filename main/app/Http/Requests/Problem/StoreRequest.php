@@ -27,20 +27,45 @@ class StoreRequest extends FormRequest
             'creador' => ['required', 'exists:users,id'],
             'nombres' => ['required', 'string', 'max:255'],
             'apellidos' => ['required', 'string', 'max:255'],
-            'identificacion' => ['required', 'string', 'min:8', 'max:15'],
+            'identificacion' => ['required', 'min:8', 'max:15', 'unique:formularios,identificacion,'. $this->id, 'unique:pre_formularios,identificacion,'. $this->id],
             'telefono' => ['required', 'string', 'max:255'],
             'direccion' => ['required', 'string', 'max:255'],
             'vinculo' => ['required'],
             'puesto' => ['required'],
             'descripcion' => ['required_if:check_problem,on'],
-            'email' => ['required', 'string', 'email', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:formularios,id,'. $this->id],
             'genero' => ['required', 'string', 'in:Hombre,Mujer,Otro'],
+            'edil' => ['required'],
+            'cons' => ['required']
         ];
 
-        if ($this->check_problem == 'on') {
-            $validate['descripcion'] = ['min:10'];
+        if ($this->edil) {
+            $validate['concejo'] = ['required'];
+            $validate['apoyo'] = ['required'];
+            $validate['user_edil'] = ['required', 'exists:usuarios_ediles,id'];
+        }
+
+        if ($this->apoyo) {
+            $validate['alcaldia'] = ['required'];
+            $validate['gobernacion'] = ['required'];
         }
 
         return $validate;
+    }
+
+    public function attributes()
+    {
+        return [
+            'cons' => 'tratamiento de datos',
+            'user_edil' => 'usuario edil',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'cons.required' => 'Debe aceptar el tratamiento de datos',
+            'identificacion.unique' => 'La identificación ya se encuentra registrada',
+        ];
     }
 }
