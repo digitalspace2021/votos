@@ -40,10 +40,11 @@
                 <option value="" selected>Filtrar por pregunta</option>
                 <option value="1">Se le enseño a Votar?</option>
                 <option value="2">Se le pego Publicidad?</option>
-                <option value="3">Tiene carro o moto para ir a Votar?</option>
+                <option value="3">El dia de las elecciones tiene trasporte?</option>
                 <option value="4">Se le ha echo seguimiento constante?</option>
                 <option value="5">Se le ha visitado?</option>
                 <option value="6">El lugar de votacion es cerca a su casa?</option>
+                <option value="7">Ha participado en actividades de forma frecuente?</option>
               </select>
         </div>
       </div>
@@ -64,6 +65,17 @@
         </div>
       </div>
 <br>
+      <div class="row">
+        <div class="col">
+            <label for="">Por comuna</label>
+            <select class="form-select" aria-label="Default select example" id="selectComuna">
+                <option value="" selected>Filtrar por comuna</option>
+                @foreach ($comunas as $comuna)
+                <option value="{{$comuna->id}}">{{$comuna->name}}</option>
+                @endforeach
+            </select>
+            </select>
+        </div>
       <div class="row">
         <div class="col">
             <label for="">Por corregimiento</label>
@@ -115,6 +127,7 @@
                 <th>Se le ha echo seguimiento?</th>
                 <th>Se le ha visitado?</th>
                 <th>Lugar votacion cerca?</th>
+                <th>Participacion en actividades?</th>
                 <th>Accion</th>
             </tr>
         </thead>
@@ -134,7 +147,10 @@
     $('#selectPregunta').select2({
         theme: 'bootstrap-5'
     });
-    $('#selectBarrio').select2({
+    $('#selectPregunta').select2({
+        theme: 'bootstrap-5'
+    });
+    $('#selectComuna').select2({
         theme: 'bootstrap-5'
     });
     $('#selectCorregimiento').select2({
@@ -149,19 +165,21 @@
         var candidato = null;
         var pregunta = null;
         var cedula = null;
+        var comuna = null;
         var barrio = null;
         var corregimiento = null;
 
-        viewTable(candidato,pregunta,cedula,barrio,corregimiento); 
+        viewTable(candidato,pregunta,cedula,comuna,barrio,corregimiento); 
 
         $('#btnFiltrar').click(function() {
             candidato = document.getElementById('selectCandidato').value;
             pregunta = document.getElementById('selectPregunta').value;
             cedula = document.getElementById('cedula').value;
+            comuna = document.getElementById('selectComuna').value;
             barrio = document.getElementById('selectBarrio').value;
             corregimiento = document.getElementById('selectCorregimiento').value;
             $('#tablas-matriz').DataTable().destroy();
-            viewTable(candidato,pregunta,cedula,barrio,corregimiento); 
+            viewTable(candidato,pregunta,cedula,comuna,barrio,corregimiento); 
             console.log('Opción seleccionada: ' + candidato);
         });
 
@@ -170,16 +188,17 @@
             candidato = document.getElementById('selectCandidato').value;
             pregunta = document.getElementById('selectPregunta').value;
             cedula = document.getElementById('cedula').value;
+            comuna = document.getElementById('selectComuna').value;
             barrio = document.getElementById('selectBarrio').value;
             corregimiento = document.getElementById('selectCorregimiento').value;
             
-            exportMatriz(candidato,pregunta,cedula,barrio,corregimiento); 
+            exportMatriz(candidato,pregunta,cedula,comuna,barrio,corregimiento); 
             console.log('Opción seleccionada: ' + candidato);
         });
         
     });
 
-    function viewTable(candidato,pregunta,cedula,barrio,corregimiento){
+    function viewTable(candidato,pregunta,cedula,comuna,barrio,corregimiento){
         $('#tablas-matriz').DataTable({
             processing: true,
             serverSide: true,
@@ -191,6 +210,7 @@
                     candidato: candidato,
                     pregunta: pregunta,
                     cedula: cedula,
+                    comuna: comuna,
                     barrio: barrio,
                     corregimiento: corregimiento
                    
@@ -210,13 +230,14 @@
                 { data: 'res_cuatro', name: 'res_cuatro', render: function(data) {const colorClass = (data == 1) ? 'text-success' : 'text-danger'; return '<span class="' + colorClass + '">' +((data == 1) ? 'SI' : 'NO')+ '</span>';} },
                 { data: 'res_cinco', name: 'res_cinco', render: function(data) {const colorClass = (data == 1) ? 'text-success' : 'text-danger'; return '<span class="' + colorClass + '">' +((data == 1) ? 'SI' : 'NO')+ '</span>';} },
                 { data: 'res_seis', name: 'res_seis', render: function(data) {const colorClass = (data == 1) ? 'text-success' : 'text-danger'; return '<span class="' + colorClass + '">' +((data == 1) ? 'SI' : 'NO')+ '</span>';} },
+                { data: 'res_siete', name: 'res_siete', render: function(data) {const colorClass = (data == 1) ? 'text-success' : 'text-danger'; return '<span class="' + colorClass + '">' +((data == 1) ? 'SI' : 'NO')+ '</span>';} },
                 { data: 'acciones', name: 'acciones'}
             ]
         });
     }
 
     //function generate XLS
-    function exportMatriz(candidato,pregunta,cedula,barrio,corregimiento){
+    function exportMatriz(candidato,pregunta,cedula,comuna,barrio,corregimiento){
         $.ajax({
             url: "{{ route('export.matriz') }}", 
             method: 'GET',
@@ -228,6 +249,7 @@
                     candidato: candidato,
                     pregunta: pregunta,
                     cedula: cedula,
+                    comuna: comuna,
                     barrio: barrio,
                     corregimiento: corregimiento       
             },

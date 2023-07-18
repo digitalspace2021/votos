@@ -74,7 +74,7 @@
     
             <div class="row mt-2">
                 <div class="col">
-                    <label  for="">Tiene carro o moto para ir a votar?</label>
+                    <label  for="">El dia de las elecciones tiene trasporte?</label>
                     <div class="input-group-text">
                         <label for="">Si</label>
                         <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta3" value="1" class="grupo3" @if ($seguimientos[0]->respuesta_tres == 1) checked @endif disabled>
@@ -122,6 +122,23 @@
                         <label for="">No</label>
                         <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta6" value="0" class="grupo6" @if ($seguimientos[0]->respuesta_seis == 0) checked @endif disabled>
                       </div>
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="col">
+                    <label for="">Ha participado en actividades de forma frecuente?</label>
+                    <div class="input-group-text">
+                        <label for="">Si</label>
+                        <input id="pregunta7" type="checkbox" aria-label="Checkbox for following text input" name="pregunta7" value="1" class="grupo7" @if ($seguimientos[0]->respuesta_siete == 1) checked @endif disabled> 
+                        <label for="">No</label>
+                        <input id="pregunta7Not" type="checkbox" aria-label="Checkbox for following text input" name="pregunta7" value="0" class="grupo7" @if ($seguimientos[0]->respuesta_siete == 0) checked @endif disabled>
+                    </div>
+                    <div class="form-group mt-2" @if ($seguimientos[0]->respuesta_siete == 0) style="display: none;" @endif>
+                        <label  for="">En qué fecha ha participado?</label><br>
+                        <label for="">Fechas Seleccionadas: {{$seguimientos[0]->fechas_siete}}</label>
+                    </div>
+
                 </div>
             </div>
         </div>

@@ -9,12 +9,12 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\FormularioController;
 use App\Http\Controllers\HighchartController;
 use App\Http\Controllers\MatrizSeguimientoController;
+use App\Http\Controllers\MesaVotacionController;
 use App\Http\Controllers\PreFormularioController;
 use App\Http\Controllers\ProblemController;
+use App\Http\Controllers\PuestoVotacionController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\UtilityController;
-use App\Models\MatrizSeguimiento;
-use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -130,6 +130,26 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/matrizSeguimiento/update/{id}',[MatrizSeguimientoController::class,'update'])->name('matriz.update');
     //exportar matriz
     Route::get('/export/matrizSeguimiento', [FileManagementController::class, 'exportMatrizSeguimiento'])->name('export.matriz');
+
+    //puestos de votacion
+    Route::get('/puestosVotacion/create',[PuestoVotacionController::class,'create'])->name('puestoVotacion.create');
+    Route::get('/puestosVotacion',[PuestoVotacionController::class,'index'])->name('puestoVotacion.index');
+    Route::get('/puestosVotacion/{id}/show',[PuestoVotacionController::class,'show'])->name('puestoVotacion.show');
+    Route::get('/puestosVotacion/{id}/edit',[PuestoVotacionController::class,'edit'])->name('puestoVotacion.edit');
+    Route::get('/puestosVotacion/{id}/delete',[PuestoVotacionController::class,'destroy'])->name('puestoVotacion.delete');
+    Route::post('/puestosVotacion/store',[PuestoVotacionController::class,'store'])->name('puestoVotacion.store');
+    Route::get('/puestosVotacion/tabla', [PuestoVotacionController::class, 'tabla'])->name('puestoVotacion.tabla');
+    Route::put('/puestosVotacion/{id}/update', [PuestoVotacionController::class, 'update'])->name('puestoVotacion.update');
+
+    //Mesas Votacion
+    Route::get('/mesasVotacion',[MesaVotacionController::class,'index'])->name('mesas.index');
+    Route::get('/mesasVotacion/create',[MesaVotacionController::class,'create'])->name('mesas.create');
+    Route::post('/mesasVotacion/store',[MesaVotacionController::class,'store'])->name('mesas.store');
+    Route::get('/mesasVotacion/tabla', [MesaVotacionController::class, 'tabla'])->name('mesas.tabla');
+    Route::get('/mesasVotacion/{id}/edit', [MesaVotacionController::class, 'edit'])->name('mesas.edit');
+    Route::get('/mesasVotacion/{id}/update', [MesaVotacionController::class, 'update'])->name('mesas.update');
+    Route::get('/mesasVotacion/{id}/delete', [MesaVotacionController::class, 'destroy'])->name('mesas.delete');
+    Route::get('/mesasVotacion/{id}/show', [MesaVotacionController::class, 'show'])->name('mesas.show');
 
     /*  */
     Route::get('/oportunidades/{id}/edit', [ProblemController::class, 'edit'])->name('problems.edit');

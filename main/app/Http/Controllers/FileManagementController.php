@@ -53,6 +53,6 @@ class FileManagementController extends Controller
 
     //for matriz de seguimiento
     public function exportMatrizSeguimiento(Request $request){
-        return Excel::download(new MatrizSeguimientoExport($request->candidato,$request->pregunta,$request->cedula,$request->barrio,$request->corregimiento), 'matrizSeguimiento.xlsx');
+        return Excel::download(new MatrizSeguimientoExport($request->candidato,$request->pregunta,$request->cedula,$request->comuna,$request->barrio,$request->corregimiento), 'matrizSeguimiento.xlsx');
     }
 }

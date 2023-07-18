@@ -43,7 +43,7 @@
                 d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
         </symbol>
     </svg>
-    <div class="container py-3"">
+    <div class="container py-3">
         <header>
             <div class="{{-- d-flex --}} flex-column flex-md-row align-items-center pb-3 mb-4 border-bottom"
                 id="content-nav">
@@ -103,6 +103,12 @@
                                     <a class="me-3 py-2 text-dark text-decoration-none btn-hover" href="{{ route('matriz') }}"><i class="fa fa-table" aria-hidden="true"></i> Matriz de seguimiento</a>
                                 @endif
                                 <!---->
+                                @if(Auth::user()->hasRole('administrador'))
+                                    <a class="me-3 py-2 text-dark text-decoration-none btn-hover" href="{{route('puestoVotacion.index')}}"><i class="fa fa-globe" aria-hidden="true"></i> Puestos de Votacion</a>
+                                @endif
+                                @if(Auth::user()->hasRole('administrador'))
+                                    <a class="me-3 py-2 text-dark text-decoration-none btn-hover" href="{{route('mesas.index')}}"><i class="fa fa-bolt" aria-hidden="true"></i> Mesas de Votacion</a>
+                                @endif
                                 @if (Auth::user()->hasRole('administrador'))
                                     <a class="me-3 py-2 text-dark text-decoration-none btn-hover"
                                         href="{{ route('candidatos') }}"><i class="fa fa-user-plus" aria-hidden="true"></i> Candidatos</a>
@@ -159,18 +165,19 @@
               @yield('cabecera')
         </header>
         <!-- end nav-->
-        <main> 
+        <main style="margin-bottom: 100px;"> 
             @yield('cuerpo')
         </main>
 
         @include('sweetalert::alert')
 
-        <footer class="pt-4 my-md-5 pt-md-5 border-top">
-            <div class="row">
-                <div class="col-12 col-md">
-                    <small class="d-block mb-3 text-muted">Desarrollado por {{ env('DEV') }} &copy;
-                        {{ date('Y') }}</small>
-                </div>
+        <footer class="d-flex">
+            <div class="p-2 bg-body-tertiary fixed-bottom text-center">
+                <a href="/" class="align-items-center text-dark text-decoration-none">
+                    <img src="{{asset('img/Politicos.png')}}" alt="" class="me-2" width="60" height="52">
+                </a>
+              <span class="mb-3 mb-md-0 text-muted">Desarrollado por {{ env('DEV') }} &copy;
+                {{ date('Y') }}</span>
             </div>
         </footer>
     </div>
