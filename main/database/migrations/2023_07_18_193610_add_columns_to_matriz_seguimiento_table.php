@@ -32,5 +32,4 @@ class AddColumnsToMatrizSeguimientoTable extends Migration
 
         });
     }
-
 }
