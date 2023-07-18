@@ -127,6 +127,11 @@ Preview Formularios
     {{session('success') ?? session('error')}}
 </div>
 @endif
+
+@if (Session::has('message'))
+    <p class="alert {{ Session::get('alert-class') }}">{{ Session::get('message') }}</p>
+@endif
+
 @endsection
 
 @section('cuerpo')

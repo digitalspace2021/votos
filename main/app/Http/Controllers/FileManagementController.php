@@ -8,6 +8,7 @@ use App\Imports\FormImport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Validators\ValidationException;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 
 class FileManagementController extends Controller
@@ -21,13 +22,24 @@ class FileManagementController extends Controller
         return view('formularios.import');
     }
 
+    /**
+     * The function imports data from a file and handles any validation errors that occur during the
+     * import process.
+     * 
+     * @param Request request The  parameter is an instance of the Request class, which
+     * represents an HTTP request. It contains information about the request such as the input data,
+     * files, headers, and more.
+     * 
+     * @return a response back to the previous page.
+     */
     public function importFormulario(Request $request)
     {
-        /* dd(request()->all()); */
         try {
             $files = $request->file('file');
             $tipoZona = $request->input('tipo_zona');
             $zona = $request->input('zona');
+
+            $errorMessages = [];
 
             foreach ($files as $index => $file) {
                 $data = [
@@ -37,13 +49,36 @@ class FileManagementController extends Controller
                     'zona' => $zona[$index],
                 ];
 
-                Excel::import(new FormImport($data), $file->store('temp'));
+                try {
+                   $import=Excel::import(new FormImport($data), $file->store('temp'));
+                } catch (ValidationException $e) {
+                    $failures = $e->failures();
+                    foreach ($failures as $failure) {
+                        $errorMessage = "Error en el archivo: " . $file->getClientOriginalName() . "\n\n";
+                        $errorMessage .= "Fila: " . $failure->row() . ", Columna: " . $failure->attribute() . ". \n\n";
+                        $errorMessage .= "Mensaje: " . $failure->errors()[0];
+
+
+                        $errorMessages[] = $errorMessage;
+                    }
+                }
             }
 
-            Session::flash('message', 'Documentos subidos correctamente!! Recuerda Aprobarlos en la sección de Pre-Formularios');
-            Session::flash('alert-class', 'alert-success');
+            if (!empty($errorMessages)) {
+                $errorMessage = implode('\n\n', $errorMessages);
+                Session::flash('message', $errorMessage);
+                Session::flash('alert-class', 'alert-danger');
+
+                return back();
+            } else {
+                Session::flash('message', 'Documentos subidos correctamente!! Recuerda confirmar los datos antes de guardarlos.');
+                Session::flash('alert-class', 'alert-success');
+
+                return redirect()->route('pre-formularios');
+            }
 
             return back();
+            
         } catch (\Throwable $th) {
             Session::flash('message', $th->getMessage());
             Session::flash('alert-class', 'alert-danger');
