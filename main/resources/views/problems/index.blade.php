@@ -203,11 +203,24 @@ Posibles Votantes
             /* change status */
             $(document).on('click', '.status', function() {
                 let id = $(this).attr('prid');
+                let apo = $(this).attr('apo');
+                let cotainerSelect = $("#select_cand");
                 let url = "{{ route('problems.changeStatus', ':id') }}";
                 url = url.replace(':id', id);
                 $("#changeStatus form").attr('action', url);
                 /* call attribute in prid get value */
                 $("#changeStatus form input[name='problem_id']").val($(this).attr('prid'));
+
+                if (apo==1) {
+                    cotainerSelect.hide();
+                    /* remove required to select inside */
+                    $("#changeStatus form select[name='candidato_id']").removeAttr('required');
+                }else{
+                    cotainerSelect.show();
+                    /* add required to select inside */
+                    $("#changeStatus form select[name='candidato_id']").attr('required', 'required');
+                }
+
                 $("#changeStatus").modal('show');
             });
 

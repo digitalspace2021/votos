@@ -47,7 +47,10 @@ class FormularioController extends Controller
         $formularios = $this->model::query();
         $formularios->join('barrios', 'formularios.zona', '=', 'barrios.id')->join('comunas','barrios.comuna_id','=','comunas.id');
         $formularios->join('veredas', 'formularios.zona', '=', 'veredas.id')->join('corregimientos','veredas.corregimiento_id','=','corregimientos.id');
-        if(!empty($request->candidato)){$formularios->where('formularios.candidato_id',$request->candidato);}
+        if(!empty($candidato = $request->candidato)){$formularios->where(function ($query) use ($candidato) {
+            $query->where('candidato_id', $candidato)
+                ->orWhereNull('candidato_id');
+        });}
         if(!empty($request->creador)){$formularios->where('formularios.propietario_id',$request->creador);}
         if(!empty($request->cedula)){$formularios->where('formularios.identificacion',$request->cedula);}
         if(!empty($request->nombre)){$formularios->where('formularios.nombre', 'LIKE', '%' . $request->nombre . '%');}
@@ -197,7 +200,7 @@ class FormularioController extends Controller
             return redirect()->route(trans($this->plural));
         }
 
-        $formulario->candidato_nombre = Candidato::find($formulario->candidato_id)->name;
+        $formulario->candidato_nombre = Candidato::find($formulario->candidato_id)->name ?? null;
         $formulario->propietario_nombre = User::find($formulario->propietario_id)->name;
         return view(trans($this->plural) . '.ver', compact('formulario'));
     }

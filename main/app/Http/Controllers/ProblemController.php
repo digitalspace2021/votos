@@ -49,7 +49,8 @@ class ProblemController extends Controller
     {
         $problems = DB::table('formularios')
             ->join('users', 'formularios.propietario_id', '=', 'users.id')
-            ->select('formularios.id', 'formularios.identificacion', 'formularios.nombre', 'formularios.apellido', 'formularios.telefono', 'formularios.direccion', 'users.name', 'users.id as creator_id', 'formularios.puesto_votacion', 'formularios.estado', 'formularios.created_at', 'formularios.propietario_id')
+            ->leftJoin('ediles', 'formularios.id', '=', 'ediles.formulario_id')
+            ->select('formularios.id', 'formularios.identificacion', 'formularios.nombre', 'formularios.apellido', 'formularios.telefono', 'formularios.direccion', 'users.name', 'users.id as creator_id', 'formularios.puesto_votacion', 'formularios.estado', 'formularios.created_at', 'formularios.propietario_id', 'ediles.concejo', 'ediles.alcaldia', 'ediles.gobernacion')
             ->addSelect(DB::raw("CONCAT(formularios.nombre, ' ', formularios.apellido) AS nombre_completo"))
             ->where('formularios.estado', false)
             /* filter for cedula, nombre+apellido, created_at or creator_id */
@@ -81,7 +82,13 @@ class ProblemController extends Controller
                 if (Auth::user()->hasRole('administrador')) {
                     $btn .= '<a href="' . route('problems.destroy', $problem->id) . '" class="btn btn-outline-danger btn-sm" title="Eliminar problema"><i class="fa fa-times"></i></a>';
                     $btn .= '<a href="' . route('problems.edit', $problem->id) . '" class="btn btn-outline-primary m-2 btn-sm" title="Editar problema"><i class="fa fa-edit"></i></a>';
-                    $btn .= '<button prid="' . $problem->id . '" class="btn btn-outline-success m-2 status btn-sm" title="Cambiar estado"><i class="fa fa-check"></i></button>';
+
+                    $status = false;
+                    if ((bool) $problem->concejo || (bool) $problem->alcaldia || (bool) $problem->gobernacion) {
+                        $status = true;
+                    }
+
+                    $btn .= '<button prid="' . $problem->id . '" apo="'.$status.'"  class="btn btn-outline-success m-2 status btn-sm" title="Cambiar estado"><i class="fa fa-check"></i></button>';
                 }
 
                 return $btn;
