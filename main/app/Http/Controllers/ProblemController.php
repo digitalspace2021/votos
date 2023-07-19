@@ -23,8 +23,8 @@ class ProblemController extends Controller
     public function index(): View
     {
         $creadores = DB::table('users');
-        if(env('USERS_TEST')){
-            $creadores = $creadores->where(function ($query){
+        if (env('USERS_TEST')) {
+            $creadores = $creadores->where(function ($query) {
                 $query->where('name', '!=', 'Admin')
                     ->where('name', '!=', 'simple');
             });
@@ -88,7 +88,7 @@ class ProblemController extends Controller
                         $status = true;
                     }
 
-                    $btn .= '<button prid="' . $problem->id . '" apo="'.$status.'"  class="btn btn-outline-success m-2 status btn-sm" title="Cambiar estado"><i class="fa fa-check"></i></button>';
+                    $btn .= '<button prid="' . $problem->id . '" apo="' . $status . '"  class="btn btn-outline-success m-2 status btn-sm" title="Cambiar estado"><i class="fa fa-check"></i></button>';
                 }
 
                 return $btn;
@@ -114,15 +114,33 @@ class ProblemController extends Controller
     public function create(): View
     {
         $users = DB::table('users');
-        if(env('USERS_TEST')){
-            $users = $users->where(function ($query){
+        if (env('USERS_TEST')) {
+            $users = $users->where(function ($query) {
                 $query->where('name', '!=', 'Admin')
                     ->where('name', '!=', 'simple');
             });
         }
         $users = $users->get();
         $edils = DB::table('usuarios_ediles')->get();
-        return view('problems.create', compact('users', 'edils'));
+
+        $puestos = DB::table('mesas_votacion AS mv')
+            ->select(DB::raw("CONCAT('Puesto: ', COALESCE(pv.name, 'Sin información'), ', ', 
+                CASE
+                    WHEN pv.zone_type = 'Comuna' THEN CONCAT('Barrio: ', COALESCE(barrios.name, 'Sin información'))
+                    WHEN pv.zone_type = 'Corregimiento' THEN CONCAT('Vereda: ', COALESCE(veredas.name, 'Sin información'))
+                END, ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre"))
+            ->leftJoin('puestos_votacion AS pv', 'pv.id', '=', 'mv.puesto_votacion')
+            ->leftJoin('barrios', function ($join) {
+                $join->on('pv.zone', '=', 'barrios.id')
+                    ->where('pv.zone_type', '=', 'Comuna');
+            })
+            ->leftJoin('veredas', function ($join) {
+                $join->on('pv.zone', '=', 'veredas.id')
+                    ->where('pv.zone_type', '=', 'Corregimiento');
+            })
+            ->get();
+
+        return view('problems.create', compact('users', 'edils', 'puestos'));
     }
 
     public function edit($id)
@@ -136,7 +154,24 @@ class ProblemController extends Controller
             return back()->with('error', 'No se puede visualizar un formulario comfirmado');
         }
 
-        return view('problems.edit', compact('users', 'problem', 'edils'));
+        $puestos = DB::table('mesas_votacion AS mv')
+            ->select(DB::raw("CONCAT('Puesto: ', COALESCE(pv.name, 'Sin información'), ', ', 
+                CASE
+                    WHEN pv.zone_type = 'Comuna' THEN CONCAT('Barrio: ', COALESCE(barrios.name, 'Sin información'))
+                    WHEN pv.zone_type = 'Corregimiento' THEN CONCAT('Vereda: ', COALESCE(veredas.name, 'Sin información'))
+                END, ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre"))
+            ->leftJoin('puestos_votacion AS pv', 'pv.id', '=', 'mv.puesto_votacion')
+            ->leftJoin('barrios', function ($join) {
+                $join->on('pv.zone', '=', 'barrios.id')
+                    ->where('pv.zone_type', '=', 'Comuna');
+            })
+            ->leftJoin('veredas', function ($join) {
+                $join->on('pv.zone', '=', 'veredas.id')
+                    ->where('pv.zone_type', '=', 'Corregimiento');
+            })
+            ->get();
+
+        return view('problems.edit', compact('users', 'problem', 'edils', 'puestos'));
     }
 
     /**

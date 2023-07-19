@@ -149,8 +149,14 @@
 
                         <div class="col-6">
                             <label for="zona" class="form-label">Puesto de votacion</label>
-                            <input type="text" class="form-control" id="puesto_votacion" name="puesto_votacion"
-                                placeholder="Puesto de votacion" required>
+                            <select name="puesto_votacion" id="puesto" class="form-select" required>
+                                <option value="" selected disabled>Seleccione un puesto</option>
+                                @foreach ($puestos as $puesto)
+                                <option value="{{$puesto->puesto_nombre}}" 
+                                    {{old('puesto_votacion')==$puesto->puesto_nombre ? 'selected' : '' }}
+                                    >{{$puesto->puesto_nombre}}</option>
+                                @endforeach
+                            </select>
                             <div class="invalid-feedback">
                                 Por favor ingresa tu puesto de votacion.
                             </div>
@@ -287,6 +293,8 @@
                         $("#label_zona").html('Barrio');
                     }
                 });
+
+                $('#puesto').select2();
             });
         </script>
     @endsection

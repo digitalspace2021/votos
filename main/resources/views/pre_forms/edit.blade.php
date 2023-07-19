@@ -158,8 +158,25 @@ Editar Formulario
                 </div>
                 <div class="col-md-6 mb-2">
                     <label for="puesto" class="form-label">Puesto de votacion</label>
-                    <input type="number" class="form-control" name="puesto" value="{{$pre_formulario->puesto_votacion}}"
-                        required>
+                    <select name="puesto" id="puesto" class="form-select" required>
+                        <option value="" selected disabled>Seleccione un puesto</option>
+                        @php
+                            $status = false;
+                        @endphp
+                        @foreach ($puestos as $puesto)
+                        <option value="{{$puesto->puesto_nombre}}" 
+                            @if ($puesto->puesto_nombre == $pre_formulario->puesto_votacion)
+                                selected
+                                @php
+                                    $status = true;
+                                @endphp
+                            @endif
+                            >{{$puesto->puesto_nombre}}</option>
+                        @endforeach
+                        @if (!$status)
+                            <option value="{{$pre_formulario->puesto_votacion}}" selected>{{$pre_formulario->puesto_votacion}}</option>
+                        @endif
+                    </select>
                     @error('puesto')
                     <div class="text-danger">
                         {{ $message }}
@@ -287,6 +304,8 @@ Editar Formulario
                 cache: true
             }
         });
+
+        $('#puesto').select2();
     });
 </script>
 @endsection

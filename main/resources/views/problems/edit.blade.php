@@ -158,8 +158,25 @@ Editar Posible Votante
                 </div>
                 <div class="col-md-6 mb-2">
                     <label for="puesto" class="form-label">Puesto de votacion</label>
-                    <input type="text" class="form-control" name="puesto" value="{{$problem->puesto_votacion}}"
-                        required>
+                    <select name="puesto" id="puesto" class="form-select" required>
+                        <option value="" disabled>Seleccione un puesto</option>
+                        @php
+                            $status = false;
+                        @endphp
+                        @foreach ($puestos as $puesto)
+                        <option value="{{$puesto->puesto_nombre}}" 
+                            @if ($puesto->puesto_nombre == $problem->puesto)
+                                @php
+                                    $status = true;
+                                @endphp
+                                selected
+                            @endif
+                            >{{$puesto->puesto_nombre}}</option>
+                        @endforeach
+                        @if (!$status)
+                            <option value="{{$problem->puesto_votacion}}" selected>{{$problem->puesto_votacion}}</option>
+                        @endif
+                    </select>
                     @error('puesto')
                     <div class="text-danger">
                         {{ $message }}
@@ -468,6 +485,8 @@ Editar Posible Votante
         if (apoyo1.is(':checked')) {
             $("#apGobAl").show();
         }
+
+        $('#puesto').select2();
     });
 </script>
 @endsection

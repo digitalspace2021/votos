@@ -130,8 +130,27 @@
 
                         <div class="col-6">
                             <label for="puesto_votacion" class="form-label">Puesto de votacion</label>
-                            <input name="puesto_votacion" type="text" class="form-control"
-                                value="{{ $formulario->puesto_votacion }}">
+                            <select name="puesto_votacion" id="puesto" class="form-select" required>
+                                <option value="" selected disabled>Seleccione un puesto</option>
+                                @php
+                                    $status = false;
+                                @endphp
+                                @foreach ($puestos as $puesto)
+                                <option value="{{$puesto->puesto_nombre}}" 
+                                    @if ($puesto->puesto_nombre == $formulario->puesto_votacion)
+                                        @php
+                                            $status = true;
+                                        @endphp
+                                        selected
+                                    @endif
+                                    >{{$puesto->puesto_nombre}}</option>
+                                @endforeach
+
+                                @if ($status == false)
+                                    <option value="{{$formulario->puesto_votacion}}" selected>{{$formulario->puesto_votacion}}</option>
+                                @endif
+
+                            </select>
                         </div>
 
                         <div class="col-12">
@@ -285,6 +304,8 @@
                         $("#label_zona").html('Barrionot');
                     }
                 });
+
+                $('#puesto').select2();
             })
         </script>
     @endsection

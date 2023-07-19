@@ -166,7 +166,14 @@ Crear formulario
                 </div>
                 <div class="col-md-6 mb-2">
                     <label for="puesto" class="form-label">Puesto de votacion</label>
-                    <input type="text" class="form-control" name="puesto" value="{{old('puesto')}}" required>
+                    <select name="puesto" id="puesto" class="form-select" required>
+                        <option value="" selected disabled>Seleccione un puesto</option>
+                        @foreach ($puestos as $puesto)
+                        <option value="{{$puesto->puesto_nombre}}" 
+                            {{old('puesto')==$puesto->puesto_nombre ? 'selected' : '' }}
+                            >{{$puesto->puesto_nombre}}</option>
+                        @endforeach
+                    </select>
                     @error('puesto')
                     <div class="text-danger">
                         {{ $message }}
@@ -474,6 +481,8 @@ Crear formulario
         if (apoyo1.is(':checked')) {
             $("#apGobAl").show();
         }
+
+        $('#puesto').select2();
 
         /* let foto = $('#foto');
         let preview = $('#preview_img');
