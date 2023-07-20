@@ -177,10 +177,10 @@ class MesaVotacionController extends Controller
         }
         
         $mesas->join('puestos_votacion', 'mesas_votacion.puesto_votacion', '=', 'puestos_votacion.id')
-            ->join('barrios', 'puestos_votacion.zone', '=', 'barrios.id')
-            ->join('comunas','barrios.comuna_id','=','comunas.id')
-            ->join('veredas', 'puestos_votacion.zone', '=', 'veredas.id')
-            ->join('corregimientos','veredas.corregimiento_id','=','corregimientos.id')
+            ->leftJoin('barrios', 'puestos_votacion.zone', '=', 'barrios.id')
+            ->leftJoin('comunas','barrios.comuna_id','=','comunas.id')
+            ->leftJoin('veredas', 'puestos_votacion.zone', '=', 'veredas.id')
+            ->leftJoin('corregimientos','veredas.corregimiento_id','=','corregimientos.id')
             ->select('mesas_votacion.id as id','mesas_votacion.numero_mesa as numero','mesas_votacion.descripcion as descripcion',
                      'puestos_votacion.name as puesto',
                       DB::raw("CASE puestos_votacion.zone_type WHEN 'Comuna' THEN barrios.name WHEN 'Corregimiento' THEN veredas.name END as zona"))
