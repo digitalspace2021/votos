@@ -30,8 +30,13 @@
                 </ul>
 
                 <form class="needs-validation" method="POST"
-                    action="{{ route('formularios.actualizar.guardar', $formulario->id) }}" novalidate>
+                    action="{{ route('formularios.actualizar.guardar', $formulario->id) }}" enctype="multipart/form-data" novalidate>
                     @csrf
+                    <div class="d-flex mb-2 justify-content-center align-items-center">
+                        @if ($formulario->foto)
+                        <img src="{{asset('storage/'.$formulario->foto)}}" alt="Foto" class="img-fluid" width="200px">
+                        @endif
+                    </div>
                     <input type="hidden" name="creador_id" id="creador_id" value="{{ $formulario->propietario_id }}">
                     <input type="hidden" name="candidato_id" id="candidato_id" value="{{ $formulario->candidato_id }}">
 
@@ -130,13 +135,46 @@
 
                         <div class="col-6">
                             <label for="puesto_votacion" class="form-label">Puesto de votacion</label>
-                            <input name="puesto_votacion" type="text" class="form-control"
-                                value="{{ $formulario->puesto_votacion }}">
+                            <select name="puesto_votacion" id="puesto" class="form-select" required>
+                                <option value="" selected disabled>Seleccione un puesto</option>
+                                @php
+                                    $status = false;
+                                @endphp
+                                @foreach ($puestos as $puesto)
+                                <option value="{{$puesto->puesto_nombre}}" 
+                                    @if ($puesto->puesto_nombre == $formulario->puesto_votacion)
+                                        @php
+                                            $status = true;
+                                        @endphp
+                                        selected
+                                    @endif
+                                    >{{$puesto->puesto_nombre}}</option>
+                                @endforeach
+
+                                @if ($status == false)
+                                    <option value="{{$formulario->puesto_votacion}}" selected>{{$formulario->puesto_votacion}}</option>
+                                @endif
+
+                            </select>
                         </div>
 
                         <div class="col-12">
                             <label for="mensaje" class="form-label">Problematica</label>
                             <textarea name="mensaje" ea class="form-control" cols="30" rows="10">{{ $formulario->mensaje }}</textarea>
+                        </div>
+
+                        <div class="col-md-12 mb-2">
+                            <label for="foto">Foto</label>
+                            <input type="file" name="foto" id="foto" class="form-control mt-2" accept="image/*" required>
+                            @error('foto')
+                            <div class="text-danger">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+        
+                        <div class="d-flex justify-content-center">
+                            <img src="" alt="" style="display: none; width: 35%;" id="preview_img" class="mt-2 mb-2">
                         </div>
                     </div>
 
@@ -285,6 +323,23 @@
                         $("#label_zona").html('Barrionot');
                     }
                 });
+
+                $('#puesto').select2();
+
+                let foto = $('#foto');
+            let preview = $('#preview_img');
+
+                foto.change(function(){
+                    let file = this.files[0];
+
+                    if (file == null) {
+                        preview.hide();
+                        preview.attr('src', '');
+                    }else{
+                        preview.show();
+                        preview.attr('src', URL.createObjectURL(file));
+                    }
+                })
             })
         </script>
     @endsection

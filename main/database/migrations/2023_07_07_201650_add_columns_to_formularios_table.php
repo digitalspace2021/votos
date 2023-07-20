@@ -16,6 +16,7 @@ class AddColumnsToFormulariosTable extends Migration
         Schema::table('formularios', function (Blueprint $table) {
             $table->string('vinculo')->nullable();
             $table->boolean('estado')->default(true);
+            $table->string('foto')->nullable();
 
             $table->unsignedBigInteger('candidato_id')->nullable()->change();
             $table->string('zona')->nullable()->change();
@@ -32,6 +33,7 @@ class AddColumnsToFormulariosTable extends Migration
         Schema::table('formularios', function (Blueprint $table) {
             $table->dropColumn('vinculo');
             $table->dropColumn('estado');
+            $table->dropColumn('foto');
 
             $table->unsignedBigInteger('candidato_id')->change();
             $table->string('zona')->change();

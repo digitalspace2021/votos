@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -140,7 +141,18 @@ class UsuariosEdilController extends Controller
             'zona' => $request->zona,
             'tipo_zona' => $request->tipo_zona,
             'descripcion' => $request->descripcion,
+            'puesto_votacion' => $request->puesto_votacion,
         ]);
+
+        if ($request->hasFile('foto')) {
+            if ($usuario->foto) {
+                Storage::disk('public')->delete($usuario->foto);
+            }
+
+            $path = $request->file('foto')->store('ediles', 'public');
+            $usuario->foto = $path;
+            $usuario->save();
+        }
 
         return redirect()->route('users-edils.index')->with('success', 'Usuario actualizado correctamente');
     }
@@ -180,6 +192,10 @@ class UsuariosEdilController extends Controller
 
         if (!$usuario) {
             return redirect()->back()->with('error', 'No se pudo eliminar el usuario');
+        }
+
+        if ($usuario->foto) {
+            Storage::disk('public')->delete($usuario->foto);
         }
 
         $usuario->delete();
