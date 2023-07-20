@@ -327,6 +327,11 @@ class ProblemController extends Controller
             if ($edil) {
                 $edil->delete();
             }
+
+            if ($problem->foto) {
+                Storage::disk('public')->delete($problem->foto);
+            }
+
             $problem->delete();
         }
 
