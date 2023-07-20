@@ -181,3 +181,12 @@ Route::get('/storage-link', function () {
     Artisan::call('storage:link');
     return 'success';
 });
+
+
+/* route full clear ccahe */
+Route::get('/clear-cache-web', function () {
+    Artisan::call('cache:clear');
+    Artisan::call('config:clear');
+    Artisan::call('view:clear');
+    return 'success';
+});
