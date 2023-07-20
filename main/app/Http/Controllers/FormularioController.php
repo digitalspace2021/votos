@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Yajra\Datatables\Datatables;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -136,7 +137,8 @@ class FormularioController extends Controller
             // 'tipo_zona' => 'required',
             'zona' => 'required|max:255',
             'puesto_votacion' => 'required|max:255',
-            'mensaje' => 'nullable'
+            'mensaje' => 'nullable',
+            'foto' => 'nullable|image'
         ]);
 
         $formulario =  $this->model;
@@ -153,6 +155,12 @@ class FormularioController extends Controller
         $formulario->mensaje = $request->mensaje;
         $formulario->candidato_id = $request->candidato_id;
         $formulario->identificacion = $request->identificacion;
+
+        if ($request->hasFile('foto')) {
+            $path = $request->file('foto')->store('formularios', 'public');
+            $formulario->foto = $path;
+        }
+
         $formulario->save();
 
         Alert::success(trans($this->className), 'Se ha creado el ' . $this->singular . ' con exito!');
@@ -209,7 +217,8 @@ class FormularioController extends Controller
             'zona' => 'required|max:255',
             'tipo_zona' => 'required|max:255',
             'puesto_votacion' => 'required|max:255',
-            'mensaje' => 'nullable'
+            'mensaje' => 'nullable',
+            'foto' => 'nullable|image'
         ]);
 
         $formulario->propietario_id = $request->creador_id;
@@ -225,6 +234,17 @@ class FormularioController extends Controller
         $formulario->mensaje = $request->mensaje;
         $formulario->identificacion = $request->identificacion;
         $formulario->candidato_id = $request->candidato_id;
+
+        if ($request->hasFile('foto')) {
+
+            if ($formulario->foto) {
+                Storage::disk('public')->delete($formulario->foto);
+            }
+
+            $path = $request->file('foto')->store('formularios', 'public');
+            $formulario->foto = $path;
+        }
+
         $formulario->save();
 
         Alert::success(trans($this->className), 'Se ha actualizado el ' . $this->singular . ' con exito!');
@@ -262,6 +282,10 @@ class FormularioController extends Controller
         if (!$formulario) {
             Alert::error(trans($this->className), 'No se ha encontrado el ' . $this->singular . ' solicitado.');
             return redirect()->route(trans($this->plural));
+        }
+
+        if ($formulario->foto) {
+            Storage::disk('public')->delete($formulario->foto);
         }
 
         $formulario->delete();

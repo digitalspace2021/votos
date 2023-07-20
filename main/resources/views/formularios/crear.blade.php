@@ -28,7 +28,7 @@
                     @endforeach
                 </ul>
 
-                <form class="needs-validation" method="POST" action="{{ route('formularios.crear.guardar') }}" novalidate>
+                <form class="needs-validation" method="POST" action="{{ route('formularios.crear.guardar') }}" enctype="multipart/form-data" novalidate>
                     @csrf
                     <input type="hidden" name="creador_id" id="creador_id"
                         @if (Auth::user()->hasRole('simple')) value="{{ Auth::user()->id }}" @endif>
@@ -167,6 +167,20 @@
                                     class="text-muted">(Opcional)</span></label>
                             <textarea class="form-control" name="mensaje" id="mensaje" cols="30" rows="10"></textarea>
                         </div>
+
+                        <div class="col-md-12 mb-2">
+                            <label for="foto">Foto</label>
+                            <input type="file" name="foto" id="foto" class="form-control mt-2" accept="image/*" required>
+                            @error('foto')
+                            <div class="text-danger">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+        
+                        <div class="d-flex justify-content-center">
+                            <img src="" alt="" style="display: none; width: 35%;" id="preview_img" class="mt-2 mb-2">
+                        </div>
                     </div>
 
                     <hr class="my-4">
@@ -295,6 +309,21 @@
                 });
 
                 $('#puesto').select2();
+
+                let foto = $('#foto');
+                let preview = $('#preview_img');
+
+                foto.change(function(){
+                    let file = this.files[0];
+
+                    if (file == null) {
+                        preview.hide();
+                        preview.attr('src', '');
+                    }else{
+                        preview.show();
+                        preview.attr('src', URL.createObjectURL(file));
+                    }
+                })
             });
         </script>
     @endsection
