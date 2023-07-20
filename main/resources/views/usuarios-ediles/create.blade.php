@@ -142,7 +142,7 @@ Crear Edil
 
                 <div class="col-md-12">
                     <label for="foto">Foto</label>
-                    <input type="file" name="foto" id="foto" class="form-control mt-2" accept="image/*" required>
+                    <input type="file" name="foto" id="foto" class="form-control mt-2" accept="image/*">
                     @error('foto')
                     <div class="text-danger">
                         {{ $message }}
