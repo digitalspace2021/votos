@@ -27,6 +27,11 @@ Posibles Votantes
 
     <div class="d-flex justify-content-center align-items-center w-75" style="margin-left: auto; margin-right: auto;">
         <form>
+            <div class="d-flex mb-2 justify-content-center align-items-center">
+                @if ($problem->foto)
+                <img src="{{asset('storage/'.$problem->foto)}}" alt="Foto" class="img-fluid" width="200px">
+                @endif
+            </div>
             <div class="row">
                 <div class="col-md-12 mb-2">
                     <label for="creador" class="form-label">Quien lo diligencia</label>

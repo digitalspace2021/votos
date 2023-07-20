@@ -36,7 +36,8 @@ class StoreRequest extends FormRequest
             'email' => ['required', 'string', 'email', 'max:255', 'unique:formularios,id,'. $this->id],
             'genero' => ['required', 'string', 'in:Hombre,Mujer,Otro'],
             'edil' => ['required'],
-            'cons' => ['required']
+            'cons' => ['required'],
+            'foto' => ['nullable', 'image'],
         ];
 
         if ($this->edil) {

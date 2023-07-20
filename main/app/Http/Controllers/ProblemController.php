@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -186,6 +187,7 @@ class ProblemController extends Controller
      */
     public function store(StoreRequest $request): RedirectResponse
     {
+
         $problem = Formulario::create([
             'propietario_id' => $request->creador,
             'identificacion' => $request->identificacion,
@@ -200,6 +202,13 @@ class ProblemController extends Controller
             'vinculo' => $request->vinculo,
             'mensaje' => $request->check_problem ? $request->mensaje : null,
         ]);
+
+        if ($request->hasFile('foto')) {
+            $path = $request->file('foto')->store('formularios', 'public');
+            $problem->update([
+                'foto' => $path,
+            ]);
+        }
 
         if ($problem && $request->edil == 1) {
             $edil = new Edil();
@@ -261,6 +270,17 @@ class ProblemController extends Controller
             'vinculo' => $request->vinculo,
             'mensaje' => $request->descripcion,
         ]);
+
+        if ($request->hasFile('foto')) {
+            if ($problem->foto) {
+                Storage::disk('public')->delete($problem->foto);
+            }
+
+            $path = $request->file('foto')->store('formularios', 'public');
+            $problem->update([
+                'foto' => $path,
+            ]);
+        }
 
         if ($request->edil == 1) {
             $edil = new Edil();

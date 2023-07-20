@@ -24,7 +24,8 @@ class Formulario extends Model
         'puesto_votacion',
         'mensaje',
         'estado',
-        'vinculo'
+        'vinculo',
+        'foto',
     ];
 
     public function edil()

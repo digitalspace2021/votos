@@ -58,7 +58,7 @@ Crear formulario
 <div class="container">
 
     <div class="d-flex justify-content-center align-items-center w-75" style="margin-left: auto; margin-right: auto;">
-        <form action="{{route('problems.store')}}" method="POST" novalidate>
+        <form action="{{route('problems.store')}}" method="POST" enctype="multipart/form-data" novalidate>
             @csrf
             @if (Auth::check())
                 @if (Auth::user()->hasRole('simple'))
@@ -198,6 +198,20 @@ Crear formulario
                 </div>
 
                 <div class="col-md-12 mb-2">
+                    <label for="foto">Foto</label>
+                    <input type="file" name="foto" id="foto" class="form-control mt-2" accept="image/*" required>
+                    @error('foto')
+                    <div class="text-danger">
+                        {{ $message }}
+                    </div>
+                    @enderror
+                </div>
+
+                <div class="d-flex justify-content-center">
+                    <img src="" alt="" style="display: none; width: 35%;" id="preview_img" class="mt-2 mb-2">
+                </div>
+
+                <div class="col-md-12 mb-2">
 
                     <label for="">¿Usted desea votar por otro de los candidatos politicos?</label>
 
@@ -218,20 +232,6 @@ Crear formulario
                         @enderror
                     </div>
 
-                </div>
-
-                {{-- <div class="col-md-12">
-                    <label for="foto">Foto</label>
-                    <input type="file" name="foto" id="foto" class="form-control mt-2" accept="image/*" required>
-                    @error('foto')
-                    <div class="text-danger">
-                        {{ $message }}
-                    </div>
-                    @enderror
-                </div> --}}
-
-                <div class="d-flex justify-content-center">
-                    <img src="" alt="" style="display: none; width: 35%;" id="preview_img">
                 </div>
             </div>
             <div class="row" id="step2" style="display: none;">
@@ -484,7 +484,7 @@ Crear formulario
 
         $('#puesto').select2();
 
-        /* let foto = $('#foto');
+        let foto = $('#foto');
         let preview = $('#preview_img');
 
         foto.change(function(){
@@ -497,7 +497,7 @@ Crear formulario
                 preview.show();
                 preview.attr('src', URL.createObjectURL(file));
             }
-        }) */
+        })
     });
 </script>
 @endsection
