@@ -271,8 +271,8 @@ class FormularioController extends Controller
             Alert::error(trans($this->className), 'No se ha encontrado el ' . $this->singular . ' solicitado.');
             return redirect()->route(trans($this->plural));
         }
-        $formulario->candidato_nombre = Candidato::find($formulario->candidato_id)->name;
-        $formulario->propietario_nombre = User::find($formulario->propietario_id)->name;
+        $formulario->candidato_nombre = Candidato::find($formulario->candidato_id)->name ?? null;
+        $formulario->propietario_nombre = User::find($formulario->propietario_id)->name ?? null;
         return view(trans($this->plural) . '.eliminar', compact('formulario'));
     }
 
