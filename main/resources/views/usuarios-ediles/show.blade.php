@@ -131,16 +131,6 @@ Ver Edil
                         required disabled>{{$edil->descripcion}}</textarea>
                 </div>
 
-                {{-- <div class="col-md-12">
-                    <label for="foto">Foto</label>
-                    <input type="file" name="foto" id="foto" class="form-control mt-2" accept="image/*" required>
-                    @error('foto')
-                    <div class="text-danger">
-                        {{ $message }}
-                    </div>
-                    @enderror
-                </div> --}}
-
                 <div class="d-flex justify-content-center">
                     <img src="" alt="" style="display: none; width: 35%;" id="preview_img">
                 </div>

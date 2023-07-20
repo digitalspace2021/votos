@@ -26,14 +26,16 @@ Editar Edil
 <div class="container">
 
     <div class="d-flex justify-content-center align-items-center w-75" style="margin-left: auto; margin-right: auto;">
-        <form action="{{route('users-edils.update', $edil->id)}}" method="POST" enctype="multipart/form-dat" novalidate>
+        <form action="{{route('users-edils.update', $edil->id)}}" method="POST" enctype="multipart/form-data" novalidate>
             @csrf
             @method('PUT')
             <input type="hidden" name="id" value="{{$edil->id}}">
-            <div class="row">
-                {{-- @if ($edil->foto)
+            <div class="d-flex mb-2 justify-content-center align-items-center">
+                @if ($edil->foto)
                 <img src="{{asset('storage/'.$edil->foto)}}" alt="Foto" class="img-fluid" width="200px">
-                @endif --}}
+                @endif
+            </div>
+            <div class="row">
                 <div class="col-md-12 mb-2">
                     <label for="identificacion">Identificacion</label>
                     <input type="number" name="identificacion" id="" class="form-control"
@@ -125,7 +127,7 @@ Editar Edil
                 <div class="col-md-6 mb-2">
                     <div class="form-group">
                         <label for="puesto_votacion" id="puesto_votacion" class="form-label">Puesto de votacion</label>
-                        <input type="text" name="puesto_votacion" id="" class="form-control" value="{{$edil->puesto_votacion}}" disabled required>
+                        <input type="text" name="puesto_votacion" id="" class="form-control" value="{{$edil->puesto_votacion}}" required>
                     </div>
                     @error('zona')
                     <div class="text-danger">
@@ -144,18 +146,18 @@ Editar Edil
                     @enderror
                 </div>
 
-                {{-- <div class="col-md-12">
+                <div class="col-md-12">
                     <label for="foto">Foto</label>
-                    <input type="file" name="foto" id="foto" class="form-control mt-2" accept="image/*" required>
+                    <input type="file" name="foto" id="foto" class="form-control mt-2" accept="image/*">
                     @error('foto')
                     <div class="text-danger">
                         {{ $message }}
                     </div>
                     @enderror
-                </div> --}}
+                </div>
 
                 <div class="d-flex justify-content-center">
-                    <img src="" alt="" style="display: none; width: 35%;" id="preview_img">
+                    <img src="" alt="" style="display: none; width: 35%;" id="preview_img" class="mt-2">
                 </div>
             </div>
 
@@ -227,7 +229,10 @@ Editar Edil
             }
         });
 
-        /* foto.change(function(){
+        let foto = $('#foto');
+        let preview = $('#preview_img');
+
+        foto.change(function(){
             let file = this.files[0];
             
             if (file == null) {
@@ -237,7 +242,7 @@ Editar Edil
                 preview.show();
                 preview.attr('src', URL.createObjectURL(file));
             }
-        }) */
+        })
     });
 </script>
 @endsection

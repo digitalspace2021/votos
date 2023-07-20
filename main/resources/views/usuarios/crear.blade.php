@@ -28,14 +28,23 @@
                     @endforeach
                 </ul>
 
-                <form class="needs-validation" method="POST" action="{{ route('usuarios.crear.guardar') }}" novalidate>
+                <form class="needs-validation" method="POST" action="{{ route('usuarios.crear.guardar') }}" enctype="multipart/form-data" novalidate>
                     @csrf
 
                     <div class="row g-3">
+
+                        <div class="col-sm-12">
+                            <label for="identificacion" class="form-label">Identificacion</label>
+                            <input type="number" class="form-control" placeholder="1234567890" name="identificacion" value="{{old('identificacion')}}" required>
+                            <div class="invalid-feedback">
+                                Este campo es requerido.
+                            </div>
+                        </div>
+
                         <div class="col-sm-12">
                             <label for="nombres" class="form-label">Nombre completo</label>
                             <input type="text" class="form-control" id="nombre" name="nombre"
-                                placeholder="Nombre completo" value="" required>
+                                placeholder="Nombre completo" value="{{old('nombre')}}" required>
                             <div class="invalid-feedback">
                                 Este campo es requerido.
                             </div>
@@ -44,7 +53,7 @@
                         <div class="col-12">
                             <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control" id="email" name="email"
-                                placeholder="usuario@mail.com" required>
+                                placeholder="usuario@mail.com" value="{{old('email')}}" required>
                             <div class="invalid-feedback">
                                 Por favor ingresa un Email valido.
                             </div>
@@ -69,6 +78,80 @@
                                 <option value="simple">Usuario simple</option>
                                 <option value="admin">Administrador</option>
                             </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="direccion" class="form-label">Direccion</label>
+                            <input type="text" name="direccion" id="direccion" class="form-control" value="{{old('direccion')}}">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="telefono" class="form-label">
+                                Telefono
+                            </label>
+                            <input type="phone" name="telefono" id="telefono" class="form-control" value="{{old('telefono')}}">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="genero" class="form-label">Genero</label>
+                            <select class="form-select" name="genero" id="genero" required>
+                                <option value="">Seleccione un genero</option>
+                                <option value="masculino">Masculino</option>
+                                <option value="femenino">Femenino</option>
+                                <option value="Otro">Otro</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="referido" class="form-label">Referido</label>
+                            <select name="referido" id="" class="form-select">
+                                <option value="">Selecciona el usuario que te asigno</option>
+                                @foreach ($users as $item)
+                                    <option value="{{ $item->id }}"
+                                        @if (old('referido') == $item->id)
+                                            selected
+                                        @endif
+                                        >{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <label for="tipo_zona" class="form-label">Tipo de ubicacion</label>
+                            <select name="tipo_zona" id="tipo_zona" class="form-control" required>
+                                <option value="0">Seleccion el tipo de zona</option>
+                                <option value="Comuna">Comuna</option>
+                                <option value="Corregimiento">Corregimiento</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Seleccion un tipo de zona valido
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="zona" class="form-label" id="label_zona">Comuna / Corregimiento</label>
+                            <select class="form-control" name="zona" id="zona" required></select>
+                            {{-- <input type="text" class="form-control" id="zona" name="zona"
+                                placeholder="Comuna" required> --}}
+                            <div class="invalid-feedback">
+                                Por favor ingresa tu Comuna / Corregimiento.
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <textarea name="descripcion" id="" cols="30" rows="5" class="form-control" placeholder="Descripcion del producto">{{old('descripcion')}}</textarea>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label for="foto">Foto</label>
+                            <input type="file" name="foto" id="foto" class="form-control mt-2" accept="image/*">
+                            @error('foto')
+                            <div class="text-danger">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+        
+                        <div class="d-flex justify-content-center">
+                            <img src="" alt="" style="display: none; width: 35%;" id="preview_img" class="mt-2">
                         </div>
                     </div>
 
@@ -103,6 +186,58 @@
                         }, false)
                     })
                 })()
+
+                let foto = $('#foto');
+                let preview = $('#preview_img');
+
+                foto.change(function(){
+                    let file = this.files[0];
+            
+                    if (file == null) {
+                        preview.hide();
+                        preview.attr('src', '');
+                    }else{
+                        preview.show();
+                        preview.attr('src', URL.createObjectURL(file));
+                    }
+                });
+
+                $('#zona').select2({
+                    theme: "bootstrap",
+                    ajax: {
+                        dataType: 'json',
+                        url: function(params) {
+                            return "/get_veredas_and_comunas?type=" + $('#tipo_zona').val();
+                        },
+                        type: "get",
+                        delay: 250,
+                        data: function(params) {
+                            return {
+                                search: params.term
+                            };
+                        },
+                        processResults: function(response) {
+                            return {
+                                results: response
+                            };
+                        },
+                        cache: true
+                    }
+
+                });
+
+                $('#zona').on('select2:select', function(e) {
+                    var data = e.params.data;
+                    $('#zona').val(data.id);
+                });
+
+                $("#tipo_zona").change(function() {
+                    if ($(this).val() == 'Corregimiento') {
+                        $("#label_zona").html('Vereda');
+                    } else {
+                        $("#label_zona").html('Barrio');
+                    }
+                });
             })
         </script>
     @endsection

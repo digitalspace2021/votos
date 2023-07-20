@@ -128,9 +128,24 @@ class PreFormularioController extends Controller
         $users = DB::table('users')->get();
         $candidatos = DB::table('candidatos')->get();
 
-        /* dd($formulario); */
+        $puestos = DB::table('puestos_votacion AS pv')
+            ->select(DB::raw("CONCAT('Puesto: ', COALESCE(pv.name, 'Sin información'), ', ', 
+                CASE
+                    WHEN pv.zone_type = 'Comuna' THEN CONCAT('Barrio: ', COALESCE(barrios.name, 'Sin información'))
+                    WHEN pv.zone_type = 'Corregimiento' THEN CONCAT('Vereda: ', COALESCE(veredas.name, 'Sin información'))
+                END, ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre"))
+            ->leftJoin('mesas_votacion AS mv', 'pv.id', '=', 'mv.puesto_votacion')
+            ->leftJoin('barrios', function ($join) {
+                $join->on('pv.zone', '=', 'barrios.id')
+                    ->where('pv.zone_type', '=', 'Comuna');
+            })
+            ->leftJoin('veredas', function ($join) {
+                $join->on('pv.zone', '=', 'veredas.id')
+                    ->where('pv.zone_type', '=', 'Corregimiento');
+            })
+            ->get();
 
-        return view('pre_forms.edit', compact('pre_formulario', 'users', 'candidatos'));
+        return view('pre_forms.edit', compact('pre_formulario', 'users', 'candidatos', 'puestos'));
     }
 
     public function update(StoreRequest $request, $id)

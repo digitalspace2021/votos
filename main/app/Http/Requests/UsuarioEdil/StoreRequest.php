@@ -33,7 +33,7 @@ class StoreRequest extends FormRequest
             'tipo_zona' => ['required', 'in:Corregimiento,Comuna'],
             'zona' => ['required'],
             'puesto_votacion' => ['required'],
-            'foto' => ['image'],
+            'foto' => ['image', 'nullable'],
         ];
 
         return $validate;

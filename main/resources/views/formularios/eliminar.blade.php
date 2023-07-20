@@ -15,6 +15,11 @@
         <div class="row g-5">
             <div class="col-3"></div>
             <div class="col-7">
+                <div class="d-flex mb-2 justify-content-center align-items-center">
+                    @if ($formulario->foto)
+                    <img src="{{asset('storage/'.$formulario->foto)}}" alt="Foto" class="img-fluid" width="200px">
+                    @endif
+                </div>
 
                 <div class="row g-3">
 

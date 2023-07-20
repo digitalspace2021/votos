@@ -58,9 +58,14 @@ Editar Posible Votante
 <div class="container">
 
     <div class="d-flex justify-content-center align-items-center w-75" style="margin-left: auto; margin-right: auto;">
-        <form action="{{route('problems.update', $problem->id)}}" method="POST" novalidate>
+        <form action="{{route('problems.update', $problem->id)}}" method="POST" enctype="multipart/form-data" novalidate>
             @method('PUT')
             @csrf
+            <div class="d-flex mb-2 justify-content-center align-items-center">
+                @if ($problem->foto)
+                <img src="{{asset('storage/'.$problem->foto)}}" alt="Foto" class="img-fluid" width="200px">
+                @endif
+            </div>
             <div class="row" id="step1">
                 <div class="col-md-12 mb-2">
                     <label for="creador" class="form-label">Quien lo diligencia</label>
@@ -158,8 +163,25 @@ Editar Posible Votante
                 </div>
                 <div class="col-md-6 mb-2">
                     <label for="puesto" class="form-label">Puesto de votacion</label>
-                    <input type="text" class="form-control" name="puesto" value="{{$problem->puesto_votacion}}"
-                        required>
+                    <select name="puesto" id="puesto" class="form-select" required>
+                        <option value="" disabled>Seleccione un puesto</option>
+                        @php
+                            $status = false;
+                        @endphp
+                        @foreach ($puestos as $puesto)
+                        <option value="{{$puesto->puesto_nombre}}" 
+                            @if ($puesto->puesto_nombre == $problem->puesto)
+                                @php
+                                    $status = true;
+                                @endphp
+                                selected
+                            @endif
+                            >{{$puesto->puesto_nombre}}</option>
+                        @endforeach
+                        @if (!$status)
+                            <option value="{{$problem->puesto_votacion}}" selected>{{$problem->puesto_votacion}}</option>
+                        @endif
+                    </select>
                     @error('puesto')
                     <div class="text-danger">
                         {{ $message }}
@@ -180,6 +202,20 @@ Editar Posible Votante
                         {{ $message }}
                     </div>
                     @enderror
+                </div>
+
+                <div class="col-md-12 mb-2">
+                    <label for="foto">Foto</label>
+                    <input type="file" name="foto" id="foto" class="form-control mt-2" accept="image/*">
+                    @error('foto')
+                    <div class="text-danger">
+                        {{ $message }}
+                    </div>
+                    @enderror
+                </div>
+
+                <div class="d-flex justify-content-center">
+                    <img src="" alt="" style="display: none; width: 35%;" id="preview_img" class="mt-2 mb-2">
                 </div>
 
                 <div class="col-md-12 mb-2">
@@ -468,6 +504,23 @@ Editar Posible Votante
         if (apoyo1.is(':checked')) {
             $("#apGobAl").show();
         }
+
+        $('#puesto').select2();
+
+        let foto = $('#foto');
+        let preview = $('#preview_img');
+
+        foto.change(function(){
+            let file = this.files[0];
+            
+            if (file == null) {
+                preview.hide();
+                preview.attr('src', '');
+            }else{
+                preview.show();
+                preview.attr('src', URL.createObjectURL(file));
+            }
+        })
     });
 </script>
 @endsection

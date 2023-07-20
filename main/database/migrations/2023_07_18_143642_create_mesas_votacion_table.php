@@ -15,7 +15,7 @@ class CreateMesasVotacionTable extends Migration
     {
         Schema::create('mesas_votacion', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('numero_mesa');
+            $table->string('numero_mesa');
             $table->string('descripcion');
             $table->unsignedBigInteger('puesto_votacion');
             $table->timestamps();

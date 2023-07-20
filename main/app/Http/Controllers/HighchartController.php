@@ -33,7 +33,10 @@ class HighchartController extends Controller
             ->join('corregimientos', 'veredas.corregimiento_id', '=', 'corregimientos.id')
             ->join('users', 'users.id', '=', 'formularios.propietario_id')
             ->where('formularios.tipo_zona', 'Corregimiento')
-            ->where('candidato_id', $candidato)
+            ->where(function ($query) use ($candidato) {
+                $query->where('candidato_id', $candidato)
+                    ->orWhereNull('candidato_id');
+            })
             ->where('formularios.estado', true)
             ->groupBy('formularios.tipo_zona', 'corregimientos.name')
             ->get();
@@ -43,14 +46,20 @@ class HighchartController extends Controller
             ->join('comunas', 'barrios.comuna_id', '=', 'comunas.id')
             ->join('users', 'users.id', '=', 'formularios.propietario_id')
             ->where('formularios.tipo_zona', 'Comuna')
-            ->where('candidato_id', $candidato)
+            ->where(function ($query) use ($candidato) {
+                $query->where('candidato_id', $candidato)
+                    ->orWhereNull('candidato_id');
+            })
             ->where('formularios.estado', true)
             ->groupBy('formularios.tipo_zona', 'comunas.name')
             ->get();
         /****************************************************************************************************************************************** */
         $DataUsers = Formulario::select('users.name as drilldown', 'users.name as name',  DB::raw("COUNT(formularios.id) as y"))
             ->join('users', 'users.id', 'formularios.propietario_id')
-            ->where('candidato_id', $candidato)
+            ->where(function ($query) use ($candidato) {
+                $query->where('candidato_id', $candidato)
+                    ->orWhereNull('candidato_id');
+            })
             ->where('formularios.estado', true)
             ->groupBy('users.name')
             ->get();
@@ -63,7 +72,10 @@ class HighchartController extends Controller
             ->join('users', 'users.id', '=', 'formularios.propietario_id')
             ->where('formularios.tipo_zona', 'Corregimiento')
             ->where('veredas.id',$zona_id)
-            ->where('candidato_id', $candidato)
+            ->where(function ($query) use ($candidato) {
+                $query->where('candidato_id', $candidato)
+                    ->orWhereNull('candidato_id');
+            })
             ->where('formularios.estado', true)
             ->groupBy('formularios.tipo_zona', 'veredas.name')
             ->get();
@@ -76,7 +88,10 @@ class HighchartController extends Controller
             ->join('users', 'users.id', '=', 'formularios.propietario_id')
             ->where('formularios.tipo_zona', 'Comuna')
             ->where('barrios.id',$zona_id)
-            ->where('candidato_id', $candidato)
+            ->where(function ($query) use ($candidato) {
+                $query->where('candidato_id', $candidato)
+                    ->orWhereNull('candidato_id');
+            })
             ->where('formularios.estado', true)
             ->groupBy('formularios.tipo_zona', 'barrios.name')
             ->get();

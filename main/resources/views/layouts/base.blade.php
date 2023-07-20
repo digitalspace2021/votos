@@ -58,6 +58,7 @@
                       <div>
                         @if (!auth()->check())
                         <a class="me-3 py-2 text-dark text-decoration-none btn-hover" href="{{ route('problems.create') }}" id="btn-pVotantes"><i class="fa fa-users" aria-hidden="true"></i> Posibles Votantes</a>
+                        <a class="me-3 py-2 text-dark text-decoration-none btn-hover" href="{{ route('actividad.create') }}" id="btn-pVotantes"><i class="fa fa-tasks" aria-hidden="true"></i> Actividades</a>
                         @endif
                           <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" aria-label="Toggle navigation">
                             <span class="navbar-toggler-icon"></span>
@@ -132,6 +133,9 @@
                                     </li>
                                 </ul>
                                 @endif
+
+                                <a class="me-3 py-2 text-dark text-decoration-none btn-hover"
+                                    href="{{ auth()->check() ? route('actividad.index') : route('actividad.create') }}"><i class="fa fa-tasks" aria-hidden="true"></i> Actividades</a>
                                 
                                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                                     <li class="nav-item dropdown">
@@ -156,6 +160,8 @@
                                 @else
                                 <a class="me-3 py-2 text-dark text-decoration-none"
                                     href="{{ route('problems.create') }}"><i class="fa fa-users" aria-hidden="true"></i> Posibles Votantes</a>
+                                <a class="me-3 py-2 text-dark text-decoration-none"
+                                href="{{ route('actividad.create') }}"><i class="fa fa-tasks" aria-hidden="true"></i> Actividades</a>
                                 <a class="me-3 py-2 text-dark text-decoration-none" href="{{ route('login') }}"><i class="fa fa-key" aria-hidden="true"></i> Login</a>
                             @endauth
                         </nav>
@@ -178,7 +184,7 @@
                 <a href="/" class="align-items-center text-dark text-decoration-none">
                     <img src="{{asset('img/Politicos.png')}}" alt="" class="me-2" width="60" height="52">
                 </a>
-              <span class="mb-3 mb-md-0 text-muted">Desarrollado por {{ env('DEV') }} &copy;
+              <span class="mb-3 mb-md-0 text-muted">Desarrollado por <a href="https://digitalspace.net.co/" target="_blank">{{ env('DEV') }}</a> &copy;
                 {{ date('Y') }}</span>
             </div>
         </footer>
