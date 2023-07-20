@@ -20,7 +20,7 @@
         @csrf
         <div class="mb-3">
           <label for="inputName" class="form-label">Numero de la mesa de Votacion</label>
-          <input type="number" class="form-control" name="inputNumberTable" id="inputNumberTable" aria-describedby="mesa de votacion" value="{{$mesa[0]->numero}}" readonly>
+          <input type="text" class="form-control" name="inputNumberTable" id="inputNumberTable" aria-describedby="mesa de votacion" value="{{$mesa[0]->numero}}" readonly>
         </div>
         <div class="mb-3">
           <label for="inputDescript" class="form-label">Descripcion</label>
