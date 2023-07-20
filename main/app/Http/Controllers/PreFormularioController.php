@@ -128,13 +128,13 @@ class PreFormularioController extends Controller
         $users = DB::table('users')->get();
         $candidatos = DB::table('candidatos')->get();
 
-        $puestos = DB::table('mesas_votacion AS mv')
+        $puestos = DB::table('puestos_votacion AS pv')
             ->select(DB::raw("CONCAT('Puesto: ', COALESCE(pv.name, 'Sin información'), ', ', 
                 CASE
                     WHEN pv.zone_type = 'Comuna' THEN CONCAT('Barrio: ', COALESCE(barrios.name, 'Sin información'))
                     WHEN pv.zone_type = 'Corregimiento' THEN CONCAT('Vereda: ', COALESCE(veredas.name, 'Sin información'))
                 END, ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre"))
-            ->leftJoin('puestos_votacion AS pv', 'pv.id', '=', 'mv.puesto_votacion')
+            ->leftJoin('mesas_votacion AS mv', 'pv.id', '=', 'mv.puesto_votacion')
             ->leftJoin('barrios', function ($join) {
                 $join->on('pv.zone', '=', 'barrios.id')
                     ->where('pv.zone_type', '=', 'Comuna');
