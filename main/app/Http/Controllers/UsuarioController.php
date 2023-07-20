@@ -8,6 +8,7 @@ use App\Traits\Listusers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Yajra\Datatables\Datatables;
@@ -57,7 +58,9 @@ class UsuarioController extends Controller
             'rol' => 'required',
             'password' => 'required|confirmed|min:6',
             'identificacion' => 'required|unique:users,identificacion|min:8|max:15',
-            'foto' => 'image|mimes:jpeg,png,jpg,gif,svg|nullable'
+            'foto' => 'image|mimes:jpeg,png,jpg,gif,svg|nullable',
+            'tipo_zona' => 'required',
+            'zona' => 'required'
         ]);
 
         $usuario = new $this->model();
@@ -65,6 +68,23 @@ class UsuarioController extends Controller
         $usuario->name = $request->nombre;
         $usuario->email = $request->email;
         $usuario->password = bcrypt($request->password);
+
+        if ($usuario) {
+            $info = DB::table('info_users')->insertGetId([
+                'direccion' => $request->direccion,
+                'telefono' => $request->telefono,
+                'genero' => $request->genero,
+                'tipo_zona' => $request->tipo_zona,
+                'zona' => $request->zona,
+                'observaciones' => $request->descripcion,
+                'referido_id' => $request->referido,
+                'created_at' => Carbon::now(),
+            ]);
+
+            if ($info) {
+                $usuario->info_id = $info;
+            }
+        }
         $usuario->save();
 
         if ($request->hasFile('foto')) {
@@ -91,8 +111,11 @@ class UsuarioController extends Controller
             return redirect()->route(trans($this->plural));
         }
 
+        $info = DB::table('info_users')->where('id', $usuario->info_id)->first();
+        $users = DB::table('users')->get();
+
         $usuario->rol = implode(",", $usuario->getRoleNames()->toArray());
-        return view(trans($this->plural) . '.ver', compact('usuario'));
+        return view(trans($this->plural) . '.ver', compact('usuario', 'info', 'users'));
     }
 
 
@@ -105,8 +128,11 @@ class UsuarioController extends Controller
             return redirect()->route(trans($this->plural));
         }
 
+        $info = DB::table('info_users')->where('id', $usuario->info_id)->first();
+        $users = DB::table('users')->get();
+
         $usuario->rol = implode(",", $usuario->getRoleNames()->toArray());
-        return view(trans($this->plural) . '.eliminar', compact('usuario'));
+        return view(trans($this->plural) . '.eliminar', compact('usuario', 'info', 'users'));
     }
 
     public function actualizar(Request $request, $id)
@@ -117,8 +143,11 @@ class UsuarioController extends Controller
             return redirect()->route('usuarios');
         }
 
+        $info = DB::table('info_users')->where('id', $usuario->info_id)->first();
+        $users = DB::table('users')->get();
+
         $usuario->rol = implode(",", $usuario->getRoleNames()->toArray());
-        return view(trans($this->plural) . ".actualizar", compact('usuario'));
+        return view(trans($this->plural) . ".actualizar", compact('usuario', 'info', 'users'));
     }
 
     //diferents?
@@ -137,7 +166,9 @@ class UsuarioController extends Controller
             'email' => 'required|email|max:255',
             'rol' => 'required',
             'password' => 'nullable|confirmed',
-            'foto' => 'image|mimes:jpeg,png,jpg,gif,svg|nullable'
+            'foto' => 'image|mimes:jpeg,png,jpg,gif,svg|nullable', 
+            'tipo_zona' => 'required',
+            'zona' => 'required'
         ]);
 
         $usuario->name = $request->nombre;
@@ -146,6 +177,35 @@ class UsuarioController extends Controller
         if ($request->password) {
             $usuario->password = Hash::make($request->password);
         }
+
+        if ($usuario->info_id) {
+            $info = DB::table('info_users')->where('id', $usuario->info_id)->update([
+                'direccion' => $request->direccion,
+                'telefono' => $request->telefono,
+                'genero' => $request->genero,
+                'tipo_zona' => $request->tipo_zona,
+                'zona' => $request->zona,
+                'observaciones' => $request->descripcion,
+                'referido_id' => $request->referido,
+                'updated_at' => Carbon::now(),
+            ]);
+        } else {
+            $info = DB::table('info_users')->insertGetId([
+                'direccion' => $request->direccion,
+                'telefono' => $request->telefono,
+                'genero' => $request->genero,
+                'tipo_zona' => $request->tipo_zona,
+                'zona' => $request->zona,
+                'observaciones' => $request->descripcion,
+                'referido_id' => $request->referido,
+                'created_at' => Carbon::now(),
+            ]);
+
+            if ($info) {
+                $usuario->info_id = $info;
+            }
+        }
+
         $usuario->save();
 
         if ($request->hasFile('foto')) {

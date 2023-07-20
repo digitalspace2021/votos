@@ -81,6 +81,69 @@
                                 name="password_confirmation" placeholder="">
                         </div>
 
+                        <div class="col-md-6">
+                            <label for="direccion" class="form-label">Direccion</label>
+                            <input type="text" name="direccion" id="direccion" class="form-control" value="{{$info->direccion ?? ''}}">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="telefono" class="form-label">
+                                Telefono
+                            </label>
+                            <input type="phone" name="telefono" id="telefono" class="form-control" value="{{$info->telefono ?? ''}}">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="genero" class="form-label">Genero</label>
+                            <select class="form-select" name="genero" id="genero" required>
+                                <option value="">Seleccione un genero</option>
+                                <option value="masculino" {{$info->genero ?? null == 'masculino' ? 'selected' : ''}}>Masculino</option>
+                                <option value="femenino" {{$info->genero ?? null == 'femnino' ? 'selected' : ''}}>Femenino</option>
+                                <option value="Otro" {{$info->genero ?? null == 'Otro' ? 'selected' : ''}}>Otro</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="referido" class="form-label">Referido</label>
+                            <select name="referido" id="" class="form-select">
+                                <option value="">Selecciona el usuario que te asigno</option>
+                                @foreach ($users as $item)
+                                    <option value="{{ $item->id }}"
+                                        @php
+                                            $referido = $info->referido ?? null;
+                                        @endphp
+                                        @if ($item->id == $referido)
+                                            selected
+                                        @endif
+                                        >{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <label for="tipo_zona" class="form-label">Tipo de ubicacion</label>
+                            <select name="tipo_zona" id="tipo_zona" class="form-control" required>
+                                <option value="0">Seleccion el tipo de zona</option>
+                                <option value="Comuna" {{$info->tipo_zona ?? null == 'Comuna' ? 'selected' : ''}}>Comuna</option>
+                                <option value="Corregimiento" {{$info->tipo_zona ?? null == 'Corregimiento' ? 'selected' : ''}}>Corregimiento</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Seleccion un tipo de zona valido
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="zona" class="form-label" id="label_zona">Comuna / Corregimiento</label>
+                            <select class="form-control" name="zona" id="zona" required></select>
+                            {{-- <input type="text" class="form-control" id="zona" name="zona"
+                                placeholder="Comuna" required> --}}
+                            <div class="invalid-feedback">
+                                Por favor ingresa tu Comuna / Corregimiento.
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <textarea name="descripcion" id="" cols="30" rows="5" class="form-control" placeholder="Descripcion del producto">{{$info->direccion ?? ''}}</textarea>
+                        </div>
+
                         {{-- <div class="col-12">
                             <label for="password" class="form-label">Contraseña (Opcional)</label>
                             <input type="password" class="form-control" id="password" name="password">
@@ -117,7 +180,7 @@
     @section('js-extra')
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
         <script>
-            $(document).ready(function() {
+            $(document).ready(async function() {
                 (() => {
                     'use strict'
 
@@ -148,6 +211,52 @@
                         preview.attr('src', URL.createObjectURL(file));
                     }
                 })
+
+
+                var zona = $('#tipo_zona').val()
+
+                $('#zona').select2({
+                    theme: "bootstrap",
+                    ajax: {
+                        dataType: 'json',
+                        url: function(params) {
+                            return "/get_veredas_and_comunas?type=" + $('#tipo_zona').val();
+                        },
+                        type: "get",
+                        delay: 250,
+                        data: function(params) {
+                            return {
+                                search: params.term
+                            };
+                        },
+                        processResults: function(response) {
+                            return {
+                                results: response
+                            };
+                        },
+                        cache: true
+                    }
+
+                });
+
+                await $.ajax({
+                    type: 'GET',
+                    url: '/get_veredas_and_comunas?type=' + zona + '&id=' + '{{ $info->zona ?? '' }}',
+                    data: function(params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    },
+                    cache: true
+                }).then(function(data) {
+                    var option = new Option(data[0].text, data[0].id, true, true);
+                    $('#zona').append(option).trigger('change');
+                });
             })
         </script>
     @endsection

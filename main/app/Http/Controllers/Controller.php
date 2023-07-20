@@ -64,7 +64,10 @@ class Controller extends BaseController
                     ->where('pv.zone_type', '=', 'Corregimiento');
             })
             ->get();
-        return view(trans($this->plural) . ".crear", compact('puestos'));
+
+            $users = DB::table('users')->get();
+
+        return view(trans($this->plural) . ".crear", compact('puestos', 'users'));
     }
 
     public function eliminar_confirmar(Request $request, $id)
@@ -75,11 +78,19 @@ class Controller extends BaseController
             return redirect()->route('usuarios');
         }
 
-        $usuario->delete();
-
         if ($usuario->foto) {
             Storage::disk('public')->delete($usuario->foto);
         }
+
+        $info = DB::table('info_users')->where('id', $usuario->info_id)->first();
+
+        if ($info) {
+            /* Call to undefined method stdClass::delete() */
+            $info = DB::table('info_users')->where('id', $usuario->info_id)->delete();
+        }
+
+        $usuario->delete();
+
 
         Alert::success("$this->className", 'Se ha eliminado el usuario con exito.');
         return redirect()->route('usuarios');

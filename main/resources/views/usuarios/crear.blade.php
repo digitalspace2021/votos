@@ -80,6 +80,66 @@
                             </select>
                         </div>
 
+                        <div class="col-md-6">
+                            <label for="direccion" class="form-label">Direccion</label>
+                            <input type="text" name="direccion" id="direccion" class="form-control" value="{{old('direccion')}}">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="telefono" class="form-label">
+                                Telefono
+                            </label>
+                            <input type="phone" name="telefono" id="telefono" class="form-control" value="{{old('telefono')}}">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="genero" class="form-label">Genero</label>
+                            <select class="form-select" name="genero" id="genero" required>
+                                <option value="">Seleccione un genero</option>
+                                <option value="masculino">Masculino</option>
+                                <option value="femenino">Femenino</option>
+                                <option value="Otro">Otro</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="referido" class="form-label">Referido</label>
+                            <select name="referido" id="" class="form-select">
+                                <option value="">Selecciona el usuario que te asigno</option>
+                                @foreach ($users as $item)
+                                    <option value="{{ $item->id }}"
+                                        @if (old('referido') == $item->id)
+                                            selected
+                                        @endif
+                                        >{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <label for="tipo_zona" class="form-label">Tipo de ubicacion</label>
+                            <select name="tipo_zona" id="tipo_zona" class="form-control" required>
+                                <option value="0">Seleccion el tipo de zona</option>
+                                <option value="Comuna">Comuna</option>
+                                <option value="Corregimiento">Corregimiento</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Seleccion un tipo de zona valido
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="zona" class="form-label" id="label_zona">Comuna / Corregimiento</label>
+                            <select class="form-control" name="zona" id="zona" required></select>
+                            {{-- <input type="text" class="form-control" id="zona" name="zona"
+                                placeholder="Comuna" required> --}}
+                            <div class="invalid-feedback">
+                                Por favor ingresa tu Comuna / Corregimiento.
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <textarea name="descripcion" id="" cols="30" rows="5" class="form-control" placeholder="Descripcion del producto">{{old('descripcion')}}</textarea>
+                        </div>
+
                         <div class="col-md-12">
                             <label for="foto">Foto</label>
                             <input type="file" name="foto" id="foto" class="form-control mt-2" accept="image/*">
@@ -140,7 +200,44 @@
                         preview.show();
                         preview.attr('src', URL.createObjectURL(file));
                     }
-                })
+                });
+
+                $('#zona').select2({
+                    theme: "bootstrap",
+                    ajax: {
+                        dataType: 'json',
+                        url: function(params) {
+                            return "/get_veredas_and_comunas?type=" + $('#tipo_zona').val();
+                        },
+                        type: "get",
+                        delay: 250,
+                        data: function(params) {
+                            return {
+                                search: params.term
+                            };
+                        },
+                        processResults: function(response) {
+                            return {
+                                results: response
+                            };
+                        },
+                        cache: true
+                    }
+
+                });
+
+                $('#zona').on('select2:select', function(e) {
+                    var data = e.params.data;
+                    $('#zona').val(data.id);
+                });
+
+                $("#tipo_zona").change(function() {
+                    if ($(this).val() == 'Corregimiento') {
+                        $("#label_zona").html('Vereda');
+                    } else {
+                        $("#label_zona").html('Barrio');
+                    }
+                });
             })
         </script>
     @endsection
