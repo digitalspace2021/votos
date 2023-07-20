@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActividadController;
 use App\Http\Controllers\CandidatoController;
 use App\Http\Controllers\CargoController;
 use App\Http\Controllers\Controller;
@@ -148,10 +149,13 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/mesasVotacion/store',[MesaVotacionController::class,'store'])->name('mesas.store');
     Route::get('/mesasVotacion/tabla', [MesaVotacionController::class, 'tabla'])->name('mesas.tabla');
     Route::get('/mesasVotacion/{id}/edit', [MesaVotacionController::class, 'edit'])->name('mesas.edit');
-    Route::get('/mesasVotacion/{id}/update', [MesaVotacionController::class, 'update'])->name('mesas.update');
+    Route::put('/mesasVotacion/{id}/update', [MesaVotacionController::class, 'update'])->name('mesas.update');
     Route::get('/mesasVotacion/{id}/delete', [MesaVotacionController::class, 'destroy'])->name('mesas.delete');
     Route::get('/mesasVotacion/{id}/show', [MesaVotacionController::class, 'show'])->name('mesas.show');
 
+    //Actividades
+    Route::get('/actividades/index',[ActividadController::class,'create'])->name('actividad.index');
+    
     /*  */
     Route::get('/oportunidades/{id}/edit', [ProblemController::class, 'edit'])->name('problems.edit');
     Route::get('/oportunidades/{id}/delete', [ProblemController::class, 'destroy'])->name('problems.destroy');
@@ -175,6 +179,12 @@ Route::get('/oportunidades/getall', [ProblemController::class, 'getAll'])->name(
 Route::get('/oportunidades/create', [ProblemController::class, 'create'])->name('problems.create');
 Route::post('/oportunidades/create', [ProblemController::class, 'store'])->name('problems.store');
 Route::get('/oportunidades/{id}/show', [ProblemController::class, 'show'])->name('problems.show');
+
+//Actividades
+Route::get('/actividades/create',[ActividadController::class,'create'])->name('actividad.create');
+Route::get('/actividades/getUsers',[ActividadController::class,'getUserInfo']);
+Route::post('/actividades/create',[ActividadController::class,'store'])->name('actividad.store');
+
 
 /* route storage link command */
 Route::get('/storage-link', function () {

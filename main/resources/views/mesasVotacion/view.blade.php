@@ -16,7 +16,7 @@
 
 @section('cuerpo')
 <div class="container">
-    <form action="{{route('mesas.store')}}" method="post">
+    <form action="" method="post">
         @csrf
         <div class="mb-3">
           <label for="inputName" class="form-label">Numero de la mesa de Votacion</label>
@@ -32,7 +32,6 @@
         </div>
         
         <div class="text-center">
-            <button type="submit" class="btn btn-primary">Crear</button>
             <a href="{{route('mesas.index')}}" class="btn btn-danger">Cancelar</a>
         </div>
     </form>

@@ -15,7 +15,7 @@ class AddColumnsToMatrizSeguimientoTable extends Migration
     {
         Schema::table('matriz_seguimiento', function (Blueprint $table) {
             $table->boolean('respuesta_siete');
-            $table->json('fechas_siete')->nullable()->default(NULL);
+            $table->json('fechas_siete')->nullable()->default(null);
         });
     }
 
