@@ -154,7 +154,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/mesasVotacion/{id}/show', [MesaVotacionController::class, 'show'])->name('mesas.show');
 
     //Actividades
-    Route::get('/actividades/index',[ActividadController::class,'create'])->name('actividad.index');
+    Route::get('/actividades/index',[ActividadController::class,'index'])->name('actividad.index');
+    Route::get('/actividades/tabla', [ActividadController::class, 'tabla'])->name('actividad.tabla');
+    Route::get('/actividades/{id}/{status}/status',[ActividadController::class,'changeStatus'])->name('actividad.status');
+    Route::get('/actividades/{id}/show',[ActividadController::class,'show'])->name('actividad.show');
+    Route::get('/actividades/{id}/edit',[ActividadController::class,'edit'])->name('actividad.edit');
+    Route::put('/actividades/{id}/update',[ActividadController::class,'update'])->name('actividad.update');
+    Route::get('/actividades/{id}/delete',[ActividadController::class,'destroy'])->name('actividad.delete');
     
     /*  */
     Route::get('/oportunidades/{id}/edit', [ProblemController::class, 'edit'])->name('problems.edit');
