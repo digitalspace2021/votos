@@ -36,6 +36,11 @@
                         <div class="col-sm-12">
                             <label for="identificacion" class="form-label">Identificacion</label>
                             <input type="number" class="form-control" placeholder="1234567890" name="identificacion" value="{{$usuario->identificacion}}" required>
+                            @error('identificacion')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                             <div class="invalid-feedback">
                                 Este campo es requerido.
                             </div>
@@ -45,6 +50,11 @@
                             <label for="nombres" class="form-label">Nombre completo</label>
                             <input type="text" class="form-control" id="nombre" name="nombre"
                                 placeholder="Nombre completo" value="{{ $usuario->name }}" required>
+                            @error('nombre')
+                            <div class="text-danger">
+                                {{ $message }}
+                            </div>
+                            @enderror
                             <div class="invalid-feedback">
                                 Este campo es requerido.
                             </div>
@@ -54,6 +64,11 @@
                             <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control" id="email" name="email"
                                 value="{{ $usuario->email }}" placeholder="usuario@mail.com" required>
+                            @error('email')
+                            <div class="text-danger">
+                                {{ $message }}
+                            </div>
+                            @enderror
                             <div class="invalid-feedback">
                                 Por favor ingresa un Email valido.
                             </div>
@@ -68,11 +83,21 @@
                                 <option value="admin" {{ $usuario->rol == 'administrador' ? 'selected' : '' }}>
                                     Administrador</option>
                             </select>
+                            @error('rol')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
 
                         <div class="col-12">
                             <label for="password" class="form-label">Password (Opcional)</label>
                             <input type="password" class="form-control" id="password" name="password" placeholder="">
+                            @error('password')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
 
                         <div class="col-12">
@@ -84,12 +109,22 @@
                         <div class="col-md-6">
                             <label for="direccion" class="form-label">Direccion</label>
                             <input type="text" name="direccion" id="direccion" class="form-control" value="{{$info->direccion ?? ''}}">
+                            @error('direccion')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
                         <div class="col-md-6">
                             <label for="telefono" class="form-label">
                                 Telefono
                             </label>
                             <input type="phone" name="telefono" id="telefono" class="form-control" value="{{$info->telefono ?? ''}}">
+                            @error('telefono')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
                         <div class="col-md-6">
                             <label for="genero" class="form-label">Genero</label>
@@ -99,6 +134,11 @@
                                 <option value="femenino" {{$info->genero ?? null == 'femnino' ? 'selected' : ''}}>Femenino</option>
                                 <option value="Otro" {{$info->genero ?? null == 'Otro' ? 'selected' : ''}}>Otro</option>
                             </select>
+                            @error('genero')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
                         <div class="col-md-6">
                             <label for="referido" class="form-label">Referido</label>
@@ -115,6 +155,11 @@
                                         >{{ $item->name }}</option>
                                 @endforeach
                             </select>
+                            @error('referido')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
 
 
@@ -128,6 +173,11 @@
                             <div class="invalid-feedback">
                                 Seleccion un tipo de zona valido
                             </div>
+                            @error('tipo_zona')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
 
                         <div class="col-md-6">
@@ -138,6 +188,11 @@
                             <div class="invalid-feedback">
                                 Por favor ingresa tu Comuna / Corregimiento.
                             </div>
+                            @error('zona')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
 
                         <div class="col-md-12">
