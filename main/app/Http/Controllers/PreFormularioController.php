@@ -190,6 +190,10 @@ class PreFormularioController extends Controller
             return back()->with('error', 'Error al aprobar la preview del formulario');
         }
 
+        if (!$pre_formulario->email || !$pre_formulario->direccion || !$pre_formulario->puesto_votacion) {
+            return back()->with('error', 'Para aprobar es necesario que el formulario tenga email, dirección y puesto de votación');
+        }
+
         $formulario = Formulario::create([
             'propietario_id' => $pre_formulario->propietario_id,
             'candidato_id' => $pre_formulario->candidato_id,
