@@ -18,12 +18,12 @@ class TablaPreFormularios extends Migration
             $table->unsignedBigInteger('propietario_id');
             $table->string('nombre');
             $table->string('apellido');
-            $table->string('email');
+            $table->string('email')->nullable();
             $table->string('telefono');
             $table->string('genero');
-            $table->string('direccion');
+            $table->string('direccion')->nullable();
             $table->string('zona');
-            $table->string('puesto_votacion');
+            $table->string('puesto_votacion')->nullable();
             $table->text('mensaje')->nullable();
             $table->string('tipo_zona')->nullable();
             $table->unsignedBigInteger('candidato_id');
