@@ -75,8 +75,8 @@
                             <label for="rol" class="form-label">Rol</label>
                             <select class="form-control" name="rol" id="rol" required>
                                 <option value="">Seleccione un rol</option>
-                                <option value="simple">Usuario simple</option>
-                                <option value="admin">Administrador</option>
+                                <option value="simple" {{old('rol') == 'simple' ? 'selected' : ''}}>Usuario simple</option>
+                                <option value="admin" {{old('rol' == 'admin' ? 'selected' : '')}}>Administrador</option>
                             </select>
                         </div>
 
@@ -94,9 +94,9 @@
                             <label for="genero" class="form-label">Genero</label>
                             <select class="form-select" name="genero" id="genero" required>
                                 <option value="">Seleccione un genero</option>
-                                <option value="masculino">Masculino</option>
-                                <option value="femenino">Femenino</option>
-                                <option value="Otro">Otro</option>
+                                <option value="masculino" {{old('genero') == 'masculino' ? 'selected' : ''}}>Masculino</option>
+                                <option value="femenino" {{old('genero') == 'femenino' ? 'selected' : ''}}>Femenino</option>
+                                <option value="Otro" {{old('genero') == 'otro' ? 'selected' : ''}}>Otro</option>
                             </select>
                         </div>
                         <div class="col-md-6">
@@ -118,8 +118,14 @@
                             <label for="tipo_zona" class="form-label">Tipo de ubicacion</label>
                             <select name="tipo_zona" id="tipo_zona" class="form-control" required>
                                 <option value="0">Seleccion el tipo de zona</option>
-                                <option value="Comuna">Comuna</option>
-                                <option value="Corregimiento">Corregimiento</option>
+                                <option value="Comuna"
+                                    @if (old('tipo_zona') == 'Comuna')
+                                        selected
+                                    @endif>Comuna</option>
+                                <option value="Corregimiento"
+                                    @if (old('tipo_zona') == 'Corregimiento')
+                                        selected
+                                    @endif>Corregimiento</option>
                             </select>
                             <div class="invalid-feedback">
                                 Seleccion un tipo de zona valido
