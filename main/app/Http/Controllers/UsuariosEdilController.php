@@ -48,7 +48,24 @@ class UsuariosEdilController extends Controller
 
     public function create()
     {
-        return view('usuarios-ediles.create');
+        $puestos = DB::table('puestos_votacion AS pv')
+            ->select(DB::raw("CONCAT('Puesto: ', COALESCE(pv.name, 'Sin información'), ', ', 
+                CASE
+                    WHEN pv.zone_type = 'Comuna' THEN CONCAT('Barrio: ', COALESCE(barrios.name, 'Sin información'))
+                    WHEN pv.zone_type = 'Corregimiento' THEN CONCAT('Vereda: ', COALESCE(veredas.name, 'Sin información'))
+                END, ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre"))
+            ->leftJoin('mesas_votacion AS mv', 'pv.id', '=', 'mv.puesto_votacion')
+            ->leftJoin('barrios', function ($join) {
+                $join->on('pv.zone', '=', 'barrios.id')
+                    ->where('pv.zone_type', '=', 'Comuna');
+            })
+            ->leftJoin('veredas', function ($join) {
+                $join->on('pv.zone', '=', 'veredas.id')
+                    ->where('pv.zone_type', '=', 'Corregimiento');
+            })
+            ->get();
+
+        return view('usuarios-ediles.create', compact('puestos'));
     }
 
     /**
@@ -102,12 +119,28 @@ class UsuariosEdilController extends Controller
     public function edit(int $id): View
     {
         $edil = UserEdiles::find($id);
+        $puestos = DB::table('puestos_votacion AS pv')
+            ->select(DB::raw("CONCAT('Puesto: ', COALESCE(pv.name, 'Sin información'), ', ', 
+                CASE
+                    WHEN pv.zone_type = 'Comuna' THEN CONCAT('Barrio: ', COALESCE(barrios.name, 'Sin información'))
+                    WHEN pv.zone_type = 'Corregimiento' THEN CONCAT('Vereda: ', COALESCE(veredas.name, 'Sin información'))
+                END, ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre"))
+            ->leftJoin('mesas_votacion AS mv', 'pv.id', '=', 'mv.puesto_votacion')
+            ->leftJoin('barrios', function ($join) {
+                $join->on('pv.zone', '=', 'barrios.id')
+                    ->where('pv.zone_type', '=', 'Comuna');
+            })
+            ->leftJoin('veredas', function ($join) {
+                $join->on('pv.zone', '=', 'veredas.id')
+                    ->where('pv.zone_type', '=', 'Corregimiento');
+            })
+            ->get();
 
         if (!$edil) {
             return redirect()->back()->with('error', 'No se pudo encontrar el usuario');
         }
 
-        return view('usuarios-ediles.edit', compact('edil'));
+        return view('usuarios-ediles.edit', compact('edil', 'puestos'));
     }
 
     /**
