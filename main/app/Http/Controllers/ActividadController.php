@@ -94,8 +94,8 @@ class ActividadController extends Controller
     {
         $actividad = $this->model::where('actividades.id',$id)
          ->join('users', 'actividades.id_user', '=', 'users.id')
-            ->join('info_users', 'users.info_id', '=', 'info_users.id')
-            ->join('users as referido', 'info_users.referido_id', '=', 'referido.id')
+            ->leftJoin('info_users', 'users.info_id', '=', 'info_users.id')
+            ->leftJoin('users as referido', 'info_users.referido_id', '=', 'referido.id')
             ->select('actividades.fecha_actividad as fecha','actividades.nombre_actividad as titulo','actividades.descripcion_actividad as descripcion','actividades.evidencia as evidencia',
                     'users.identificacion as cedula','users.name as nombre','info_users.direccion as direccion','info_users.telefono as telefono','referido.name as referido')
             ->get();
@@ -113,8 +113,8 @@ class ActividadController extends Controller
     {
         $actividad = $this->model::where('actividades.id',$id)
          ->join('users', 'actividades.id_user', '=', 'users.id')
-            ->join('info_users', 'users.info_id', '=', 'info_users.id')
-            ->join('users as referido', 'info_users.referido_id', '=', 'referido.id')
+            ->leftJoin('info_users', 'users.info_id', '=', 'info_users.id')
+            ->leftJoin('users as referido', 'info_users.referido_id', '=', 'referido.id')
             ->select('actividades.id as id','actividades.fecha_actividad as fecha','actividades.nombre_actividad as titulo','actividades.descripcion_actividad as descripcion','actividades.evidencia as evidencia',
                     'users.identificacion as cedula','users.name as nombre','info_users.direccion as direccion','info_users.telefono as telefono','referido.name as referido')
             ->get();
@@ -212,8 +212,8 @@ class ActividadController extends Controller
         $output = ['status'=>0,'msg'=>'Usted no se encuentra registrado, por favor comuniquese con el administrador del sistema'];
         if($this->validate_user($request->cedula)){
             $info_user = User::select('users.identificacion as identificacion', 'users.name as nombre', 'info_users.direccion as direccion', 'info_users.telefono as telefono', 'referido.name as referido')
-            ->join('info_users', 'users.info_id', '=', 'info_users.id')
-            ->join('users as referido', 'info_users.referido_id', '=', 'referido.id')
+            ->leftJoin('info_users', 'users.info_id', '=', 'info_users.id')
+            ->leftJoin('users as referido', 'info_users.referido_id', '=', 'referido.id')
             ->where('users.identificacion', $request->cedula)
             ->get();
 
