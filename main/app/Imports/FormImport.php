@@ -73,16 +73,16 @@ class FormImport implements ToModel,  WithValidation, WithHeadingRow
                 'unique:formularios,identificacion'
             ],
             'mensaje' => [
-                'required',
                 'string',
+                'nullable'
             ],
             'puesto_votacion' => [
-                'required',
                 'string',
+                'nullable'
             ],
             'direccion' => [
-                'required',
                 'string',
+                'nullable'
             ],
             'genero' => [
                 'required',
@@ -92,8 +92,8 @@ class FormImport implements ToModel,  WithValidation, WithHeadingRow
                 'required',
             ],
             'email' => [
-                'required',
-                'string',
+                'email',
+                'nullable'
             ],
             'apellidos' => [
                 'required',
