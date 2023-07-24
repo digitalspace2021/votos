@@ -126,8 +126,27 @@ Editar Edil
                 </div>
                 <div class="col-md-6 mb-2">
                     <div class="form-group">
-                        <label for="puesto_votacion" id="puesto_votacion" class="form-label">Puesto de votacion</label>
-                        <input type="text" name="puesto_votacion" id="" class="form-control" value="{{$edil->puesto_votacion}}" required>
+                        <label for="puesto_votacion" class="form-label">Puesto de votacion</label>
+                        <select name="puesto_votacion" id="puesto" class="form-select" required>
+                            <option value="" selected disabled>Seleccione un puesto</option>
+                                @php
+                                    $status = false;
+                                @endphp
+                                @foreach ($puestos as $puesto)
+                                <option value="{{$puesto->puesto_nombre}}" 
+                                    @if ($puesto->puesto_nombre == $edil->puesto_votacion)
+                                        @php
+                                            $status = true;
+                                        @endphp
+                                        selected
+                                    @endif
+                                    >{{$puesto->puesto_nombre}}</option>
+                                @endforeach
+
+                                @if ($status == false)
+                                    <option value="{{$edil->puesto_votacion}}" selected>{{$edil->puesto_votacion}}</option>
+                                @endif
+                        </select>
                     </div>
                     @error('zona')
                     <div class="text-danger">
@@ -243,6 +262,7 @@ Editar Edil
                 preview.attr('src', URL.createObjectURL(file));
             }
         })
+        $('#puesto').select2();
     });
 </script>
 @endsection

@@ -120,10 +120,17 @@ Crear Edil
                 </div>
                 <div class="col-md-6 mb-2">
                     <div class="form-group">
-                        <label for="puesto_votacion" id="puesto_votacion" class="form-label">Puesto de votacion</label>
-                        <input type="text" name="puesto_votacion" id="" class="form-control" required>
+                        <label for="puesto_votacion" class="form-label">Puesto de votacion</label>
+                        <select name="puesto_votacion" id="puesto" class="form-select" required>
+                            <option value="" selected disabled>Seleccione un puesto</option>
+                            @foreach ($puestos as $puesto)
+                            <option value="{{$puesto->puesto_nombre}}" 
+                                {{old('puesto_votacion')==$puesto->puesto_nombre ? 'selected' : '' }}
+                                >{{$puesto->puesto_nombre}}</option>
+                            @endforeach
+                        </select>
                     </div>
-                    @error('zona')
+                    @error('puesto_votacion')
                     <div class="text-danger">
                         {{ $message }}
                     </div>
@@ -222,6 +229,8 @@ Crear Edil
                 preview.attr('src', URL.createObjectURL(file));
             }
         })
+
+        $('#puesto').select2();
     });
 </script>
 @endsection
