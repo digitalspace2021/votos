@@ -26,7 +26,7 @@ class StoreRequest extends FormRequest
         $validate = [
             'nombres' => ['required', 'string', 'max:255'],
             'apellidos' => ['required', 'string', 'max:255'],
-            'identificacion' => ['required', 'string', 'min:8', 'max:15', 'unique:usuarios_ediles,identificacion,'. $this->id ?? 'NULL'],
+            'identificacion' => ['required', 'string', 'min:7', 'max:15', 'unique:usuarios_ediles,identificacion,'. $this->id ?? 'NULL'],
             'direccion' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:usuarios_ediles,email,'. $this->id ?? 'NULL'],
             'genero' => ['required', 'string', 'in:Hombre,Mujer,Otro'],

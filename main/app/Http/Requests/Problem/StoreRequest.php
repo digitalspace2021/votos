@@ -27,7 +27,7 @@ class StoreRequest extends FormRequest
             'creador' => ['required', 'exists:users,id'],
             'nombres' => ['required', 'string', 'max:255'],
             'apellidos' => ['required', 'string', 'max:255'],
-            'identificacion' => ['required', 'min:8', 'max:15', 'unique:formularios,identificacion,'. $this->id, 'unique:pre_formularios,identificacion,'. $this->id],
+            'identificacion' => ['required', 'min:7', 'max:15', 'unique:formularios,identificacion,'. $this->id, 'unique:pre_formularios,identificacion,'. $this->id],
             'telefono' => ['required', 'string', 'max:255'],
             'direccion' => ['required', 'string', 'max:255'],
             'vinculo' => ['required'],
