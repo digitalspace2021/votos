@@ -29,11 +29,14 @@
                 <label for="inputNombre" class="form-label">Nombre</label>
                 <input type="text" class="form-control" name="inputNombre" id="inputNombre" readonly>
             </div>
+            @if(auth()->check())
             <div class="mb-3 col">
                 <label for="inputDireccion" class="form-label">Direccion</label>
                 <input type="text" class="form-control" name="inputDireccion" id="inputDireccion" readonly>
             </div>
+            @endif
         </div>
+        @if(auth()->check())
         <div class="row">
             <div class="mb-3 col">
                 <label for="inputTelefono" class="form-label">Telefono</label>
@@ -44,7 +47,7 @@
                 <input type="text" class="form-control" name="inputReferido" id="inputReferido" readonly>
             </div>
         </div>
-        
+        @endif
         <hr>
         <br>
 
@@ -53,7 +56,7 @@
             <input type="date" class="form-control" name="inputFecha" id="inputFecha" required>
         </div>
         <div class="mb-3">
-            <label for="inputTitulo" class="form-label">Titulo</label>
+            <label for="inputTitulo" class="form-label">Nombre de la Actividad</label>
             <input type="text" class="form-control" name="inputTitulo" id="inputTitulo" required>
         </div>
         <div class="mb-3">
@@ -64,11 +67,15 @@
             <label for="inputEvidencia" class="form-label">Evidencia</label>
             <input type="file" class="form-control" name="inputEvidencia" id="inputEvidencia" required>
         </div>
+
+        <div class="d-flex justify-content-center">
+          <img  src="" alt="" style="display: none; width: 35%;" id="preview_img" class="mt-2">
+      </div>
         
-        
+        <br>
         <div class="text-center">
             <button type="submit" class="btn btn-primary">Crear</button>
-            <a href="{{route('actividad.create')}}" class="btn btn-danger">Cancelar</a>
+            <a  href="{{ auth()->check() ? route('actividad.index') : route('home') }}" class="btn btn-danger">Cancelar</a>
         </div>
       </form>
 </div>
@@ -76,7 +83,7 @@
 
 @section('js-extra')
 <script>
-    //Peticion, obtener datos de usuarios del formulario segun CC
+    //Request, obtain user data from the form according to CC
     $(document).ready(function() {
         
         $('#alert').hide();
@@ -115,9 +122,9 @@
 
         });
 
-        //Envio del formulario
+        //Submission of the form
         $('#form_actividad').submit(function(event) {
-      event.preventDefault(); // Previene el envío del formulario normal
+      event.preventDefault(); // Prevent normal form submission
 
       var formData = new FormData(this);
 
@@ -138,7 +145,7 @@
 
             setTimeout(function() {
               window.location.href = data.redirect;
-            }, 4000);
+            }, 3000);
           }
         },
         error: function(xhr, status, error) {
@@ -146,6 +153,25 @@
         }
       });
     });
+    });
+  </script>
+
+<!-- Preview of the uploaded image-->
+  <script>
+    $(document).ready(async function() {
+        let evidencia = $('#inputEvidencia');
+        let preview = $('#preview_img');
+
+        evidencia.change(function(){
+            let file = this.files[0];
+            if (file == null) {
+                    preview.hide();
+                    preview.attr('src', '');
+            }else{
+                preview.show();
+                preview.attr('src', URL.createObjectURL(file));
+            }
+        });
     });
   </script>
 @endsection

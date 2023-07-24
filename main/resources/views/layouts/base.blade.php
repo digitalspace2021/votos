@@ -101,7 +101,17 @@
                                 @endif
                                 <!-- Add by marco Marin 30-06-2023-->
                                 @if (Auth::user()->hasRole('administrador'))
-                                    <a class="me-3 py-2 text-dark text-decoration-none btn-hover" href="{{ route('matriz') }}"><i class="fa fa-table" aria-hidden="true"></i> Matriz de seguimiento</a>
+                                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle btn-hover" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa fa-table" aria-hidden="true"></i> Matriz de Seguimiento
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item btn-hover" href="{{ route('matriz') }}">Matriz de Seguimiento</a></li>
+                                        <li><a class="dropdown-item btn-hover" href="{{ route('alerta.index') }}">Alertas</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
                                 @endif
                                 <!---->
                                 @if(Auth::user()->hasRole('administrador'))
