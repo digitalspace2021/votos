@@ -99,6 +99,10 @@ class FormularioController extends Controller
         )
             ->where('formularios.estado', true);
 
+        if (Auth::user()->hasRole('simple')) {
+            $formularios->where('formularios.propietario_id', Auth::user()->id);
+        }
+
         return Datatables::of($formularios)
             ->addColumn('creador', function ($col) {
                 $creador = User::find($col->propietario_id);
