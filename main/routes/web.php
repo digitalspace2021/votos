@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActividadController;
+use App\Http\Controllers\AlertaController;
 use App\Http\Controllers\CandidatoController;
 use App\Http\Controllers\CargoController;
 use App\Http\Controllers\Controller;
@@ -161,7 +162,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/actividades/{id}/edit',[ActividadController::class,'edit'])->name('actividad.edit');
     Route::put('/actividades/{id}/update',[ActividadController::class,'update'])->name('actividad.update');
     Route::get('/actividades/{id}/delete',[ActividadController::class,'destroy'])->name('actividad.delete');
+    Route::get('/actividades/statisticsIndex',[ActividadController::class,'statisticsIndex'])->name('actividad.statistics');
     
+    //Alertas
+    Route::get('/alertas/index',[AlertaController::class,'index'])->name('alerta.index');
+    Route::get('/alertas/tabla',[AlertaController::class,'tabla'])->name('alerta.tabla');
+    Route::get('/alertas/persona',[AlertaController::class,'getByPerson'])->name('alerta.persona');
+    Route::get('/alertas/userForm',[AlertaController::class,'getUserForm']);
     /*  */
     Route::get('/oportunidades/{id}/edit', [ProblemController::class, 'edit'])->name('problems.edit');
     Route::get('/oportunidades/{id}/delete', [ProblemController::class, 'destroy'])->name('problems.destroy');

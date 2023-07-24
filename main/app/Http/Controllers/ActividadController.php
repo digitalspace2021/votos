@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Actividad;
+use App\Models\Candidato;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -14,10 +15,12 @@ use Yajra\DataTables\Facades\DataTables;
 class ActividadController extends Controller
 {
     protected $model;
+    protected $candidatos;
 
     public function __construct()
     {
         $this->model = new Actividad();
+        $this->candidatos = new Candidato();
     }
     /**
      * Display a listing of the resource.
@@ -282,5 +285,10 @@ class ActividadController extends Controller
             })
             ->rawColumns(['acciones'])
             ->make(true);     
+    }
+
+    public function statisticsIndex(){
+        $can = $this->candidatos::select('id', 'name')->get();
+        return view('statitics.byPersona',['candidatos'=>$can]);
     }
 }
