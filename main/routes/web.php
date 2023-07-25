@@ -178,14 +178,14 @@ Route::middleware(['auth'])->group(function () {
 
 
     /* usuarios ediles */
-    Route::get('/usuarios-ediles', [UsuariosEdilController::class, 'index'])->name('users-edils.index');
-    Route::get('/usuarios-ediles/getAll', [UsuariosEdilController::class, 'getAll'])->name('users-edils.getAll');
-    Route::get('/usuarios-ediles/create', [UsuariosEdilController::class, 'create'])->name('users-edils.create');
-    Route::post('/usuarios-ediles/create', [UsuariosEdilController::class, 'store'])->name('users-edils.store');
-    Route::get('/usuarios-ediles/{id}/show', [UsuariosEdilController::class, 'show'])->name('users-edils.show');
-    Route::get('/usuarios-ediles/{id}/edit', [UsuariosEdilController::class, 'edit'])->name('users-edils.edit');
-    Route::put('/usuarios-ediles/{id}/update', [UsuariosEdilController::class, 'update'])->name('users-edils.update');
-    Route::get('/usuarios-ediles/{id}/delete', [UsuariosEdilController::class, 'destroy'])->name('users-edils.destroy');
+    Route::get('/usuarios-vars', [UsuariosEdilController::class, 'index'])->name('users-edils.index');
+    Route::get('/usuarios-vars/getAll', [UsuariosEdilController::class, 'getAll'])->name('users-edils.getAll');
+    Route::get('/usuarios-vars/create', [UsuariosEdilController::class, 'create'])->name('users-edils.create');
+    Route::post('/usuarios-vars/create', [UsuariosEdilController::class, 'store'])->name('users-edils.store');
+    Route::get('/usuarios-vars/{id}/show', [UsuariosEdilController::class, 'show'])->name('users-edils.show');
+    Route::get('/usuarios-vars/{id}/edit', [UsuariosEdilController::class, 'edit'])->name('users-edils.edit');
+    Route::put('/usuarios-vars/{id}/update', [UsuariosEdilController::class, 'update'])->name('users-edils.update');
+    Route::get('/usuarios-vars/{id}/delete', [UsuariosEdilController::class, 'destroy'])->name('users-edils.destroy');
 });
 Route::get('/oportunidades', [ProblemController::class, 'index'])->name('problems.index');
 Route::get('/oportunidades/getall', [ProblemController::class, 'getAll'])->name('problems.getAll');

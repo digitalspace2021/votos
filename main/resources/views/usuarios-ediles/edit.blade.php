@@ -1,7 +1,7 @@
 @extends('layouts.base')
 
 @section('titulo')
-Editar Edil
+Editar {{$edil->rol}}
 @endsection
 
 @section('css-extra')
@@ -12,7 +12,9 @@ Editar Edil
 
 @section('cabecera')
 <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
-    <h1 class="display-4 fw-normal">Editar Edile</h1>
+    <h1 class="display-4 fw-normal">
+        Editar {{$edil->rol}}
+    </h1>
 </div>
 
 @if (session('success') || session('error'))
@@ -102,7 +104,7 @@ Editar Edil
                         <select name="tipo_zona" id="tipo_zona" class="form-select" required>
                             <option value="0" selected disabled>Seleccione el tipo de zona</option>
                             <option value="Comuna" {{$edil->tipo_zona == 'Comuna' ? 'selected' : ''}}>Comuna</option>
-                            <option value="Corregimiento" {{$edil->tipo_zona == 'corregimiento' ? 'selected' : ''}}>Corregimiento</option>
+                            <option value="Corregimiento" {{$edil->tipo_zona == 'Corregimiento' ? 'selected' : ''}}>Corregimiento</option>
                         </select>
                     </div>
                     @error('tipo_zona')
@@ -182,7 +184,7 @@ Editar Edil
 
             <div class="row mt-3">
                 <div class="col-md-12 d-flex justify-content-between">
-                    <a href=" {{route('users-edils.index')}}" class="btn btn-danger" id="btnCancel">Cancelar</a>
+                    <a href=" {{route('users-edils.index', ['type' => $type])}}" class="btn btn-danger" id="btnCancel">Cancelar</a>
                     <button type="submit" class="btn btn-primary" id="btnSave">Actualizar</button>
                 </div>
             </div>

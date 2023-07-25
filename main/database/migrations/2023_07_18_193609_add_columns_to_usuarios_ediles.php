@@ -15,7 +15,8 @@ class AddColumnsToUsuariosEdiles extends Migration
     {
         Schema::table('usuarios_ediles', function (Blueprint $table) {
             $table->string('puesto_votacion')->nullable()->after('descripcion');
-            $table->string('foto')->nullable()->after('puesto_votacion');
+            $table->enum('rol', ['Edil', 'Asambleista'])->default('Edil')->after('puesto_votacion');
+            $table->string('foto')->nullable()->after('rol');
         });
     }
 
@@ -28,6 +29,7 @@ class AddColumnsToUsuariosEdiles extends Migration
     {
         Schema::table('usuarios_ediles', function (Blueprint $table) {
             $table->dropColumn('puesto_votacion');
+            $table->dropColumn('rol');
             $table->dropColumn('foto');
         });
     }

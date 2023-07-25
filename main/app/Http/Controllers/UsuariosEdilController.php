@@ -13,11 +13,41 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
 
-class UsuariosEdilController extends Controller
+class UsuariosEdilController
 {
-    public function index()
+    protected $type;
+
+    /**
+     * The function sets the type of user based on the request and redirects to the appropriate route
+     * if the type is not valid.
+     * 
+     * @param Request request The  parameter is an instance of the Request class, which is used
+     * to retrieve information about the current HTTP request. It contains data such as the request
+     * method, URL, headers, and input data. In this case, it is used to retrieve the 'type' parameter
+     * from the request.
+     * 
+     * @return If the type is not 'Edil' or 'Asambleista', a redirect response is being returned.
+     * Otherwise, nothing is being returned.
+     */
+    public function __construct(Request $request)
     {
-        return view('usuarios-ediles.index');
+        if (in_array($this->type, ['Edil', 'Asambleista'])) {
+            $this->type = 'Edil';
+            return redirect()->route('users-edils.index', ['type' => 'Edil']);
+        }
+        $this->type = $request->type;
+    }
+
+    /**
+     * The index function returns a view with the type variable passed to the usuarios-ediles.index
+     * view.
+     * 
+     * @return View A view is being returned. The view being returned is 'usuarios-ediles.index' and it
+     * is being passed an array with a key 'type' and a value of ->type.
+     */
+    public function index(): View
+    {
+        return view('usuarios-ediles.index', ['type' => $this->type]);
     }
 
     public function getAll()
@@ -25,6 +55,7 @@ class UsuariosEdilController extends Controller
         $edils = DB::table('usuarios_ediles')
             ->select('usuarios_ediles.*')
             ->addSelect(DB::raw("CONCAT(usuarios_ediles.nombres, ' ', usuarios_ediles.apellidos) AS nombre_completo"))
+            ->where('usuarios_ediles.rol', '=', $this->type)
             ->get();
 
         $edils = DataTables::of($edils)
@@ -36,7 +67,10 @@ class UsuariosEdilController extends Controller
                 if (Auth::user()->hasRole('administrador')) {
                     $btn .= '<a href="' . route('users-edils.destroy', $edil->id) . '" class="btn btn-outline-danger btn-sm" title="Eliminar edil"><i class="fa fa-times"></i></a>';
                 }
-                $btn .= '<a href="' . route('users-edils.edit', $edil->id) . '" class="btn btn-outline-primary m-2 btn-sm" title="Editar problema"><i class="fa fa-edit"></i></a>';
+                $btn .= '<a href="' . route('users-edils.edit', [
+                    'id' => $edil->id,
+                    'type' => $this->type
+                ]) . '" class="btn btn-outline-primary m-2 btn-sm" title="Editar problema"><i class="fa fa-edit"></i></a>';
 
                 return $btn;
             })
@@ -64,8 +98,9 @@ class UsuariosEdilController extends Controller
                     ->where('pv.zone_type', '=', 'Corregimiento');
             })
             ->get();
+            $type = $this->type;
 
-        return view('usuarios-ediles.create', compact('puestos'));
+        return view('usuarios-ediles.create', compact('puestos', 'type'));
     }
 
     /**
@@ -100,11 +135,16 @@ class UsuariosEdilController extends Controller
             $usuario->save();
         }
 
+        if ($this->type == 'Asambleista') {
+            $usuario->rol = 'Asambleista';
+            $usuario->save();
+        }
+
         if (!$usuario) {
             return redirect()->back()->with('error', 'No se pudo crear el usuario');
         }
 
-        return redirect()->route('users-edils.index')->with('success', 'Usuario creado correctamente');
+        return redirect()->route('users-edils.index', ['type' => $this->type])->with('success', 'Usuario creado correctamente');
     }
 
     /**
@@ -140,7 +180,9 @@ class UsuariosEdilController extends Controller
             return redirect()->back()->with('error', 'No se pudo encontrar el usuario');
         }
 
-        return view('usuarios-ediles.edit', compact('edil', 'puestos'));
+        $type = $this->type;
+
+        return view('usuarios-ediles.edit', compact('edil', 'puestos', 'type'));
     }
 
     /**
