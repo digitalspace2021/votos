@@ -122,7 +122,9 @@ class ProblemController extends Controller
             });
         }
         $users = $users->get();
-        $edils = DB::table('usuarios_ediles')->get();
+        $edils = DB::table('usuarios_ediles')
+            ->where('rol', 'Edil')
+            ->get();
 
         $puestos = DB::table('puestos_votacion AS pv')
             ->select(DB::raw("CONCAT('Puesto: ', COALESCE(pv.name, 'Sin información'), ', ', 
@@ -149,7 +151,9 @@ class ProblemController extends Controller
         $users = DB::table('users')->get();
 
         $problem = Formulario::findOrFail($id);
-        $edils = DB::table('usuarios_ediles')->get();
+        $edils = DB::table('usuarios_ediles')
+            ->where('rol', 'Edil')
+            ->get();
 
         if ($problem->estado == true || !$problem) {
             return back()->with('error', 'No se puede visualizar un formulario comfirmado');

@@ -141,6 +141,7 @@
                                         <ul class="dropdown-menu">
                                         <li><a class="dropdown-item btn-hover" href="{{ url('statitics') }}">Estadisticas Generales</a></li>
                                         <li><a class="dropdown-item btn-hover" href="{{ route('statistics') }}">Estadisticas Seguimiento</a></li>
+                                        <li><a class="dropdown-item btn-hover" href="{{ route('ediles.statistics') }}">Estadisticas Ediles</a></li>
                                         </ul>
                                     </li>
                                 </ul>
