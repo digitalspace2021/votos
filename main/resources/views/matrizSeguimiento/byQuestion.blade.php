@@ -71,10 +71,10 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        {{-- <div class="row">
             <label for="">Observaciones</label>
             <textarea name="observaciones" id="obs" cols="30" rows="10"></textarea>
-        </div>
+        </div> --}}
 
         <div class="text-center">
             <button type="submit" class="btn btn-primary">Actualizar</button>
