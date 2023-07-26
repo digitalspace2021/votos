@@ -15,7 +15,7 @@
 
 @section('cabecera')
     <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
-        <h1 class="display-4 fw-normal">Participacion de actividades</h1>
+        <h1 class="display-4 fw-normal">Participaci&oacute;n de Actividades</h1>
         <p class="fs-5 text-muted">Aqui podras encontrar la gestion de actividades, solo los administradores pueden eliminar actividades.
         </p>
     </div>

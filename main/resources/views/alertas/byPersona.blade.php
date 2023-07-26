@@ -76,6 +76,7 @@
                             </div>
                             <div class="col-auto">
                                 <input type="text" class="form-control" id="inputNombre" readonly>
+                                
                             </div>
                         </div>
                         
@@ -133,7 +134,14 @@
     </table>
     <br><hr><br>
 
-    <h3>Cuantas veces se ha llamado? <span id="calls"></span></h3>
+    <h3>Cuantas veces se ha llamado? <span id="calls"></span> </h3>
+    <br>
+    <form action="{{route('matriz.editPregunta')}}" method="get">
+        <input type="hidden" class="form-control" name="id_matriz" id="id_matriz_cuatro" readonly>
+        <input type="hidden" class="form-control" name="pregunta" id="pregunta" value="4" readonly>
+        <button class="btn btn-primary" type="submit" >Editar</button>
+    </form>
+    
     <br><hr><br>
     <div  id="containerCalls">
         <p class="text-light h5 p-3">Se ha llamado <span id="numCalls"></span> veces.</p>
@@ -142,11 +150,19 @@
     <br><hr><br>
 
     <h3>Cuantas veces se ha visitado? <span id="visits"></span></h3>
-    <div id="containerVisits">
+    <br>
+    <form action="{{route('matriz.editPregunta')}}" method="get">
+        <input type="hidden" class="form-control" name="id_matriz" id="id_matriz_cinco" readonly>
+        <input type="hidden" class="form-control" name="pregunta" id="pregunta" value="5" readonly>
+        <button class="btn btn-primary" type="submit" >Editar</button>
+    </form>
+
+    <br><hr><br>
+    {{-- <div id="containerVisits">
         <p class="text-light h5 p-3">Se ha visitado <span id="numVisits"></span> veces.</p>
         <p class="text-light h5 p-3">Durante las siguientes fechas: <span id="dateVisits"></span></p>
     </div>
-    <br><hr><br>
+    <br><hr><br> --}}
 </div>
 
 <div class="text-center">
@@ -166,7 +182,7 @@
                 event.preventDefault();
                 
                 $.ajax({
-                    url: '/alertas/userForm', 
+                    url: "{{ route('alerta.form') }}", 
                     type: 'GET', 
                     dataType: 'json', 
                     data: $(this).serialize(),
@@ -180,6 +196,8 @@
                             $('#alert').hide();
                             $('#info-user').show();
                             const status = document.getElementById('status');
+                            document.getElementById('id_matriz_cuatro').value = response[0].id_matriz;
+                            document.getElementById('id_matriz_cinco').value = response[0].id_matriz;
                             document.getElementById('inputNombre').value = response[0].nombre;
                             document.getElementById('inputDireccion').value = response[0].direccion;
                             document.getElementById('inputTelefono').value = response[0].telefono;
@@ -390,4 +408,5 @@
         }
     
     </script>
+    
 @endsection

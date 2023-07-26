@@ -131,6 +131,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/matrizSeguimiento/edit/{id}',[MatrizSeguimientoController::class,'edit'])->name('matriz.edit');
     Route::get('/matrizSeguimiento/view/{id}',[MatrizSeguimientoController::class,'view'])->name('matriz.view');
     Route::put('/matrizSeguimiento/update/{id}',[MatrizSeguimientoController::class,'update'])->name('matriz.update');
+    Route::get('/matrizSeguimiento/editQue',[MatrizSeguimientoController::class,'editQuestion'])->name('matriz.editPregunta');
+    Route::put('/matrizSeguimiento/updateQue/{id}',[MatrizSeguimientoController::class,'updateQuestion'])->name('matriz.updateQuestion');
     //exportar matriz
     Route::get('/export/matrizSeguimiento', [FileManagementController::class, 'exportMatrizSeguimiento'])->name('export.matriz');
 
@@ -168,7 +170,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/alertas/index',[AlertaController::class,'index'])->name('alerta.index');
     Route::get('/alertas/tabla',[AlertaController::class,'tabla'])->name('alerta.tabla');
     Route::get('/alertas/persona',[AlertaController::class,'getByPerson'])->name('alerta.persona');
-    Route::get('/alertas/userForm',[AlertaController::class,'getUserForm']);
+    Route::get('/alertas/userForm',[AlertaController::class,'getUserForm'])->name('alerta.form');
+    Route::get('/alertas/getAlert',[AlertaController::class,'getAlert'])->name('alerta.grave');
     /*  */
     Route::get('/oportunidades/{id}/edit', [ProblemController::class, 'edit'])->name('problems.edit');
     Route::get('/oportunidades/{id}/delete', [ProblemController::class, 'destroy'])->name('problems.destroy');
