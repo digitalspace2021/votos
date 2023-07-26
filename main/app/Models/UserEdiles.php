@@ -22,6 +22,8 @@ class UserEdiles extends Model
         'descripcion',
         'genero',
         'puesto_votacion',
-        'foto'
+        'foto',
+        'rol',
     ];
+
 }
