@@ -16,6 +16,7 @@
 @endsection
 
 @section('cabecera')
+@include('alertas.modal')
 <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
     <h1 class="display-4 fw-normal">Matriz de Seguimiento</h1>
     <p class="fs-5 text-muted">Aqui podras encontrar la gestion de seguimientos, solo los administradores pueden crear,
@@ -273,4 +274,61 @@
 
     }
 </script>
+
+<!-- Alert Modal -->
+<script>
+    $(document).ready(function() {
+        $.ajax({
+          url: "{{route('alerta.grave')}}", 
+          type: "GET",
+          dataType: "json",
+          success: function(data) {
+            
+            for (const user of data) {
+                dataTable(user.id_matriz,user.identificacion,user.nombre+' '+user.apellido,user.referido,user.alerta);
+            }
+            $('#alertModal').modal('show');
+          },
+          error: function(error) {
+            console.log("Error en la petición ", error);
+          }
+        });
+      });
+   
+      function dataTable(id,cedula,nombre,creador,color) {
+        console.log(id);
+        const tablaBody = document.getElementById('tableBody');
+        const newRow = document.createElement('tr');
+
+        const Cedula = document.createElement('td');
+        Cedula.textContent = cedula;
+
+        const Nombre = document.createElement('td');
+        Nombre.textContent = nombre;
+
+        const Creador = document.createElement('td');
+        Creador.textContent = creador;
+
+        const Acciones = document.createElement('td');
+        const btn = document.createElement('a');
+        btn.textContent = 'Editar';
+        btn.href = '/matrizSeguimiento/edit/'+id;
+        btn.classList.add('btn', 'btn-primary');
+        Acciones.appendChild(btn);
+
+        newRow.appendChild(Cedula);
+        newRow.appendChild(Nombre);
+        newRow.appendChild(Creador);
+        newRow.appendChild(Acciones);
+
+        if(color == "Rojo"){
+            newRow.classList.add('table-danger');
+        }
+        else{
+            newRow.classList.add('table-warning');
+        }
+
+        tablaBody.appendChild(newRow);
+        }
+  </script>
 @endsection

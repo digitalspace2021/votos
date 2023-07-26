@@ -135,6 +135,48 @@ class MatrizSeguimientoController extends Controller
         return view('matrizSeguimiento.edit',['seguimientos' => $seguimientos]); 
     }
 
+    public function editQuestion(Request $request){
+        $id = $request->input('id_matriz');
+        $pregunta = $request->input('pregunta');
+        
+        if(!empty($id)){
+            $seguimiento = MatrizSeguimiento::join('formularios', 'matriz_seguimiento.formulario_id', '=', 'formularios.id')
+            ->select('matriz_seguimiento.*', 'formularios.nombre as usuario',
+                    'formularios.identificacion','formularios.direccion','formularios.telefono')
+            ->where('matriz_seguimiento.id', $id) 
+            ->get();
+        }
+        return view('matrizSeguimiento.byQuestion',['seguimientos' => $seguimiento,'pregunta'=>$pregunta]); 
+    }
+
+    //update Question
+    public function updateQuestion(Request $request,$id){
+        
+        $matriz = $this->model::find($id);
+        if (!$matriz) {
+            Alert::error('Seguimiento', 'No se ha encontrado el seguimiento solicitado.');
+            return redirect()->route('matriz');
+        }
+        
+        if($request->pregunta == 4){
+            
+            $matriz->respuesta_cuatro = $request->pregunta4;
+            $matriz->fechas_cuatro = ($request->datesInputCall && $request->pregunta4 == 1) ? json_encode($request->datesInputCall) : NULL;
+            
+        }
+
+        if($request->pregunta == 5){
+            $matriz->respuesta_cinco = $request->pregunta5;
+            $matriz->fechas_cinco = ($request->datesInputVisit && $request->pregunta5 == 1) ? json_encode($request->datesInputVisit) : NULL;
+            
+        }
+       
+        $matriz->save();
+
+        Alert::success('Seguimiento', 'Se ha actualizado el seguimiento con exito!');
+        return redirect()->route('alerta.index');
+   }
+
     //Update data in the DB
    public function update(Request $request,$id){
         $request->validate([

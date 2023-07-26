@@ -40,12 +40,12 @@ class AlertaController extends Controller
     public function getUserForm(Request $request){
         $cedula = $request->inputCedula;
         $ouput = null;
-        $usersForm = Formulario::where('formularios.identificacion', $cedula)
+        $usersForm = $this->formulario::where('formularios.identificacion', $cedula)
         ->join('matriz_seguimiento','formularios.id','=','matriz_seguimiento.formulario_id')
         ->join('users', 'formularios.propietario_id', '=', 'users.id')
-        ->select('formularios.id as id_form','formularios.*', 'users.name as referido',
+        ->select('matriz_seguimiento.id as id_matriz','formularios.id as id_form','formularios.*', 'users.name as referido',
                 'matriz_seguimiento.fechas_cuatro as llamadas',
-                'Matriz_seguimiento.fechas_cinco as visitas',
+                'matriz_seguimiento.fechas_cinco as visitas',
         DB::raw('CASE
                     WHEN (matriz_seguimiento.respuesta_uno + matriz_seguimiento.respuesta_dos + matriz_seguimiento.respuesta_tres +
                         matriz_seguimiento.respuesta_cuatro + matriz_seguimiento.respuesta_cinco + matriz_seguimiento.respuesta_seis +
@@ -130,5 +130,25 @@ class AlertaController extends Controller
             })
             ->rawColumns(['acciones'])
             ->make(true);     
+    }
+
+    public function getAlert(){
+        $usersAlert = $this->formulario::join('matriz_seguimiento', 'formularios.id', '=', 'matriz_seguimiento.formulario_id')
+    ->join('users', 'formularios.propietario_id', '=', 'users.id')
+    ->select('matriz_seguimiento.id as id_matriz','formularios.id as id_form','formularios.*', 'users.name as referido',
+        DB::raw('CASE
+            WHEN (SUM(matriz_seguimiento.respuesta_uno + matriz_seguimiento.respuesta_dos + matriz_seguimiento.respuesta_tres +
+                matriz_seguimiento.respuesta_cuatro + matriz_seguimiento.respuesta_cinco + matriz_seguimiento.respuesta_seis +
+                matriz_seguimiento.respuesta_siete)) <= 4 THEN "Rojo"
+            ELSE "Amarillo"
+        END AS alerta'))
+    ->whereRaw('(matriz_seguimiento.respuesta_uno + matriz_seguimiento.respuesta_dos + matriz_seguimiento.respuesta_tres +
+                matriz_seguimiento.respuesta_cuatro + matriz_seguimiento.respuesta_cinco + matriz_seguimiento.respuesta_seis +
+                matriz_seguimiento.respuesta_siete) BETWEEN 0 AND 6')
+    ->groupBy('formularios.id','matriz_seguimiento.id')
+    ->orderBy('alerta', 'desc')
+    ->get();
+
+        return $usersAlert;
     }
 }

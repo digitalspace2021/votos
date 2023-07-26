@@ -131,6 +131,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/matrizSeguimiento/edit/{id}',[MatrizSeguimientoController::class,'edit'])->name('matriz.edit');
     Route::get('/matrizSeguimiento/view/{id}',[MatrizSeguimientoController::class,'view'])->name('matriz.view');
     Route::put('/matrizSeguimiento/update/{id}',[MatrizSeguimientoController::class,'update'])->name('matriz.update');
+    Route::get('/matrizSeguimiento/editQue',[MatrizSeguimientoController::class,'editQuestion'])->name('matriz.editPregunta');
+    Route::put('/matrizSeguimiento/updateQue/{id}',[MatrizSeguimientoController::class,'updateQuestion'])->name('matriz.updateQuestion');
     //exportar matriz
     Route::get('/export/matrizSeguimiento', [FileManagementController::class, 'exportMatrizSeguimiento'])->name('export.matriz');
 
@@ -168,7 +170,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/alertas/index',[AlertaController::class,'index'])->name('alerta.index');
     Route::get('/alertas/tabla',[AlertaController::class,'tabla'])->name('alerta.tabla');
     Route::get('/alertas/persona',[AlertaController::class,'getByPerson'])->name('alerta.persona');
-    Route::get('/alertas/userForm',[AlertaController::class,'getUserForm']);
+    Route::get('/alertas/userForm',[AlertaController::class,'getUserForm'])->name('alerta.form');
+    Route::get('/alertas/getAlert',[AlertaController::class,'getAlert'])->name('alerta.grave');
     /*  */
     Route::get('/oportunidades/{id}/edit', [ProblemController::class, 'edit'])->name('problems.edit');
     Route::get('/oportunidades/{id}/delete', [ProblemController::class, 'destroy'])->name('problems.destroy');
@@ -178,14 +181,14 @@ Route::middleware(['auth'])->group(function () {
 
 
     /* usuarios ediles */
-    Route::get('/usuarios-ediles', [UsuariosEdilController::class, 'index'])->name('users-edils.index');
-    Route::get('/usuarios-ediles/getAll', [UsuariosEdilController::class, 'getAll'])->name('users-edils.getAll');
-    Route::get('/usuarios-ediles/create', [UsuariosEdilController::class, 'create'])->name('users-edils.create');
-    Route::post('/usuarios-ediles/create', [UsuariosEdilController::class, 'store'])->name('users-edils.store');
-    Route::get('/usuarios-ediles/{id}/show', [UsuariosEdilController::class, 'show'])->name('users-edils.show');
-    Route::get('/usuarios-ediles/{id}/edit', [UsuariosEdilController::class, 'edit'])->name('users-edils.edit');
-    Route::put('/usuarios-ediles/{id}/update', [UsuariosEdilController::class, 'update'])->name('users-edils.update');
-    Route::get('/usuarios-ediles/{id}/delete', [UsuariosEdilController::class, 'destroy'])->name('users-edils.destroy');
+    Route::get('/usuarios-vars', [UsuariosEdilController::class, 'index'])->name('users-edils.index');
+    Route::get('/usuarios-vars/getAll', [UsuariosEdilController::class, 'getAll'])->name('users-edils.getAll');
+    Route::get('/usuarios-vars/create', [UsuariosEdilController::class, 'create'])->name('users-edils.create');
+    Route::post('/usuarios-vars/create', [UsuariosEdilController::class, 'store'])->name('users-edils.store');
+    Route::get('/usuarios-vars/{id}/show', [UsuariosEdilController::class, 'show'])->name('users-edils.show');
+    Route::get('/usuarios-vars/{id}/edit', [UsuariosEdilController::class, 'edit'])->name('users-edils.edit');
+    Route::put('/usuarios-vars/{id}/update', [UsuariosEdilController::class, 'update'])->name('users-edils.update');
+    Route::get('/usuarios-vars/{id}/delete', [UsuariosEdilController::class, 'destroy'])->name('users-edils.destroy');
 });
 Route::get('/oportunidades', [ProblemController::class, 'index'])->name('problems.index');
 Route::get('/oportunidades/getall', [ProblemController::class, 'getAll'])->name('problems.getAll');

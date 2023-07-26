@@ -1,7 +1,13 @@
 @extends('layouts.base')
 
 @section('titulo')
-Crear Edil
+@if ($type == 'Asambleista')
+Crear Asambleistas
+@endif
+
+@if ($type == 'Edil')
+Crear Ediles
+@endif
 @endsection
 
 @section('css-extra')
@@ -12,7 +18,15 @@ Crear Edil
 
 @section('cabecera')
 <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
-    <h1 class="display-4 fw-normal">Nuevos Ediles</h1>
+    <h1 class="display-4 fw-normal">
+        @if ($type == 'Asambleista')
+        Nuevo Asambleista
+        @endif
+
+        @if ($type == 'Edil')
+        Nuevo Edil
+        @endif
+    </h1>
 </div>
 
 @if (session('success') || session('error'))
@@ -26,7 +40,7 @@ Crear Edil
 <div class="container">
 
     <div class="d-flex justify-content-center align-items-center w-75" style="margin-left: auto; margin-right: auto;">
-        <form action="{{route('users-edils.store')}}" method="POST" enctype="multipart/form-data" novalidate>
+        <form action="{{route('users-edils.store', ['type' => $type])}}" method="POST" enctype="multipart/form-data" novalidate>
             @csrf
             <div class="row">
                 <div class="col-md-12 mb-2">
@@ -164,7 +178,7 @@ Crear Edil
 
             <div class="row mt-3">
                 <div class="col-md-12 d-flex justify-content-between">
-                    <a href=" {{route('users-edils.index')}}" class="btn btn-danger" id="btnCancel">Cancelar</a>
+                    <a href=" {{route('users-edils.index', ['type' => $type])}}" class="btn btn-danger" id="btnCancel">Cancelar</a>
                     <button type="submit" class="btn btn-primary" id="btnSave">Guardar</button>
                 </div>
             </div>
