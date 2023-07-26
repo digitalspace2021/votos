@@ -158,11 +158,11 @@
     </form>
 
     <br><hr><br>
-    {{-- <div id="containerVisits">
+    <div id="containerVisits">
         <p class="text-light h5 p-3">Se ha visitado <span id="numVisits"></span> veces.</p>
         <p class="text-light h5 p-3">Durante las siguientes fechas: <span id="dateVisits"></span></p>
     </div>
-    <br><hr><br> --}}
+    <br><hr><br>
 </div>
 
 <div class="text-center">
