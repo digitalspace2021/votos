@@ -32,8 +32,8 @@ class PreFormularioController extends Controller
     {
         $pre_forms = DB::table('pre_formularios')
             ->join('users', 'pre_formularios.propietario_id', '=', 'users.id')
-            ->join('barrios', 'pre_formularios.zona', '=', 'barrios.id')->join('comunas', 'barrios.comuna_id', '=', 'comunas.id')
-            ->join('veredas', 'pre_formularios.zona', '=', 'veredas.id')->join('corregimientos', 'veredas.corregimiento_id', '=', 'corregimientos.id')
+            ->leftJoin('barrios', 'pre_formularios.zona', '=', 'barrios.id')->leftJoin('comunas', 'barrios.comuna_id', '=', 'comunas.id')
+            ->leftJoin('veredas', 'pre_formularios.zona', '=', 'veredas.id')->leftJoin('corregimientos', 'veredas.corregimiento_id', '=', 'corregimientos.id')
             ->select('pre_formularios.id', 'pre_formularios.identificacion', 'pre_formularios.nombre', 'pre_formularios.apellido', 'pre_formularios.telefono', 'pre_formularios.direccion', 'users.name', 'users.id as creator_id', 'pre_formularios.puesto_votacion', 'pre_formularios.created_at', 'pre_formularios.email', 'pre_formularios.propietario_id')
             ->addSelect(DB::raw("CONCAT(pre_formularios.nombre, ' ', pre_formularios.apellido) AS nombre_completo"))
             /* filter for cedula, nombre+apellido, created_at or creator_id */
