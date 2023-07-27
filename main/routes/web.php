@@ -118,7 +118,6 @@ Route::middleware(['auth'])->group(function () {
 
     // utils
     Route::get('get_veredas_and_comunas', [UtilityController::class, 'getVeredasAndComunas']);
-    Route::get('get_mesas', [UtilityController::class, 'getMesas'])->name('ut.get_mesas');
     Route::get('/statitics/{candidato_id?}', [HighchartController::class, 'handleChart']);
     Route::get('/statitics/{candidato_id?}/{zona?}/{zona_id?}', [HighchartController::class, 'handleChart']);
 
@@ -207,6 +206,9 @@ Route::get('/oportunidades/{id}/show', [ProblemController::class, 'show'])->name
 Route::get('/actividades/create',[ActividadController::class,'create'])->name('actividad.create');
 Route::get('/actividades/getUsers',[ActividadController::class,'getUserInfo']);
 Route::post('/actividades/create',[ActividadController::class,'store'])->name('actividad.store');
+
+/* utils */
+Route::get('get_mesas', [UtilityController::class, 'getMesas'])->name('ut.get_mesas');
 
 
 /* route storage link command */
