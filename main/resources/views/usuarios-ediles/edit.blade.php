@@ -28,7 +28,7 @@ Editar {{$edil->rol}}
 <div class="container">
 
     <div class="d-flex justify-content-center align-items-center w-75" style="margin-left: auto; margin-right: auto;">
-        <form action="{{route('users-edils.update', $edil->id)}}" method="POST" enctype="multipart/form-data" novalidate>
+        <form action="{{route('users-edils.update', ['type' => $type, 'id' => $edil->id])}}" method="POST" enctype="multipart/form-data" novalidate>
             @csrf
             @method('PUT')
             <input type="hidden" name="id" value="{{$edil->id}}">
@@ -142,7 +142,7 @@ Editar {{$edil->rol}}
                                         @endphp
                                         selected
                                     @endif
-                                    >{{$puesto->puesto_nombre}}</option>
+                                    puesto_id="{{$puesto->id}}">{{$puesto->puesto_nombre}}</option>
                                 @endforeach
 
                                 @if ($status == false)
@@ -156,6 +156,18 @@ Editar {{$edil->rol}}
                     </div>
                     @enderror
                 </div>
+                <div class="col-md-6 mb-2">
+                    <label for="mesa" class="form-label">Mesa</label>
+                    <select name="mesa" id="mesa" class="form-select" required>
+                        <option value="" selected disabled>Seleccione una mesa</option>
+                    </select>
+                    {{-- @error('mesa')
+                    <div class="text-danger">
+                        {{ $message }}
+                    </div>
+                    @enderror --}}
+                </div>
+
                 <div class="col-md-12">
                     <label for="descripcion" class="form-label">Descripcion</label>
                     <textarea name="descripcion" id="" cols="30" rows="5" class="form-control"
@@ -198,6 +210,7 @@ Editar {{$edil->rol}}
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
     $(document).ready(async function() {
+        let mesas = "{{route('ut.get_mesas')}}";
         var zona = $('#tipo_zona').val()
 
         $('#zona').select2({
@@ -265,6 +278,32 @@ Editar {{$edil->rol}}
             }
         })
         $('#puesto').select2();
+        $('#mesa').select2();
+
+        function getMesas(){
+            let puesto_id = $(this).children("option:selected").attr('puesto_id');
+            $('#mesa').empty();
+            $.ajax({
+                url: mesas,
+                type: 'GET',
+                data: {puesto_id: puesto_id},
+                success: function(data){
+                    $('#mesa').append('<option value="" selected disabled>Seleccione una mesa</option>');
+                    $.each(data, function(i, item){
+                        $('#mesa').append(`
+                            <option value="${item.numero_mesa}"
+                                ${item.numero_mesa == '{{$edil->mesa}}' ? 'selected' : ''}>${item.numero_mesa}</option>
+                        `);
+                    });
+                }
+            });
+        }
+        
+        $('#puesto').change(function(){
+            getMesas.call(this);
+        });
+
+        getMesas.call($('#puesto'));
     });
 </script>
 @endsection

@@ -87,7 +87,9 @@ class UsuariosEdilController
                 CASE
                     WHEN pv.zone_type = 'Comuna' THEN CONCAT('Barrio: ', COALESCE(barrios.name, 'Sin información'))
                     WHEN pv.zone_type = 'Corregimiento' THEN CONCAT('Vereda: ', COALESCE(veredas.name, 'Sin información'))
-                END, ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre"))
+                END) AS puesto_nombre, pv.id"))
+                /* after case */
+                /* , ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre */
             ->leftJoin('mesas_votacion AS mv', 'pv.id', '=', 'mv.puesto_votacion')
             ->leftJoin('barrios', function ($join) {
                 $join->on('pv.zone', '=', 'barrios.id')
@@ -127,6 +129,7 @@ class UsuariosEdilController
             'tipo_zona' => $request->tipo_zona,
             'descripcion' => $request->descripcion,
             'puesto_votacion' => $request->puesto_votacion,
+            'mesa' => $request->mesa,
         ]);
 
         if ($request->hasFile('foto')) {
@@ -164,7 +167,9 @@ class UsuariosEdilController
                 CASE
                     WHEN pv.zone_type = 'Comuna' THEN CONCAT('Barrio: ', COALESCE(barrios.name, 'Sin información'))
                     WHEN pv.zone_type = 'Corregimiento' THEN CONCAT('Vereda: ', COALESCE(veredas.name, 'Sin información'))
-                END, ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre"))
+                END) AS puesto_nombre, pv.id"))
+                /* after case */
+                /* , ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre */
             ->leftJoin('mesas_votacion AS mv', 'pv.id', '=', 'mv.puesto_votacion')
             ->leftJoin('barrios', function ($join) {
                 $join->on('pv.zone', '=', 'barrios.id')
@@ -217,6 +222,7 @@ class UsuariosEdilController
             'tipo_zona' => $request->tipo_zona,
             'descripcion' => $request->descripcion,
             'puesto_votacion' => $request->puesto_votacion,
+            'mesa' => $request->mesa,
         ]);
 
         if ($request->hasFile('foto')) {
@@ -229,7 +235,7 @@ class UsuariosEdilController
             $usuario->save();
         }
 
-        return redirect()->route('users-edils.index')->with('success', 'Usuario actualizado correctamente');
+        return redirect()->route('users-edils.index', ['type' => $this->type])->with('success', 'Usuario actualizado correctamente');
     }
 
     /**
