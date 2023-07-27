@@ -13,6 +13,7 @@ class Edil extends Model
 
     protected $fillable = [
         'edil_id',
+        'asamblea_edil',
         'concejo',
         'alcaldia',
         'gobernacion',
@@ -22,6 +23,11 @@ class Edil extends Model
     public function userEdil()
     {
         return $this->belongsTo(UserEdiles::class, 'edil_id');
+    }
+
+    public function userAsamblea()
+    {
+        return $this->belongsTo(UserEdiles::class, 'asamblea_id');
     }
 
 

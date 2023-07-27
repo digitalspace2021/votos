@@ -73,6 +73,10 @@ Ver Formulario
                     <label for="puesto" class="form-label">Puesto de votacion</label>
                     <input type="number" class="form-control" name="puesto" value="{{$formulario->puesto_votacion}}" required disabled>
                 </div>
+                <div class="col-md-6 mb-2">
+                    <label for="puesto" class="form-label">Mesa de votacion</label>
+                    <input type="number" class="form-control" name="mesa" value="{{$formulario->mesa}}" required disabled>
+                </div>
                 <div class="col-md-12" id="desc_problem">
                     <label for="descripcion">Problematica</label>
                     <textarea name="descripcion" id="" cols="30" rows="5" class="form-control"

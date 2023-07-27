@@ -24,6 +24,7 @@ class UserEdiles extends Model
         'puesto_votacion',
         'foto',
         'rol',
+        'mesa'
     ];
 
 }

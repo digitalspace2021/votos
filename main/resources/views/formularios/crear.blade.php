@@ -61,7 +61,7 @@
                         <div class="col-sm-6">
                             <label for="nombres" class="form-label">Nombre(s)</label>
                             <input type="text" class="form-control" id="nombres" name="nombres" placeholder=""
-                                value="" required>
+                                value="{{old('nombres')}}" required>
                             <div class="invalid-feedback">
                                 Este campo es requerido.
                             </div>
@@ -70,7 +70,7 @@
                         <div class="col-sm-6">
                             <label for="apellidos" class="form-label">Apellido(s)</label>
                             <input type="text" class="form-control" id="apellidos" name="apellidos" placeholder=""
-                                value="" required>
+                                value="{{old('apellidos')}}" required>
                             <div class="invalid-feedback">
                                 Este campo es requerido.
                             </div>
@@ -78,8 +78,8 @@
 
                         <div class="col-sm-6">
                             <label for="identificacion" class="form-label">Cedula</label>
-                            <input type="text" class="form-control" id="identificacion" name="identificacion"
-                                placeholder="" value="" required>
+                            <input type="number" class="form-control" id="identificacion" name="identificacion"
+                                value="{{old('identificacion')}}" required>
                             <div class="invalid-feedback">
                                 Este campo es requerido.
                             </div>
@@ -88,7 +88,7 @@
                         <div class="col-6">
                             <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control" id="email" name="email"
-                                placeholder="usuario@mail.com" required>
+                                value="{{old('email')}}" placeholder="usuario@mail.com" required>
                             <div class="invalid-feedback">
                                 Por favor ingresa un Email valido.
                             </div>
@@ -97,6 +97,7 @@
                         <div class="col-6">
                             <label for="telefono" class="form-label">Telefono</label>
                             <input type="text" class="form-control" id="telefono" name="telefono"
+                                value="{{old('telefono')}}"
                                 placeholder="+57 321-123-1122" required>
                             <div class="invalid-feedback">
                                 Por favor ingresa tu numero telefonico.
@@ -154,12 +155,25 @@
                                 @foreach ($puestos as $puesto)
                                 <option value="{{$puesto->puesto_nombre}}" 
                                     {{old('puesto_votacion')==$puesto->puesto_nombre ? 'selected' : '' }}
+                                    puesto_id="{{$puesto->id}}"
                                     >{{$puesto->puesto_nombre}}</option>
                                 @endforeach
                             </select>
                             <div class="invalid-feedback">
                                 Por favor ingresa tu puesto de votacion.
                             </div>
+                        </div>
+
+                        <div class="col-md-6 mb-2">
+                            <label for="mesa" class="form-label">Mesa</label>
+                            <select name="mesa" id="mesa" class="form-select" required>
+                                <option value="" selected disabled>Seleccione una mesa</option>
+                            </select>
+                            {{-- @error('mesa')
+                            <div class="text-danger">
+                                {{ $message }}
+                            </div>
+                            @enderror --}}
                         </div>
 
                         <div class="col-12">
@@ -309,6 +323,7 @@
                 });
 
                 $('#puesto').select2();
+                $('#mesa').select2();
 
                 let foto = $('#foto');
                 let preview = $('#preview_img');
@@ -324,6 +339,23 @@
                         preview.attr('src', URL.createObjectURL(file));
                     }
                 })
+            });
+
+            let mesas = "{{route('ut.get_mesas')}}";
+            $('#puesto').change(function(){
+                let puesto_id = $(this).children("option:selected").attr('puesto_id');
+                $('#mesa').empty();
+                $.ajax({
+                    url: mesas,
+                    type: 'GET',
+                    data: {puesto_id: puesto_id},
+                    success: function(data){
+                        $('#mesa').append('<option value="" selected disabled>Seleccione una mesa</option>');
+                        $.each(data, function(i, item){
+                            $('#mesa').append('<option value="'+item.numero_mesa+'">'+item.numero_mesa+'</option>');
+                        });
+                    }
+                });
             });
         </script>
     @endsection

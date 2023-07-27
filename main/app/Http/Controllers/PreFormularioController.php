@@ -32,8 +32,8 @@ class PreFormularioController extends Controller
     {
         $pre_forms = DB::table('pre_formularios')
             ->join('users', 'pre_formularios.propietario_id', '=', 'users.id')
-            ->join('barrios', 'pre_formularios.zona', '=', 'barrios.id')->join('comunas', 'barrios.comuna_id', '=', 'comunas.id')
-            ->join('veredas', 'pre_formularios.zona', '=', 'veredas.id')->join('corregimientos', 'veredas.corregimiento_id', '=', 'corregimientos.id')
+            ->leftJoin('barrios', 'pre_formularios.zona', '=', 'barrios.id')->leftJoin('comunas', 'barrios.comuna_id', '=', 'comunas.id')
+            ->leftJoin('veredas', 'pre_formularios.zona', '=', 'veredas.id')->leftJoin('corregimientos', 'veredas.corregimiento_id', '=', 'corregimientos.id')
             ->select('pre_formularios.id', 'pre_formularios.identificacion', 'pre_formularios.nombre', 'pre_formularios.apellido', 'pre_formularios.telefono', 'pre_formularios.direccion', 'users.name', 'users.id as creator_id', 'pre_formularios.puesto_votacion', 'pre_formularios.created_at', 'pre_formularios.email', 'pre_formularios.propietario_id')
             ->addSelect(DB::raw("CONCAT(pre_formularios.nombre, ' ', pre_formularios.apellido) AS nombre_completo"))
             /* filter for cedula, nombre+apellido, created_at or creator_id */
@@ -133,8 +133,9 @@ class PreFormularioController extends Controller
                 CASE
                     WHEN pv.zone_type = 'Comuna' THEN CONCAT('Barrio: ', COALESCE(barrios.name, 'Sin información'))
                     WHEN pv.zone_type = 'Corregimiento' THEN CONCAT('Vereda: ', COALESCE(veredas.name, 'Sin información'))
-                END, ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre"))
-            ->leftJoin('mesas_votacion AS mv', 'pv.id', '=', 'mv.puesto_votacion')
+                END) AS puesto_nombre, pv.id"))
+                /* after case */
+                /* , ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre */
             ->leftJoin('barrios', function ($join) {
                 $join->on('pv.zone', '=', 'barrios.id')
                     ->where('pv.zone_type', '=', 'Comuna');
@@ -164,6 +165,7 @@ class PreFormularioController extends Controller
             'telefono' => $request->telefono,
             'direccion' => $request->direccion,
             'puesto_votacion' => $request->puesto,
+            'mesa' => $request->mesa,
             'genero' => $request->genero,
             'email' => $request->email,
             'mensaje' => $request->descripcion,
@@ -203,6 +205,7 @@ class PreFormularioController extends Controller
             'telefono' => $pre_formulario->telefono,
             'direccion' => $pre_formulario->direccion,
             'puesto_votacion' => $pre_formulario->puesto_votacion,
+            'mesa' => $pre_formulario->mesa,
             'genero' => $pre_formulario->genero,
             'email' => $pre_formulario->email,
             'mensaje' => $pre_formulario->mensaje,

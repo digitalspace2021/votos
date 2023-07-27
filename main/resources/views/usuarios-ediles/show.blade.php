@@ -121,11 +121,12 @@ Ver {{$edil->rol}}
                         <label for="puesto_votacion" id="puesto_votacion" class="form-label">Puesto de votacion</label>
                         <input type="text" name="puesto_votacion" id="" class="form-control" value="{{$edil->puesto_votacion}}" disabled required>
                     </div>
-                    @error('zona')
-                    <div class="text-danger">
-                        {{ $message }}
+                </div>
+                <div class="col-md-6 mb-2">
+                    <div class="form-group">
+                        <label for="puesto_votacion" id="puesto_votacion" class="form-label">Mesa de votacion</label>
+                        <input type="text" name="puesto_votacion" id="" class="form-control" value="{{$edil->mesa}}" disabled required>
                     </div>
-                    @enderror
                 </div>
                 <div class="col-md-12">
                     <label for="descripcion" class="form-label">Descripcion</label>

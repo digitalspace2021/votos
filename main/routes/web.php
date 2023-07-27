@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\ActividadController;
 use App\Http\Controllers\AlertaController;
+use App\Http\Controllers\AsambHighchartController;
 use App\Http\Controllers\CandidatoController;
 use App\Http\Controllers\CargoController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\EdilHighchartController;
 use App\Http\Controllers\FileManagementController;
 use App\Http\Controllers\FileOportunidadesManagementController;
 use App\Http\Controllers\HomeController;
@@ -116,6 +118,7 @@ Route::middleware(['auth'])->group(function () {
 
     // utils
     Route::get('get_veredas_and_comunas', [UtilityController::class, 'getVeredasAndComunas']);
+    Route::get('get_mesas', [UtilityController::class, 'getMesas'])->name('ut.get_mesas');
     Route::get('/statitics/{candidato_id?}', [HighchartController::class, 'handleChart']);
     Route::get('/statitics/{candidato_id?}/{zona?}/{zona_id?}', [HighchartController::class, 'handleChart']);
 
@@ -178,6 +181,10 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/oportunidades/{id}/update', [ProblemController::class, 'update'])->name('problems.update');
     Route::put('/oportunidades/{id}/status', [ProblemController::class, 'changeStatus'])->name('problems.changeStatus');
     Route::get('/oportunidades/export', [FileOportunidadesManagementController::class, 'export'])->name('problems.export');
+    /* Route::get('/estadisticas/ediles', [EdilHighchartController::class, 'handleChart'])->name('ediles.statistics'); */
+    Route::get('/estadisticas/ediles/{edil?}/{zona?}/{zona_id?}', [EdilHighchartController::class, 'handleChart'])->name('ediles.statistics');
+    Route::get('/estadisticas/asambleistas/{asamb?}/{zona?}/{zona_id?}', [AsambHighchartController::class, 'handleChart'])->name('asambleistas.statistics');
+    /* Route::get('/estadisticas/ediles/{edil?}', [EdilHighchartController::class, 'handleChart'])->name('ediles.statistics'); */
 
 
     /* usuarios ediles */

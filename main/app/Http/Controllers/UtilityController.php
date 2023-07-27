@@ -37,4 +37,11 @@ class UtilityController extends Controller
         // }
         // return response()->json(DB::table('barrios')->select('name as text', 'id')->get());
     }
+
+    public function getMesas(Request $request)
+    {
+        $mesas = DB::table('mesas_votacion')->where('puesto_votacion', $request->puesto_id)->get(['numero_mesa']);
+
+        return response()->json($mesas);
+    }
 }

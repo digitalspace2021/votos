@@ -28,6 +28,9 @@ class TablaPreFormularios extends Migration
             $table->string('tipo_zona')->nullable();
             $table->unsignedBigInteger('candidato_id');
             $table->string('identificacion');
+            $table->string('vinculo')->nullable();
+            $table->boolean('estado')->default(true);
+            $table->string('mesa')->nullable();
             $table->timestamps();
 
             $table->foreign('propietario_id')

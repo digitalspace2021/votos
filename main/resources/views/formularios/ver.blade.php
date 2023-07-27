@@ -117,6 +117,11 @@
                         <input name="puesto_votacion" type="text" class="form-control"
                             value="{{ $formulario->puesto_votacion }}">
                     </div>
+                    <div class="col-6">
+                        <label for="puesto_votacion" class="form-label">Mesa de votacion</label>
+                        <input name="puesto_votacion" type="text" class="form-control"
+                            value="{{ $formulario->mesa }}">
+                    </div>
 
                     <div class="col-12">
                         <label for="mensaje" class="form-label">Problematica</label>

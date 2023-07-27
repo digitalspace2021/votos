@@ -171,6 +171,7 @@ Editar Formulario
                                     $status = true;
                                 @endphp
                             @endif
+                            puesto_id="{{$puesto->id}}"
                             >{{$puesto->puesto_nombre}}</option>
                         @endforeach
                         @if (!$status)
@@ -183,6 +184,19 @@ Editar Formulario
                     </div>
                     @enderror
                 </div>
+
+                <div class="col-md-6 mb-2">
+                    <label for="mesa" class="form-label">Mesa</label>
+                    <select name="mesa" id="mesa" class="form-select" required>
+                        <option value="" selected disabled>Seleccione una mesa</option>
+                    </select>
+                    {{-- @error('mesa')
+                    <div class="text-danger">
+                        {{ $message }}
+                    </div>
+                    @enderror --}}
+                </div>
+
                 <div class="col-md-12" id="desc_pre_formulario">
                     <label for="descripcion">Problematica</label>
                     <textarea name="descripcion" id="" cols="30" rows="5" class="form-control"
@@ -212,7 +226,7 @@ Editar Formulario
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
     $(document).ready(async function() {
-
+        let mesas = "{{route('ut.get_mesas')}}";
         var zona = $('#tipo_zona').val()
 
                 $('#zona').select2({
@@ -306,6 +320,32 @@ Editar Formulario
         });
 
         $('#puesto').select2();
+        $('#mesa').select2();
+
+        function getMesas(){
+            let puesto_id = $(this).children("option:selected").attr('puesto_id');
+            $('#mesa').empty();
+            $.ajax({
+                url: mesas,
+                type: 'GET',
+                data: {puesto_id: puesto_id},
+                success: function(data){
+                    $('#mesa').append('<option value="" selected disabled>Seleccione una mesa</option>');
+                    $.each(data, function(i, item){
+                        $('#mesa').append(`
+                            <option value="${item.numero_mesa}"
+                                ${item.numero_mesa == '{{$pre_formulario->mesa}}' ? 'selected' : ''}>${item.numero_mesa}</option>
+                        `);
+                    });
+                }
+            });
+        }
+        
+        $('#puesto').change(function(){
+            getMesas.call(this);
+        });
+
+        getMesas.call($('#puesto'));
     });
 </script>
 @endsection

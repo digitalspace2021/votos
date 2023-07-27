@@ -25,5 +25,6 @@ class PreFormulario extends Model
         'tipo_zona',
         'candidato_id',
         'identificacion',
+        'mesa'
     ];
 }

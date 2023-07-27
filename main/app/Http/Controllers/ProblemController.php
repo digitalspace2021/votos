@@ -129,8 +129,9 @@ class ProblemController extends Controller
                 CASE
                     WHEN pv.zone_type = 'Comuna' THEN CONCAT('Barrio: ', COALESCE(barrios.name, 'Sin información'))
                     WHEN pv.zone_type = 'Corregimiento' THEN CONCAT('Vereda: ', COALESCE(veredas.name, 'Sin información'))
-                END, ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre"))
-            ->leftJoin('mesas_votacion AS mv', 'pv.id', '=', 'mv.puesto_votacion')
+                END) AS puesto_nombre, pv.id"))
+                /* after case */
+                /* , ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre */
             ->leftJoin('barrios', function ($join) {
                 $join->on('pv.zone', '=', 'barrios.id')
                     ->where('pv.zone_type', '=', 'Comuna');
@@ -160,7 +161,7 @@ class ProblemController extends Controller
                 CASE
                     WHEN pv.zone_type = 'Comuna' THEN CONCAT('Barrio: ', COALESCE(barrios.name, 'Sin información'))
                     WHEN pv.zone_type = 'Corregimiento' THEN CONCAT('Vereda: ', COALESCE(veredas.name, 'Sin información'))
-                END, ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre"))
+                END) AS puesto_nombre, pv.id"))
             ->leftJoin('mesas_votacion AS mv', 'pv.id', '=', 'mv.puesto_votacion')
             ->leftJoin('barrios', function ($join) {
                 $join->on('pv.zone', '=', 'barrios.id')
@@ -196,6 +197,7 @@ class ProblemController extends Controller
             'telefono' => $request->telefono,
             'direccion' => $request->direccion,
             'puesto_votacion' => $request->puesto,
+            'mesa' => $request->mesa,
             'estado' => false,
             'genero' => $request->genero,
             'email' => $request->email,
@@ -214,6 +216,7 @@ class ProblemController extends Controller
             $edil = new Edil();
             $edil->formulario_id = $problem->id;
             $edil->edil_id = $request->user_edil;
+            $edil->asamblea_id = $request->asamb_edil;
             $edil->concejo = $request->concejo;
 
             if ($request->apoyo == 1) {
@@ -264,6 +267,7 @@ class ProblemController extends Controller
             'telefono' => $request->telefono,
             'direccion' => $request->direccion,
             'puesto_votacion' => $request->puesto,
+            'mesa' => $request->mesa,
             'estado' => false,
             'genero' => $request->genero,
             'email' => $request->email,
@@ -287,6 +291,7 @@ class ProblemController extends Controller
             $edil->createOrUpdate([
                 'formulario_id' => $problem->id,
                 'edil_id' => $request->user_edil,
+                'asamblea_id' => $request->asamb_edil,
                 'concejo' => $request->concejo,
                 'alcaldia' => $request->apoyo == 1 ? (bool)$request->alcaldia : null,
                 'gobernacion' => $request->apoyo == 1 ? (bool)$request->gobernacion : null,

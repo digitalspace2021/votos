@@ -44,6 +44,7 @@ class StoreRequest extends FormRequest
             $validate['concejo'] = ['required'];
             $validate['apoyo'] = ['required'];
             $validate['user_edil'] = ['required', 'exists:usuarios_ediles,id'];
+            $validate['asamb_edil'] =['required', 'exists:usuarios_ediles,id'];
         }
 
         if ($this->apoyo) {

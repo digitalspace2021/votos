@@ -80,7 +80,7 @@ Posibles Votantes
                     <input type="text" class="form-control" name="direccion" value="{{$problem->direccion}}" required
                         disabled>
                 </div>
-                <div class="col-md-6 mb-2">
+                <div class="col-md-12 mb-2">
                     <label for="vinculo" class="form-label">Vinculo</label>
                     <input type="text" class="form-control" name="vinculo" value="{{$problem->vinculo}}" required
                         disabled>
@@ -88,6 +88,11 @@ Posibles Votantes
                 <div class="col-md-6 mb-2">
                     <label for="puesto" class="form-label">Puesto de votacion</label>
                     <input type="text" class="form-control" name="puesto" value="{{$problem->puesto_votacion}}" required
+                        disabled>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label for="mesa" class="form-label">Mesa de votacion</label>
+                    <input type="text" class="form-control" name="mesa" value="{{$problem->mesa}}" required
                         disabled>
                 </div>
                 <div class="col-md-12 mb-2">
@@ -111,6 +116,13 @@ Posibles Votantes
                             <input type="text" name="" id="" disabled
                                 value="{{$problem->edil->userEdil->nombres}} {{$problem->edil->userEdil->apellidos}}" class="form-control">
                         </div>
+                        <label for="" class="form-label">Asambleista que apoya: </label>
+                        <div class="col-6">
+                            <input type="text" name="" id="" disabled
+                                value="{{$problem->edil->userAsamblea->nombres}} {{$problem->edil->userAsamblea->apellidos}}" class="form-control">
+                        </div>
+
+                        
                     </div>
 
                     <div class="col-12 mb-2">

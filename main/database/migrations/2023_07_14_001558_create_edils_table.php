@@ -20,6 +20,7 @@ class CreateEdilsTable extends Migration
             $table->boolean('gobernacion')->default(false);
             $table->unsignedBigInteger('edil_id');
             $table->unsignedBigInteger('formulario_id');
+            $table->unsignedBigInteger('asamblea_id')->nullable();
 
             $table->foreign('edil_id')
                 ->references('id')
@@ -29,6 +30,11 @@ class CreateEdilsTable extends Migration
             $table->foreign('formulario_id')
                 ->references('id')
                 ->on('formularios')
+                ->onDelete('cascade');
+
+            $table->foreign('asamblea_id')
+                ->references('id')
+                ->on('usuarios_ediles')
                 ->onDelete('cascade');
 
             $table->timestamps();

@@ -53,8 +53,9 @@ class Controller extends BaseController
                 CASE
                     WHEN pv.zone_type = 'Comuna' THEN CONCAT('Barrio: ', COALESCE(barrios.name, 'Sin información'))
                     WHEN pv.zone_type = 'Corregimiento' THEN CONCAT('Vereda: ', COALESCE(veredas.name, 'Sin información'))
-                END, ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre"))
-            ->leftJoin('mesas_votacion AS mv', 'pv.id', '=', 'mv.puesto_votacion')
+                END) AS puesto_nombre, pv.id"))
+                /* after case */
+                /* , ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre */
             ->leftJoin('barrios', function ($join) {
                 $join->on('pv.zone', '=', 'barrios.id')
                     ->where('pv.zone_type', '=', 'Comuna');
@@ -64,6 +65,7 @@ class Controller extends BaseController
                     ->where('pv.zone_type', '=', 'Corregimiento');
             })
             ->get();
+            
 
             $users = DB::table('users')->get();
 

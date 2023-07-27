@@ -156,6 +156,7 @@ class FormularioController extends Controller
         $formulario->tipo_zona = $request->tipo_zona;
         $formulario->zona = $request->zona;
         $formulario->puesto_votacion = $request->puesto_votacion;
+        $formulario->mesa = $request->mesa;
         $formulario->mensaje = $request->mensaje;
         $formulario->candidato_id = $request->candidato_id;
         $formulario->identificacion = $request->identificacion;
@@ -187,8 +188,9 @@ class FormularioController extends Controller
                 CASE
                     WHEN pv.zone_type = 'Comuna' THEN CONCAT('Barrio: ', COALESCE(barrios.name, 'Sin información'))
                     WHEN pv.zone_type = 'Corregimiento' THEN CONCAT('Vereda: ', COALESCE(veredas.name, 'Sin información'))
-                END, ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre"))
-            ->leftJoin('mesas_votacion AS mv', 'pv.id', '=', 'mv.puesto_votacion')
+                END) AS puesto_nombre, pv.id"))
+                /* after case */
+                /* , ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre */
             ->leftJoin('barrios', function ($join) {
                 $join->on('pv.zone', '=', 'barrios.id')
                     ->where('pv.zone_type', '=', 'Comuna');
@@ -235,6 +237,7 @@ class FormularioController extends Controller
         $formulario->zona = $request->zona;
         $formulario->tipo_zona = $request->tipo_zona;
         $formulario->puesto_votacion = $request->puesto_votacion;
+        $formulario->mesa = $request->mesa;
         $formulario->mensaje = $request->mensaje;
         $formulario->identificacion = $request->identificacion;
         $formulario->candidato_id = $request->candidato_id;
