@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ActividadController;
 use App\Http\Controllers\AlertaController;
+use App\Http\Controllers\AsambHighchartController;
 use App\Http\Controllers\CandidatoController;
 use App\Http\Controllers\CargoController;
 use App\Http\Controllers\Controller;
@@ -182,6 +183,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/oportunidades/export', [FileOportunidadesManagementController::class, 'export'])->name('problems.export');
     /* Route::get('/estadisticas/ediles', [EdilHighchartController::class, 'handleChart'])->name('ediles.statistics'); */
     Route::get('/estadisticas/ediles/{edil?}/{zona?}/{zona_id?}', [EdilHighchartController::class, 'handleChart'])->name('ediles.statistics');
+    Route::get('/estadisticas/asambleistas/{asamb?}/{zona?}/{zona_id?}', [AsambHighchartController::class, 'handleChart'])->name('asambleistas.statistics');
     /* Route::get('/estadisticas/ediles/{edil?}', [EdilHighchartController::class, 'handleChart'])->name('ediles.statistics'); */
 
 
