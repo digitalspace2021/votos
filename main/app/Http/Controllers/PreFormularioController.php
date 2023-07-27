@@ -133,7 +133,9 @@ class PreFormularioController extends Controller
                 CASE
                     WHEN pv.zone_type = 'Comuna' THEN CONCAT('Barrio: ', COALESCE(barrios.name, 'Sin información'))
                     WHEN pv.zone_type = 'Corregimiento' THEN CONCAT('Vereda: ', COALESCE(veredas.name, 'Sin información'))
-                END, ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre"))
+                END) AS puesto_nombre, pv.id"))
+                /* after case */
+                /* , ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre */
             ->leftJoin('mesas_votacion AS mv', 'pv.id', '=', 'mv.puesto_votacion')
             ->leftJoin('barrios', function ($join) {
                 $join->on('pv.zone', '=', 'barrios.id')
@@ -164,6 +166,7 @@ class PreFormularioController extends Controller
             'telefono' => $request->telefono,
             'direccion' => $request->direccion,
             'puesto_votacion' => $request->puesto,
+            'mesa' => $request->mesa,
             'genero' => $request->genero,
             'email' => $request->email,
             'mensaje' => $request->descripcion,
@@ -203,6 +206,7 @@ class PreFormularioController extends Controller
             'telefono' => $pre_formulario->telefono,
             'direccion' => $pre_formulario->direccion,
             'puesto_votacion' => $pre_formulario->puesto_votacion,
+            'mesa' => $pre_formulario->mesa,
             'genero' => $pre_formulario->genero,
             'email' => $pre_formulario->email,
             'mensaje' => $pre_formulario->mensaje,
