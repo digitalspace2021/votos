@@ -17,6 +17,7 @@ class AddColumnsToUsuariosEdiles extends Migration
             $table->string('puesto_votacion')->nullable()->after('descripcion');
             $table->enum('rol', ['Edil', 'Asambleista'])->default('Edil')->after('puesto_votacion');
             $table->string('foto')->nullable()->after('rol');
+            $table->string('mesa')->nullable()->after('foto');
         });
     }
 
@@ -31,6 +32,7 @@ class AddColumnsToUsuariosEdiles extends Migration
             $table->dropColumn('puesto_votacion');
             $table->dropColumn('rol');
             $table->dropColumn('foto');
+            $table->dropColumn('mesa');
         });
     }
 }
