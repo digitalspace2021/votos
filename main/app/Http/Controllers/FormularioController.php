@@ -191,7 +191,6 @@ class FormularioController extends Controller
                 END) AS puesto_nombre, pv.id"))
                 /* after case */
                 /* , ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre */
-            ->leftJoin('mesas_votacion AS mv', 'pv.id', '=', 'mv.puesto_votacion')
             ->leftJoin('barrios', function ($join) {
                 $join->on('pv.zone', '=', 'barrios.id')
                     ->where('pv.zone_type', '=', 'Comuna');
