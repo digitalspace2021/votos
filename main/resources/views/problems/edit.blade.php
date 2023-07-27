@@ -255,12 +255,31 @@ Editar Posible Votante
                     <label for="" class="form-label">Seleccione el edil al cual dara su apoyo:</label>
                     <div class="col-6">
                         @foreach ($edils as $item)
-                        <input type="radio" name="user_edil" value="{{$item->id}}" {{($problem->edil->edil_id ?? null) == $item->id ? 'checked' : '' }} >
-                        <label for="" class="form-label">{{$item->nombres}} {{$item->apellidos}}</label>
+                            @if ($item->rol == 'Edil')
+                                <input type="radio" name="user_edil" value="{{$item->id}}" {{($problem->edil->edil_id ?? null) == $item->id ? 'checked' : '' }} >
+                                <label for="" class="form-label">{{$item->nombres}} {{$item->apellidos}}</label>
+                            @endif
                         @endforeach
                     </div>
 
                     @error('user_edil')
+                    <div class="text-danger">
+                        {{ $message }}
+                    </div>
+                    @enderror
+                </div>
+                <div class="col-md-12 mb-2">
+                    <label for="" class="form-label">Seleccione el asambleista al cual dara su apoyo:</label>
+                    <div class="col-6">
+                        @foreach ($edils as $item)
+                            @if ($item->rol == 'Asambleista')
+                                <input type="radio" name="asamb_edil" value="{{$item->id}}" {{($problem->edil->asamblea_id ?? null) == $item->id ? 'checked' : '' }} >
+                                <label for="" class="form-label">{{$item->nombres}} {{$item->apellidos}}</label>
+                            @endif
+                        @endforeach
+                    </div>
+
+                    @error('asamb_edil')
                     <div class="text-danger">
                         {{ $message }}
                     </div>

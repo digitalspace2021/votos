@@ -122,9 +122,7 @@ class ProblemController extends Controller
             });
         }
         $users = $users->get();
-        $edils = DB::table('usuarios_ediles')
-            ->where('rol', 'Edil')
-            ->get();
+        $edils = DB::table('usuarios_ediles')->get();
 
         $puestos = DB::table('puestos_votacion AS pv')
             ->select(DB::raw("CONCAT('Puesto: ', COALESCE(pv.name, 'Sin información'), ', ', 
@@ -153,9 +151,7 @@ class ProblemController extends Controller
         $users = DB::table('users')->get();
 
         $problem = Formulario::findOrFail($id);
-        $edils = DB::table('usuarios_ediles')
-            ->where('rol', 'Edil')
-            ->get();
+        $edils = DB::table('usuarios_ediles')->get();
 
         if ($problem->estado == true || !$problem) {
             return back()->with('error', 'No se puede visualizar un formulario comfirmado');
@@ -221,6 +217,7 @@ class ProblemController extends Controller
             $edil = new Edil();
             $edil->formulario_id = $problem->id;
             $edil->edil_id = $request->user_edil;
+            $edil->asamblea_id = $request->asamb_edil;
             $edil->concejo = $request->concejo;
 
             if ($request->apoyo == 1) {
@@ -295,6 +292,7 @@ class ProblemController extends Controller
             $edil->createOrUpdate([
                 'formulario_id' => $problem->id,
                 'edil_id' => $request->user_edil,
+                'asamblea_id' => $request->asamb_edil,
                 'concejo' => $request->concejo,
                 'alcaldia' => $request->apoyo == 1 ? (bool)$request->alcaldia : null,
                 'gobernacion' => $request->apoyo == 1 ? (bool)$request->gobernacion : null,

@@ -27,6 +27,7 @@ class Formulario extends Model
         'vinculo',
         'foto',
         'mesa',
+        
     ];
 
     public function edil()

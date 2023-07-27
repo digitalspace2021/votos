@@ -116,6 +116,13 @@ Posibles Votantes
                             <input type="text" name="" id="" disabled
                                 value="{{$problem->edil->userEdil->nombres}} {{$problem->edil->userEdil->apellidos}}" class="form-control">
                         </div>
+                        <label for="" class="form-label">Asambleista que apoya: </label>
+                        <div class="col-6">
+                            <input type="text" name="" id="" disabled
+                                value="{{$problem->edil->userAsamblea->nombres}} {{$problem->edil->userAsamblea->apellidos}}" class="form-control">
+                        </div>
+
+                        
                     </div>
 
                     <div class="col-12 mb-2">
