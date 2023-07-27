@@ -117,6 +117,7 @@ Route::middleware(['auth'])->group(function () {
 
     // utils
     Route::get('get_veredas_and_comunas', [UtilityController::class, 'getVeredasAndComunas']);
+    Route::get('get_mesas', [UtilityController::class, 'getMesas'])->name('ut.get_mesas');
     Route::get('/statitics/{candidato_id?}', [HighchartController::class, 'handleChart']);
     Route::get('/statitics/{candidato_id?}/{zona?}/{zona_id?}', [HighchartController::class, 'handleChart']);
 

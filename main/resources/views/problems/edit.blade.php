@@ -152,7 +152,7 @@ Editar Posible Votante
                     </div>
                     @enderror
                 </div>
-                <div class="col-md-6 mb-2">
+                <div class="col-md-12 mb-2">
                     <label for="vinculo" class="form-label">Vinculo</label>
                     <input type="text" class="form-control" name="vinculo" value="{{$problem->vinculo}}" required>
                     @error('vinculo')
@@ -165,20 +165,15 @@ Editar Posible Votante
                     <label for="puesto" class="form-label">Puesto de votacion</label>
                     <select name="puesto" id="puesto" class="form-select" required>
                         <option value="" disabled>Seleccione un puesto</option>
-                        @php
-                            $status = false;
-                        @endphp
+                        
                         @foreach ($puestos as $puesto)
                         <option value="{{$puesto->puesto_nombre}}" 
-                            @if ($puesto->puesto_nombre == $problem->puesto)
-                                @php
-                                    $status = true;
-                                @endphp
+                            @if ($puesto->puesto_nombre == $problem->puesto_votacion)
                                 selected
                             @endif
-                            >{{$puesto->puesto_nombre}}</option>
+                            puesto_id="{{$puesto->id}}">{{$puesto->puesto_nombre}}</option>
                         @endforeach
-                        @if (!$status)
+                        @if (!$puesto->puesto_nombre == $problem->puesto_votacion)
                             <option value="{{$problem->puesto_votacion}}" selected>{{$problem->puesto_votacion}}</option>
                         @endif
                     </select>
@@ -188,6 +183,19 @@ Editar Posible Votante
                     </div>
                     @enderror
                 </div>
+
+                <div class="col-md-6 mb-2">
+                    <label for="mesa" class="form-label">Mesa</label>
+                    <select name="mesa" id="mesa" class="form-select" required>
+                        <option value="" selected disabled>Seleccione una mesa</option>
+                    </select>
+                    {{-- @error('mesa')
+                    <div class="text-danger">
+                        {{ $message }}
+                    </div>
+                    @enderror --}}
+                </div>
+
                 <div class="col-md-12 mb-2">
                     <input type="checkbox" name="check_problem" id="check_problem" class="form-check-input" @if ($problem->mensaje) checked @endif>
                     <label for="check_problem" class="form-check-label">¿Tiene alguna problemática?</label>
@@ -391,6 +399,7 @@ Editar Posible Votante
     let circle = $(".circle");
     let apoyo1 = $("#apoyo1");
     let apoyo2 = $("#apoyo2");
+    let mesas = "{{route('ut.get_mesas')}}";
     $(document).ready(function() {
         $('#creador').select2({
             theme: "bootstrap",
@@ -506,6 +515,8 @@ Editar Posible Votante
         }
 
         $('#puesto').select2();
+        $('#mesa').select2();
+
 
         let foto = $('#foto');
         let preview = $('#preview_img');
@@ -521,6 +532,31 @@ Editar Posible Votante
                 preview.attr('src', URL.createObjectURL(file));
             }
         })
+
+        function getMesas(){
+            let puesto_id = $(this).children("option:selected").attr('puesto_id');
+            $('#mesa').empty();
+            $.ajax({
+                url: mesas,
+                type: 'GET',
+                data: {puesto_id: puesto_id},
+                success: function(data){
+                    $('#mesa').append('<option value="" selected disabled>Seleccione una mesa</option>');
+                    $.each(data, function(i, item){
+                        $('#mesa').append(`
+                            <option value="${item.numero_mesa}"
+                                ${item.numero_mesa == '{{$problem->mesa}}' ? 'selected' : ''}>${item.numero_mesa}</option>
+                        `);
+                    });
+                }
+            });
+        }
+        
+        $('#puesto').change(function(){
+            getMesas.call(this);
+        });
+
+        getMesas.call($('#puesto'));
     });
 </script>
 @endsection

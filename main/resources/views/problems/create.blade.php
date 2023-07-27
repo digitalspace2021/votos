@@ -155,7 +155,7 @@ Crear formulario
                     </div>
                     @enderror
                 </div>
-                <div class="col-md-6 mb-2">
+                <div class="col-md-12 mb-2">
                     <label for="vinculo" class="form-label">Vinculo</label>
                     <input type="text" class="form-control" name="vinculo" value="{{old('vinculo')}}" required>
                     @error('vinculo')
@@ -167,10 +167,13 @@ Crear formulario
                 <div class="col-md-6 mb-2">
                     <label for="puesto" class="form-label">Puesto de votacion</label>
                     <select name="puesto" id="puesto" class="form-select" required>
-                        <option value="" selected disabled>Seleccione un puesto</option>
+                        <option value="" disabled>Seleccione un puesto</option>
                         @foreach ($puestos as $puesto)
                         <option value="{{$puesto->puesto_nombre}}" 
-                            {{old('puesto')==$puesto->puesto_nombre ? 'selected' : '' }}
+                            @if (old('puesto')==$puesto->puesto_nombre)
+                                selected
+                            @endif
+                            puesto_id="{{$puesto->id}}"
                             >{{$puesto->puesto_nombre}}</option>
                         @endforeach
                     </select>
@@ -180,6 +183,19 @@ Crear formulario
                     </div>
                     @enderror
                 </div>
+
+                <div class="col-md-6 mb-2">
+                    <label for="mesa" class="form-label">Mesa</label>
+                    <select name="mesa" id="mesa" class="form-select" required>
+                        <option value="" selected disabled>Seleccione una mesa</option>
+                    </select>
+                    {{-- @error('mesa')
+                    <div class="text-danger">
+                        {{ $message }}
+                    </div>
+                    @enderror --}}
+                </div>
+
                 <div class="col-md-12 mb-2">
                     <input type="checkbox" name="check_problem" id="check_problem" class="form-check-input"
                         @error('descripcion') checked @enderror>
@@ -483,6 +499,7 @@ Crear formulario
         }
 
         $('#puesto').select2();
+        $('#mesa').select2();
 
         let foto = $('#foto');
         let preview = $('#preview_img');
@@ -499,5 +516,23 @@ Crear formulario
             }
         })
     });
+
+    let mesas = "{{route('ut.get_mesas')}}";
+    $('#puesto').change(function(){
+        let puesto_id = $(this).children("option:selected").attr('puesto_id');
+        $('#mesa').empty();
+        $.ajax({
+            url: mesas,
+            type: 'GET',
+            data: {puesto_id: puesto_id},
+            success: function(data){
+                $('#mesa').append('<option value="" selected disabled>Seleccione una mesa</option>');
+                $.each(data, function(i, item){
+                    $('#mesa').append('<option value="'+item.numero_mesa+'">'+item.numero_mesa+'</option>');
+                });
+            }
+        });
+    });
+
 </script>
 @endsection
