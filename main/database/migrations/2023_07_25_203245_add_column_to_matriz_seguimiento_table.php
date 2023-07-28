@@ -14,8 +14,8 @@ class AddColumnToMatrizSeguimientoTable extends Migration
     public function up()
     {
         Schema::table('matriz_seguimiento', function (Blueprint $table) {
-            $table->string('obs_pregunta_cuatro')->nullable()->default(null);
-            $table->string('obs_pregunta_cinco')->nullable()->default(null);
+            $table->json('obs_cuatro')->nullable()->default(null);
+            $table->json('obs_cinco')->nullable()->default(null);
         });
     }
 
@@ -27,8 +27,8 @@ class AddColumnToMatrizSeguimientoTable extends Migration
     public function down()
     {
         Schema::table('matriz_seguimiento', function (Blueprint $table) {
-            $table->dropColumn('obs_pregunta_cuatro');
-            $table->dropColumn('obs_pregunta_cinco');
+            $table->dropColumn('obs_cuatro');
+            $table->dropColumn('obs_cinco');
         });
     }
 }
