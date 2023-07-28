@@ -91,8 +91,10 @@ class MatrizSeguimientoController extends Controller
         $matriz->respuesta_tres = $request->pregunta3;
         $matriz->respuesta_cuatro = $request->pregunta4;
         $matriz->fechas_cuatro = ($request->datesInputCall && $request->pregunta4 == 1) ? json_encode($request->datesInputCall) : NULL;
+        $matriz->obs_cuatro = ($request->obsInputCall && $request->pregunta4 == 1) ? json_encode($request->obsInputCall) : NULL;
         $matriz->respuesta_cinco = $request->pregunta5;
         $matriz->fechas_cinco = ($request->datesInputVisit && $request->pregunta5 == 1) ? json_encode($request->datesInputVisit) : NULL;
+        $matriz->obs_cinco = ($request->obsInputVisit && $request->pregunta5 == 1) ? json_encode($request->obsInputVisit) : NULL;
         $matriz->respuesta_seis = $request->pregunta6;
         $matriz->respuesta_siete = $request->pregunta7;
         $matriz->fechas_siete = ($request->datesInputStake && $request->pregunta7 == 1) ? json_encode($request->datesInputStake) : NULL;
@@ -202,8 +204,10 @@ class MatrizSeguimientoController extends Controller
         $matriz->respuesta_tres = $request->pregunta3;
         $matriz->respuesta_cuatro = $request->pregunta4;
         $matriz->fechas_cuatro = ($request->datesInputCall && $request->pregunta4 == 1) ? json_encode($request->datesInputCall) : NULL;
+        $matriz->obs_cuatro = ($request->obsInputCall && $request->pregunta4 == 1) ? json_encode($request->obsInputCall) : NULL;
         $matriz->respuesta_cinco = $request->pregunta5;
         $matriz->fechas_cinco = ($request->datesInputVisit && $request->pregunta5 == 1) ? json_encode($request->datesInputVisit) : NULL;
+        $matriz->obs_cinco = ($request->obsInputVisit && $request->pregunta5 == 1) ? json_encode($request->obsInputVisit) : NULL;
         $matriz->respuesta_seis = $request->pregunta6;
         $matriz->respuesta_siete = $request->pregunta7;
         $matriz->fechas_siete = ($request->datesInputStake && $request->pregunta7 == 1) ? json_encode($request->datesInputStake) : NULL;

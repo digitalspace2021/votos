@@ -1,6 +1,4 @@
- @php
-     print_r($seguimientos[0]->formulario_id);
- @endphp
+
 @extends('layouts.base')
 
 @section('titulo')
@@ -91,9 +89,28 @@
                         <label for="">No</label>
                         <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta4" value="0" class="grupo4" @if ($seguimientos[0]->respuesta_cuatro == 0) checked @endif disabled>
                     </div>
-                    <div class="form-group mt-2">
+                    <div class="form-group mt-2 mb-2">
                         <label  for="">En qué fecha se le ha llamado?</label><br>
                         <label for="">Fechas Seleccionadas: {{$seguimientos[0]->fechas_cuatro}}</label>
+                    </div>
+                    @php $observacionesCall = explode(',', $seguimientos[0]->obs_cuatro); $j=0; @endphp
+                    <div class="accordion" id="accordionPanelsStayOpenExample">
+                        @foreach ($observacionesCall as $obsCall)
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#obsCall{{$j}}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                Observacion
+                              </button>
+                            </h2>
+                            <div id="obsCall{{$j}}" class="accordion-collapse collapse show">
+                              <div class="accordion-body">
+                                {{$obsCall}}
+                              </div>
+                            </div>
+                          </div>
+                          @php $j++;  @endphp
+                        @endforeach
+                        
                     </div>
                 </div>
                 
@@ -108,9 +125,28 @@
                         <label for="">No</label>
                         <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta5" value="0" class="grupo5" @if ($seguimientos[0]->respuesta_cinco == 0) checked @endif disabled>
                     </div>
-                    <div class="form-group mt-2" id="visit5" @if ($seguimientos[0]->respuesta_cinco == 0) style="display: none;" @endif>
+                    <div class="form-group mt-2 mb-2" id="visit5" @if ($seguimientos[0]->respuesta_cinco == 0) style="display: none;" @endif>
                         <label  for="">En que fecha se le ha visitado?</label><br>
                         <label for="">Fechas Seleccionadas: {{$seguimientos[0]->fechas_cuatro}}</label>
+                    </div>
+                    @php $observacionesVisit = explode(',', $seguimientos[0]->obs_cinco); $i=0; @endphp
+                    <div class="accordion" id="accordionPanelsStayOpenExample">
+                        @foreach ($observacionesVisit as $obsVisit)
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#obsVisit{{$i}}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                Observacion
+                              </button>
+                            </h2>
+                            <div id="obsVisit{{$i}}" class="accordion-collapse collapse show">
+                              <div class="accordion-body">
+                                {{$obsVisit}}
+                              </div>
+                            </div>
+                          </div>
+                          @php $i++;  @endphp
+                        @endforeach
+                        
                     </div>
                 </div>
         

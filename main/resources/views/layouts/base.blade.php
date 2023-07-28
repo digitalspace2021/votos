@@ -50,20 +50,21 @@
 
                 <nav class="navbar bg-body-tertiary fixed-top">
                     <div class="container-fluid">
-                        <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
-                            <img src="{{asset('img/Politicos.png')}}" alt="" class="me-2" width="60" height="52">
-                            <span class="fs-4">Politicos</span>
-                        </a>
-
+                        
+                    
                       <div>
-                        @if (!auth()->check())
-                        <a class="me-3 py-2 text-dark text-decoration-none btn-hover" href="{{ route('problems.create') }}" id="btn-pVotantes"><i class="fa fa-users" aria-hidden="true"></i> Posibles Votantes</a>
-                        <a class="me-3 py-2 text-dark text-decoration-none btn-hover" href="{{ route('actividad.create') }}" id="btn-pVotantes"><i class="fa fa-tasks" aria-hidden="true"></i> Actividades</a>
-                        @endif
                           <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" aria-label="Toggle navigation">
                             <span class="navbar-toggler-icon"></span>
                           </button>
+                          @if (!auth()->check())
+                            <a class="me-3 py-2 text-dark text-decoration-none btn-hover" href="{{ route('problems.create') }}" id="btn-pVotantes"><i class="fa fa-users" aria-hidden="true"></i> Posibles Votantes</a>
+                            <a class="me-3 py-2 text-dark text-decoration-none btn-hover" href="{{ route('actividad.create') }}" id="btn-pVotantes"><i class="fa fa-tasks" aria-hidden="true"></i> Actividades</a>
+                          @endif
                       </div>  
+                      <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
+                        <img src="{{asset('img/Politicos.png')}}" alt="" class="me-2" width="60" height="52">
+                        <span class="fs-4">Politicos</span>
+                    </a>
                     </div>
                 </nav>
                   

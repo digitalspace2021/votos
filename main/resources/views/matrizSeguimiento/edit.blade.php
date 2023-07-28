@@ -95,13 +95,21 @@
                     <div class="form-group" id="visit4" @if ($seguimientos[0]->respuesta_cuatro == 0) style="display: none;" @endif>
                         <label for="">En que fecha se le ha llamado?</label>
                         <input type="date" name="date_visit4" id="date_call">
-                        <button class="btn btn-primary" type="button" onclick="addDate('datesLabelCall','date_call','datesInputCall','call')">add</button>
-                        <button class="btn btn-danger" type="button" onclick="deleteDate('datesLabelCall','date_call','datesInputCall','call')">del</button>
                         <hr>
                         <label id="datesLabelCall">Fechas Seleccionadas: </label>
                         <hr>
                         
                         <input type="hidden" name="datesInputCall" id="datesInputCall">
+                        <div id="obsCall_content">
+                            <label for="">Observaciones</label><br>
+                            <textarea name="" id="obsCall" cols="70" rows="3" ></textarea>
+                            <button class="btn btn-primary" type="button" onclick="addDate('datesLabelCall','date_call','datesInputCall','call','obsCall','obsInputCall','accordionCall')">add</button>
+                            <button class="btn btn-danger" type="button" onclick="deleteDate('datesLabelCall','date_call','datesInputCall','call','obsCall','obsInputCall','accordionCall')">del</button>
+                            <input type="hidden" name="obsInputCall" id="obsInputCall" >
+                        </div>
+                        <div class="accordion mt-2" id="accordionCall">
+                            <!-- conetenido -->
+                        </div><br>
                         
                     </div>
                 </div>    
@@ -119,13 +127,21 @@
                     <div class="form-group" id="visit5" @if ($seguimientos[0]->respuesta_cinco == 0) style="display: none;" @endif>
                         <label for="">En que fecha se le ha visitado?</label>
                         <input type="date" name="date_visit5" id="date_visit">
-                        <button class="btn btn-primary" type="button" onclick="addDate('datesLabelVisit','date_visit','datesInputVisit','visit')">add</button>
-                        <button class="btn btn-danger" type="button" onclick="deleteDate('datesLabelVisit','date_visit','datesInputVisit','visit')">del</button>
                         <hr>
                         <label id="datesLabelVisit">Fechas Seleccionadas: </label>
                         <hr>
                         
                         <input type="hidden" name="datesInputVisit" id="datesInputVisit">
+                        <div id="obsvisit_content">
+                            <label for="">Observaciones</label><br>
+                            <textarea name="" id="obsVisit" cols="70" rows="3" ></textarea>
+                            <button class="btn btn-primary" type="button" onclick="addDate('datesLabelVisit','date_visit','datesInputVisit','visit','obsVisit','obsInputVisit','accordionVisit')">add</button>
+                            <button class="btn btn-danger" type="button" onclick="deleteDate('datesLabelVisit','date_visit','datesInputVisit','visit','obsVisit','obsInputVisit','accordionVisit')">del</button>
+                            <input type="hidden" name="obsInputVisit" id="obsInputVisit" >
+                        </div>
+                        <div class="accordion mt-2" id="accordionVisit">
+                            <!-- conetenido -->
+                        </div><br>
                     </div>
                 </div>
         
@@ -257,26 +273,42 @@
 
     </script>
       
-        
+    <!-- management of dates and observations dynamically -->
       <script>
+        const obsCall = [];
+        const obsVisit = [];
         const datesCall = [];
         const datesVisit = [];
         const datesStake = [];
 
         var fechas_cuatro='<?= $seguimientos[0]->fechas_cuatro;?>';
         let string_fechas_cuatro = fechas_cuatro.replace(/"/g, '');
+        var arr_fechas_cuatro = string_fechas_cuatro.split(',');
         var fechas_cinco='<?= $seguimientos[0]->fechas_cinco;?>';
         let string_fechas_cinco = fechas_cinco.replace(/"/g, '');
+        var arr_fechas_cinco = string_fechas_cinco.split(',');
         var fechas_siete='<?= $seguimientos[0]->fechas_siete;?>';
         let string_fechas_siete = fechas_siete.replace(/"/g, '');
+        
+        //observaciones
+        var obs_cuatro='<?= $seguimientos[0]->obs_cuatro;?>';
+        let string_obs_cuatro = obs_cuatro.replace(/"/g, '');
+        var arr_obs_cuatro = string_obs_cuatro.split(',');
+        var obs_cinco='<?= $seguimientos[0]->obs_cinco;?>';
+        let string_obs_cinco = obs_cinco.replace(/"/g, '');
+        var arr_obs_cinco = string_obs_cinco.split(',');
 
         if(string_fechas_cuatro !== 'null' && string_fechas_cuatro !== ''){
-            datesCall.push(string_fechas_cuatro);
+            for(let i=0; i<arr_fechas_cuatro.length;i++){
+                datesCall.push(arr_fechas_cuatro[i].trim());
+            }
             updateLabelDates('datesLabelCall','datesInputCall','call');
         }
         
         if(string_fechas_cinco !== 'null' && string_fechas_cinco !== ''){
-            datesVisit.push(string_fechas_cinco);
+            for(let i=0; i<arr_fechas_cinco.length;i++){
+                datesVisit.push(arr_fechas_cinco[i].trim());
+            }
             updateLabelDates('datesLabelVisit','datesInputVisit','visit');
         }
 
@@ -285,19 +317,53 @@
             updateLabelDates('datesLabelStake','datesInputStake','stake');
         }
 
+        if(string_obs_cuatro !== 'null' && string_obs_cuatro !== ''){
+            for(let i=0; i<arr_obs_cuatro.length;i++){
+                obsCall.push(arr_obs_cuatro[i].trim());
+            }
+            updateLabelDates('datesLabelStake','datesInputStake','stake');
+            updateInputObs('obsInputCall','call','accordionCall');
+        }
+
+        if(string_obs_cinco !== 'null' && string_obs_cinco !== ''){
+            for(let i=0; i<arr_obs_cinco.length;i++){
+                obsVisit.push(arr_obs_cinco[i].trim());
+            }
+            updateLabelDates('datesLabelStake','datesInputStake','stake');
+            updateInputObs('obsInputVisit','visit','accordionVisit');
+        }
+
         //agregar una fecha seleccionada en el array dates[]
-        function addDate(label_date,input_date_in,input_date_out,array) {
-        const date = document.getElementById(input_date_in).value;
+        function addDate(label_date,input_date_in,input_date_out,array,input_obs_in,input_obs_out,accordion) {
+            const inputDate = document.getElementById(input_date_in);
+        const date = inputDate.value;
+        const obsCall = document.getElementById('obsCall');
+        const obsVisit = document.getElementById('obsVisit');
 
         if (date) {
             if(array=='call'){
-                datesCall.push(date);
-                console.log(datesCall);
+                if (obsCall.value == '') {
+                    obsCall.setCustomValidity('Los campos fecha y observaciones son obligatorios'); 
+                    obsCall.reportValidity();
+                }
+                else{
+                    const index = datesCall.push(date) - 1;
+                    addObs(input_obs_in,input_obs_out,array,index,accordion);
+                    inputDate.value = '';
+                }
+                
             }
             if(array=='visit'){
-                datesVisit.push(date);
-                console.log(datesVisit);
-            }   
+                if (obsVisit.value == '') {
+                    obsVisit.setCustomValidity('Los campos fecha y observaciones son obligatorios'); 
+                    obsVisit.reportValidity();
+                }
+                else{
+                    const index = datesVisit.push(date) - 1;
+                    addObs(input_obs_in,input_obs_out,array,index,accordion);
+                    inputDate.value = '';
+                }
+            }     
             if(array=='stake'){
                 datesStake.push(date);
                 console.log(datesStake);
@@ -307,7 +373,6 @@
         }
         //actualizar el label con los datos del array dates[]
         function updateLabelDates(label_date,input_date_out,array) {
-            console.log(label_date.toString());
             const labelDates = document.getElementById(label_date);
             const inputDates = document.getElementById(input_date_out);
             if(array=='call'){
@@ -325,25 +390,32 @@
             
         }
         //eliminar una fecha del array dates[]
-        function deleteDate(label_date,input_date_in,input_date_out,array) {
-            const dateDel = document.getElementById(input_date_in).value;
+        function deleteDate(label_date,input_date_in,input_date_out,array,input_obs_in,input_obs_out,accordion) {
+            const inputDateDel = document.getElementById(input_date_in);
+            const dateDel = inputDateDel.value;
 
             if(array=='call'){
-                const index = datesCall.indexOf(dateDel);
-
+                const index = datesCall.findIndex((date) => date == dateDel);
+                console.log(dateDel);
+                console.log(datesCall);
                 if (index !== -1) {
+                    console.log(1);
                     datesCall.splice(index, 1);
                     
                     updateLabelDates(label_date,input_date_out,array);
+                    inputDateDel.value = '';
+                    delObs(input_obs_out,array,index,accordion);
                 }   
             }
             if(array=='visit'){
-                const index = datesVisit.indexOf(dateDel);
+                const index = datesVisit.findIndex((date) => date == dateDel);
 
                 if (index !== -1) {
                     datesVisit.splice(index, 1);
                     
                     updateLabelDates(label_date,input_date_out,array);
+                    inputDateDel.value = '';
+                    delObs(input_obs_out,array,index,accordion);
                 }
             }   
             if(array=='stake'){
@@ -355,6 +427,102 @@
                     updateLabelDates(label_date,input_date_out,array);
                 }
             }   
+        }
+
+
+        //----------------------------------------------------------------------------
+        function newObservation(title, text, index,accordion){
+            const accordionDiv = document.getElementById(accordion);
+
+            const content = document.createElement('div');
+            content.id = index;
+
+            const header = document.createElement('div');
+            header.classList.add('accordion-item');
+
+            const H2 = document.createElement('h2');
+            H2.classList.add('accordion-heade');
+
+            const btn = document.createElement('button');
+            btn.classList.add('accordion-button')
+            btn.textContent = title;
+            
+            btn.setAttribute('type', 'button');
+            btn.setAttribute('data-bs-toggle', 'collapse');
+            btn.setAttribute('data-bs-target', '#openObs_'+ index);
+            btn.setAttribute('aria-expanded', 'true');
+            btn.setAttribute('aria-controls', 'panelsStayOpen-collapseOne');
+
+            const body = document.createElement('div');
+            body.classList.add('accordion-collapse');
+            body.classList.add('collapse');
+            body.classList.add('show');
+            body.id = 'openObs_' + index;
+
+            const body_content = document.createElement('div');
+            body_content.classList.add('accordion-body');
+            body_content.textContent = text;
+
+            H2.appendChild(btn);
+            header.appendChild(H2);
+            body.appendChild(body_content);
+
+            content.appendChild(header);
+            content.appendChild(body);
+
+            accordionDiv.appendChild(content);
+            
+        }
+        function addObs(input_obs_in,input_obs_out,array,index,accordion) {
+            const input_obs = document.getElementById(input_obs_in);
+            const obs = input_obs.value;
+            if (obs) {
+                if(array=='call'){
+                    obsCall.push(obs);
+                    input_obs.value = '';  
+                    updateInputObs(input_obs_out,array,accordion);
+                } 
+                if(array=='visit'){
+                    obsVisit.push(obs);
+                    input_obs.value = '';  
+                    updateInputObs(input_obs_out,array,accordion);
+                } 
+            }
+        }
+        function updateInputObs(input_obs_out,array,accordion){
+            const inputObs = document.getElementById(input_obs_out);
+            const accordionDiv = document.getElementById(accordion);
+            if(array=='call'){
+                inputObs.value = obsCall.join(", ");
+                accordionDiv.innerHTML='';
+                for(let i=0; i<obsCall.length;i++){
+                    newObservation('Observacion', obsCall[i], i,accordion);
+                }
+            }
+            if(array=='visit'){
+                inputObs.value = obsVisit.join(", ");
+                accordionDiv.innerHTML='';
+                for(let i=0; i<obsVisit.length;i++){
+                    newObservation('Observacion', obsVisit[i], i,accordion);
+                }
+            }
+        }
+
+        function delObs(input_obs_out,array,index,accordion) {
+            if(array=='call'){
+                console.log('entro a call borrar');
+                if (index !== -1) {
+                    obsCall.splice(index, 1);
+                    updateInputObs(input_obs_out,array,accordion);
+                }   
+            }
+            if(array=='visit'){
+                if (index !== -1) {
+                    obsVisit.splice(index, 1);
+                    updateInputObs(input_obs_out,array,accordion);
+                }   
+            }
+        
         }
       </script>
 @endsection
