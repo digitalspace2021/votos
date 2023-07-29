@@ -272,10 +272,14 @@ class MatrizSeguimientoController extends Controller
             return DataTables::eloquent($seguimientos)
             ->addColumn('acciones', function ($col) {
                 $btn =  '<a href="'.route('matriz.view',['id'=>$col->id]).'" class="btn btn-outline-secondary" title="Ver "><i class="fa fa-eye"></i></a>';
-                if (Auth::user()->hasRole('administrador')) {
+                if (Auth::user()->hasRole('administrador') || Auth::user()->hasRole('callcenter')) {
                     $btn .= '<a href="'.route('matriz.edit',['id'=>$col->id]).'" class="btn btn-outline-primary m-2" title="Editar "><i class="fa fa-edit"></i></a>';
+                }
+                if (Auth::user()->hasRole('administrador')) {
+                    //$btn .= '<a href="'.route('matriz.edit',['id'=>$col->id]).'" class="btn btn-outline-primary m-2" title="Editar "><i class="fa fa-edit"></i></a>';
                     $btn .= '<a href="'.route('matriz.delete',['id'=>$col->id]).'" class="btn btn-outline-danger" title="Eliminar "><i class="fa fa-times"></i></a>';
                 }
+
                 return $btn;
             })
             ->rawColumns(['acciones'])

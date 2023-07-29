@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Actividad;
 use App\Models\Candidato;
+use App\Models\Formulario;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
+
+use function PHPUnit\Framework\isEmpty;
 
 class ActividadController extends Controller
 {
@@ -211,13 +215,48 @@ class ActividadController extends Controller
     public function getUserInfo(Request $request){
         $output = ['status'=>0,'msg'=>'Usted no se encuentra registrado, por favor comuniquese con el administrador del sistema'];
         if($this->validate_user($request->cedula)){
-            $info_user = User::select('users.identificacion as identificacion', 'users.name as nombre', 'info_users.direccion as direccion', 'info_users.telefono as telefono', 'referido.name as referido')
+            $info_user = User::select('users.foto as foto','users.identificacion as identificacion', 'users.name as nombre', 'info_users.direccion as direccion', 'info_users.telefono as telefono', 'referido.name as referido')
             ->leftJoin('info_users', 'users.info_id', '=', 'info_users.id')
             ->leftJoin('users as referido', 'info_users.referido_id', '=', 'referido.id')
             ->where('users.identificacion', $request->cedula)
             ->get();
 
             return $info_user;
+        }
+        else{
+            return $output;
+        }
+    }
+
+    public function getStatistic(Request $request){
+        $output = ['status'=>0,'msg'=>'No se encuentra informacion del usuario solicitado'];
+        if($this->validate_user($request->cedula)){
+            $actividades = $this->model::selectRaw('users.name as nombre, actividades.estado as estado, COUNT(*) as cantidad')
+            ->leftJoin('users', 'actividades.id_user', '=', 'users.id')
+            ->leftJoin('info_users', 'users.info_id', '=', 'info_users.id')
+            ->where('users.identificacion', $request->cedula)
+            ->groupBy('users.name', 'actividades.estado')
+            ->get();
+
+            return $actividades;
+        }
+        else{
+            return $output;
+        }
+    }
+    public function getStatisticVotos(Request $request){
+        $output = ['status'=>0,'msg'=>'No se encuentra informacion del candidato solicitado'];
+        
+            $votos = Formulario::selectRaw('users.name as nombre, COUNT(*) as cantidad')
+            ->leftJoin('users', 'formularios.propietario_id', '=', 'users.id')
+            ->where('formularios.candidato_id', $request->candidato)
+            ->where('users.identificacion',"=",$request->cedula)
+            ->groupBy('users.name')
+            ->get();
+
+            
+        if(!$votos->isEmpty()){
+            return $votos;
         }
         else{
             return $output;
@@ -265,17 +304,19 @@ class ActividadController extends Controller
         $actividades->join('users', 'actividades.id_user', '=', 'users.id')
             ->join('info_users','users.info_id','=','info_users.id')
             ->select('actividades.id as id','actividades.fecha_actividad as fecha','actividades.descripcion_actividad as descripcion','actividades.evidencia as evidencia',
-                    'users.name as nombre','info_users.direccion as direccion','info_users.telefono as telefono','actividades.estado as estado')
-            ->orderBy('actividades.id');
+                    'users.identificacion','users.name as nombre','info_users.direccion as direccion','info_users.telefono as telefono','actividades.estado as estado',
+                    DB::raw('(SELECT COUNT(*) FROM actividades AS sub JOIN users AS us ON sub.id_user = us.id where
+                    us.identificacion = users.identificacion) AS cantidad'))
+            ->groupBy('users.identificacion','actividades.id');
 
             return DataTables::eloquent($actividades)
             ->addColumn('acciones', function ($col) {
                 $btn =  '<a href="'.route('actividad.show',['id'=>$col->id]).'" class="btn btn-outline-secondary" title="Ver "><i class="fa fa-eye"></i></a>';
                 $btn .= '<a href="'.route('actividad.edit',['id'=>$col->id]).'" class="btn btn-outline-primary m-2" title="Editar "><i class="fa fa-edit"></i></a>';
                 if (Auth::user()->hasRole('administrador')) {  
-                    $btn .= '<a href="'.route('actividad.delete',['id'=>$col->id]).'"class="btn btn-outline-danger" title="Eliminar"><i class="fa fa-times"></i></a>';
+                    $btn .= '<a href="'.route('actividad.delete',['id'=>$col->id]).'"class="btn btn-outline-dark" title="Eliminar"><i class="fa fa-times"></i></a>';
                     if($col->estado==1){
-                        $btn .= '<a href="'.route('actividad.status',['id'=>$col->id,'status'=>0]).'"class="btn btn-outline-danger m-2"  title="Desaprobar"><i class="fa fa-ban"></i></a>';
+                        $btn .= '<a href="'.route('actividad.status',['id'=>$col->id,'status'=>0]).'"class="btn btn-outline-dark m-2"  title="Desaprobar"><i class="fa fa-ban"></i></a>';
                     }
                     else{
                         $btn .= '<a href="'.route('actividad.status',['id'=>$col->id,'status'=>1]).'"class="btn btn-outline-success m-2"  title="Aprobar"><i class="fa fa-check"></i></a>';

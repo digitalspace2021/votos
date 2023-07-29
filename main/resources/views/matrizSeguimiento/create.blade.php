@@ -105,7 +105,7 @@
                         <input type="hidden" name="datesInputCall" id="datesInputCall"><!-- save array to send to controller -->
                         <div id="obsCall_content">
                             <label for="">Observaciones</label><br>
-                            <textarea name="" id="obsCall" cols="70" rows="3" ></textarea>
+                            <textarea name="" id="obsCall" cols="70" rows="3" ></textarea><br>
                             <button class="btn btn-primary" type="button" onclick="addDate('datesLabelCall','date_call','datesInputCall','call','obsCall','obsInputCall','accordionCall')">add</button>
                             <button class="btn btn-danger" type="button" onclick="deleteDate('datesLabelCall','date_call','datesInputCall','call','obsCall','obsInputCall','accordionCall')">del</button>
                             <input type="hidden" name="obsInputCall" id="obsInputCall" >
@@ -139,7 +139,7 @@
                         <input type="hidden" name="datesInputVisit" id="datesInputVisit">
                         <div id="obsvisit_content">
                             <label for="">Observaciones</label><br>
-                            <textarea name="" id="obsVisit" cols="70" rows="3" ></textarea>
+                            <textarea name="" id="obsVisit" cols="70" rows="3" ></textarea><br>
                             <button class="btn btn-primary" type="button" onclick="addDate('datesLabelVisit','date_visit','datesInputVisit','visit','obsVisit','obsInputVisit','accordionVisit')">add</button>
                             <button class="btn btn-danger" type="button" onclick="deleteDate('datesLabelVisit','date_visit','datesInputVisit','visit','obsVisit','obsInputVisit','accordionVisit')">del</button>
                             <input type="hidden" name="obsInputVisit" id="obsInputVisit" >

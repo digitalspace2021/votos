@@ -87,12 +87,12 @@
       </div>
 
         <div class="row mt-5">
-            @if (Auth::user()->hasRole(['administrador']))
+            @if (Auth::user()->hasRole(['administrador']) || Auth::user()->hasRole(['callcenter']))
                 <div class="col-10">
                     <a id="btnExport" class="btn  btn-sm btn-success">Exportar</a>
                 </div>
             @endif
-            @if (Auth::user()->hasRole(['administrador', 'simple']))
+            @if (Auth::user()->hasRole(['administrador', 'simple']) || Auth::user()->hasRole(['callcenter']))
                 <div class="col-2 mb-2 text-center">
                     <a href="{{ route('alerta.persona') }}" class="btn  btn-sm btn-success">Alertas por persona</a>
                 </div>
@@ -157,8 +157,8 @@
             nombre = document.getElementById('inputNombre').value;
             color = document.getElementById('selectColor').value;
             
-            //exportMatriz(candidato,pregunta,cedula,comuna,barrio,corregimiento); 
-            console.log('Opción seleccionada: ' + candidato);
+            exportAlerta(cedula, nombre, color); 
+           
         });
         
     });
@@ -210,26 +210,24 @@
     }
 
     //function generate XLS
-    function exportMatriz(candidato,pregunta,cedula,comuna,barrio,corregimiento){
+    function exportAlerta(cedula, nombre, color){
         $.ajax({
-            url: "{{ route('export.matriz') }}", 
+            url: "{{ route('export.alerta') }}", 
             method: 'GET',
             xhrFields: {
                 responseType: 'blob' // Indicate that the response is of type Blob
             },
             data: {
                     // Data to send
-                    candidato: candidato,
-                    pregunta: pregunta,
                     cedula: cedula,
-                    comuna: comuna,
-                    barrio: barrio,
-                    corregimiento: corregimiento       
+                    nombre: nombre,
+                    color: color,
+                      
             },
             success: function(response) {
                 var downloadLink = document.createElement('a');
                 downloadLink.href = URL.createObjectURL(response);
-                downloadLink.download = 'matrizSeguimiento.xlsx'; // File name to download
+                downloadLink.download = 'Alerta.xlsx'; // File name to download
 
                 // Add the link to the document and click it to start the download
                 document.body.appendChild(downloadLink);
@@ -246,4 +244,5 @@
 
     }
 </script>
+
 @endsection

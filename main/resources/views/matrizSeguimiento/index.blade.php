@@ -94,12 +94,12 @@
       </div>
 
         <div class="row mt-5">
-            @if (Auth::user()->hasRole(['administrador']))
+            @if (Auth::user()->hasRole(['administrador']) || Auth::user()->hasRole(['callcenter']))
                 <div class="col-10">
                     <a id="btnExport" class="btn  btn-sm btn-success">Exportar</a>
                 </div>
             @endif
-            @if (Auth::user()->hasRole(['administrador', 'simple']))
+            @if (Auth::user()->hasRole(['administrador', 'simple']) || Auth::user()->hasRole(['callcenter']))
                 <div class="col-2 mb-2 text-center">
                     <a href="{{ route('matriz.create') }}" class="btn  btn-sm btn-success">Crear Seguimiento</a>
                 </div>
