@@ -74,7 +74,7 @@
                             @foreach ($users as $item)
                                 <option value="{{ $item->id }}"
                                     @php
-                                        $referido = $info->referido ?? null;
+                                        $referido = $info->referido_id ?? null;
                                     @endphp
                                     @if ($item->id == $referido)
                                         selected
