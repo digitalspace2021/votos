@@ -95,13 +95,15 @@
                                         </ul>
                                     </li>
                                 </ul>
+                                @if (!Auth::user()->hasRole('callcenter'))
                                 <a class="me-3 py-2 text-dark text-decoration-none btn-hover"
                                     href="{{ auth()->check() ? route('problems.index') : route('problems.create') }}"><i class="fa fa-users" aria-hidden="true"></i> Posibles Votantes</a>
+                                @endif
                                 @if (Auth::user()->hasRole('administrador'))
                                     <a class="me-3 py-2 text-dark text-decoration-none btn-hover" href="{{ route('usuarios') }}"><i class="fa fa-user" aria-hidden="true"></i> Usuarios</a>
                                 @endif
                                 <!-- Add by marco Marin 30-06-2023-->
-                                @if (Auth::user()->hasRole('administrador'))
+                                @if (Auth::user()->hasRole('administrador') || Auth::user()->hasRole('callcenter'))
                                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle btn-hover" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -133,7 +135,7 @@
                                     <a class="me-3 py-2 text-dark text-decoration-none btn-hover" href="{{ route('cargos') }}"><i class="fa fa-list-ol" aria-hidden="true"></i> Cargos</a>
                                 @endif
 
-                                @if (Auth::user()->hasRole('administrador'))
+                                @if (Auth::user()->hasRole('administrador') || Auth::user()->hasRole('callcenter'))
                                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle btn-hover" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -142,6 +144,7 @@
                                         <ul class="dropdown-menu">
                                         <li><a class="dropdown-item btn-hover" href="{{ url('statitics') }}">Estadisticas Generales</a></li>
                                         <li><a class="dropdown-item btn-hover" href="{{ route('statistics') }}">Estadisticas Seguimiento</a></li>
+                                        <li><a class="dropdown-item btn-hover" href="{{ route('actividad.statistics') }}">Estadisticas Seguimiento Persona</a></li>
                                         <li><a class="dropdown-item btn-hover" href="{{ route('ediles.statistics') }}">Estadisticas Ediles</a></li>
                                         <li><a class="dropdown-item btn-hover" href="{{ route('asambleistas.statistics') }}">Estadisticas Asambleistas</a></li>
                                         </ul>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\AlertaExport;
 use App\Exports\FormularioExport;
 use App\Exports\MatrizSeguimientoExport;
 use App\Imports\FormImport;
@@ -89,5 +90,9 @@ class FileManagementController extends Controller
     //for matriz de seguimiento
     public function exportMatrizSeguimiento(Request $request){
         return Excel::download(new MatrizSeguimientoExport($request->candidato,$request->pregunta,$request->cedula,$request->comuna,$request->barrio,$request->corregimiento), 'matrizSeguimiento.xlsx');
+    }
+    //for alertas
+    public function exportAlerta(Request $request){
+        return Excel::download(new AlertaExport($request->cedula,$request->nombre,$request->color), 'Alerta.xlsx');
     }
 }

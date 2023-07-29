@@ -167,13 +167,17 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/actividades/{id}/update',[ActividadController::class,'update'])->name('actividad.update');
     Route::get('/actividades/{id}/delete',[ActividadController::class,'destroy'])->name('actividad.delete');
     Route::get('/actividades/statisticsIndex',[ActividadController::class,'statisticsIndex'])->name('actividad.statistics');
-    
+    Route::get('/actividades/userInfo',[ActividadController::class,'getUserInfo'])->name('actividad.userInfo');
+    Route::get('/actividades/statistics',[ActividadController::class,'getStatistic'])->name('statistics.actividad');
+    Route::get('/actividades/statisticsVotos',[ActividadController::class,'getStatisticVotos'])->name('statistics.votos');
     //Alertas
     Route::get('/alertas/index',[AlertaController::class,'index'])->name('alerta.index');
     Route::get('/alertas/tabla',[AlertaController::class,'tabla'])->name('alerta.tabla');
     Route::get('/alertas/persona',[AlertaController::class,'getByPerson'])->name('alerta.persona');
     Route::get('/alertas/userForm',[AlertaController::class,'getUserForm'])->name('alerta.form');
     Route::get('/alertas/getAlert',[AlertaController::class,'getAlert'])->name('alerta.grave');
+    //exportar alertas
+    Route::get('/export/alertas', [FileManagementController::class, 'exportAlerta'])->name('export.alerta');
     /*  */
     Route::get('/oportunidades/{id}/edit', [ProblemController::class, 'edit'])->name('problems.edit');
     Route::get('/oportunidades/{id}/delete', [ProblemController::class, 'destroy'])->name('problems.destroy');

@@ -11,6 +11,48 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
     <!-- Or for RTL support -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.rtl.min.css" />
+
+    <style>
+        /* Rmplazar la clase table de bootstrap */
+        /* Estilos personalizados para la nueva clase "custom-table" */
+    .custom-table {
+      width: 100%;
+      margin-bottom: 1rem;
+      color: #212529;
+      /* Agrega aquí tus estilos personalizados para la nueva clase "custom-table" */
+    }
+    
+    .custom-table th,
+    .custom-table td {
+      padding: 0.75rem;
+      vertical-align: top;
+      border-top: 1px solid #dee2e6;
+    }
+    
+    .custom-table thead th {
+      vertical-align: bottom;
+      border-bottom: 2px solid #dee2e6;
+    }
+    
+    .custom-table tbody + tbody {
+      border-top: 2px solid #dee2e6;
+    }
+    
+    .custom-table-sm th,
+    .custom-table-sm td {
+      padding: 0.3rem;
+    }
+    
+    /* Estilos para la nueva clase "custom-table" en variantes "striped" y "hover" */
+    .custom-table-striped tbody tr:nth-of-type(odd) {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+    
+    .custom-table-hover tbody tr:hover {
+      background-color: rgba(0, 0, 0, 0.075);
+    }
+    
+    </style>
 @endsection
 
 @section('cabecera')
@@ -22,7 +64,7 @@
 
     <div class="container">
         <div class="row">
-            @if (Auth::user()->hasRole(['administrador']))
+            @if (Auth::user()->hasRole(['administrador']) || Auth::user()->hasRole(['callcenter']))
             <div class="col">
                 <label for="">Por Cedula</label>
                 <input class="form-control" type="number" name="inputCedula" id="inputCedula">
@@ -34,7 +76,7 @@
             </div>
         </div>
         <div class="row">
-            @if (Auth::user()->hasRole(['administrador']))
+            @if (Auth::user()->hasRole(['administrador']) || Auth::user()->hasRole(['callcenter']))
             <div class="col">
                 <label for="">Por Nombre / Apellido</label>
                 <input class="form-control" type="text" name="inputNombre" id="inputNombre">   
@@ -47,7 +89,7 @@
 
         <div class="row mt-5">
             <div class="col-10 mb-2 text-center"></div>
-                @if (Auth::user()->hasRole(['administrador']) || Auth::user()->hasRole(['simple']))
+                @if (Auth::user()->hasRole(['administrador']) || Auth::user()->hasRole(['simple']) || Auth::user()->hasRole(['callcenter']))
                     <div class="col-2 mb-2 text-center">
                         <a href="{{ route('actividad.create') }}" class="btn  btn-sm btn-success">Crear Actividad</a>
                     </div>
@@ -60,7 +102,7 @@
 @section('cuerpo')
     <div class="container">
         <div class="table-responsive">
-            <table class="table text-center" id="tabla-actividades">
+            <table class="custom-table text-center" id="tabla-actividades">
                 <thead>
                     <tr>
                         <th>Fecha Actividad</th>
@@ -128,7 +170,19 @@
                     { data: 'direccion', name: 'direccion' },
                     { data: 'telefono', name: 'telefono' },
                     { data: 'acciones', name: 'acciones'}
-                ]
+                ],
+                rowCallback: function(row, data, dataIndex) {
+                    const alert = data.cantidad;
+                    if (alert <= 3 && alert !=0) {
+                        $(row).addClass('bg-danger text-light');
+                    } 
+                    else if(alert >=4 && alert <=8){
+                        $(row).addClass('bg-warning text-light');
+                    }
+                    else {
+                        $(row).addClass('bg-success text-light');
+                    }
+                }
             });
         }
 
@@ -139,4 +193,5 @@
         return /\.(jpg|jpeg|png|gif)$/i.test(url);  
     }
     </script>
+    
 @endsection
