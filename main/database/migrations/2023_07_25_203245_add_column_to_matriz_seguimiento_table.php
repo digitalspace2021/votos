@@ -16,6 +16,10 @@ class AddColumnToMatrizSeguimientoTable extends Migration
         Schema::table('matriz_seguimiento', function (Blueprint $table) {
             $table->json('obs_cuatro')->nullable()->default(null);
             $table->json('obs_cinco')->nullable()->default(null);
+            $table->boolean('respuesta_ocho');
+            $table->boolean('respuesta_nueve');
+            $table->boolean('respuesta_diez');
+            
         });
     }
 
@@ -29,6 +33,10 @@ class AddColumnToMatrizSeguimientoTable extends Migration
         Schema::table('matriz_seguimiento', function (Blueprint $table) {
             $table->dropColumn('obs_cuatro');
             $table->dropColumn('obs_cinco');
+            $table->dropColumn('respuesta_ocho');
+            $table->dropColumn('respuesta_nueve');
+            $table->dropColumn('respuesta_diez');
+            
         });
     }
 }

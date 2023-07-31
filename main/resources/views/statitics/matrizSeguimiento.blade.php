@@ -35,6 +35,9 @@
         <button class="btn btn-white btn-sm" onclick="viewChart(5)">visitas</button>
         <button class="btn btn-white btn-sm" onclick="viewChart(6)">PuestoDeVotacion</button>
         <button class="btn btn-white btn-sm" onclick="viewChart(7)">Participacion</button>
+        <button class="btn btn-white btn-sm" onclick="viewChart(8)">Candidato</button>
+        <button class="btn btn-white btn-sm" onclick="viewChart(9)">Reuniones</button>
+        <button class="btn btn-white btn-sm" onclick="viewChart(10)">Mensajes</button>
     </div>
 </div>
 @endsection
@@ -47,6 +50,9 @@
 <div id="contenedor5" style="display: none;"></div>
 <div id="contenedor6" style="display: none;"></div>
 <div id="contenedor7" style="display: none;"></div>
+<div id="contenedor8" style="display: none;"></div>
+<div id="contenedor9" style="display: none;"></div>
+<div id="contenedor10" style="display: none;"></div>
 @endsection
 
 @section('js-extra')
@@ -77,6 +83,9 @@
                         var sumarSi_cinco=0; var sumarNo_cinco=0;
                         var sumarSi_seis=0; var sumarNo_seis=0;
                         var sumarSi_siete=0; var sumarNo_siete=0;
+                        var sumarSi_ocho=0; var sumarNo_ocho=0;
+                        var sumarSi_nueve=0; var sumarNo_nueve=0;
+                        var sumarSi_diez=0; var sumarNo_diez=0;
 
                         //users
                         var usersSi_uno=[]; var usersNo_uno=[];
@@ -86,10 +95,13 @@
                         var usersSi_cinco=[]; var usersNo_cinco=[];
                         var usersSi_seis=[]; var usersNo_seis=[];
                         var usersSi_siete=[]; var usersNo_siete=[];
+                        var usersSi_ocho=[]; var usersNo_ocho=[];
+                        var usersSi_nueve=[]; var usersNo_nueve=[];
+                        var usersSi_diez=[]; var usersNo_diez=[];
 
                         response.forEach((obj, indice) => {
                             
-                            const res = ['respuesta_uno', 'respuesta_dos','respuesta_tres','respuesta_cuatro','respuesta_cinco','respuesta_seis','respuesta_siete'];
+                            const res = ['respuesta_uno', 'respuesta_dos','respuesta_tres','respuesta_cuatro','respuesta_cinco','respuesta_seis','respuesta_siete','respuesta_ocho','respuesta_nueve','respuesta_diez'];
 
                             for (let [clave, valor] of Object.entries(obj)) {
                             if (res.includes(clave)) {
@@ -164,6 +176,36 @@
                                         sumarNo_siete=sumarNo_siete+1;
                                     }
                                 }
+                                if(clave=='respuesta_ocho'){
+                                    if(valor==1){
+                                        usersSi_ocho.push(obj.usuario);
+                                        sumarSi_ocho=sumarSi_ocho+1;
+                                    }
+                                    else{
+                                        usersNo_ocho.push(obj.usuario);
+                                        sumarNo_ocho=sumarNo_ocho+1;
+                                    }
+                                }
+                                if(clave=='respuesta_nueve'){
+                                    if(valor==1){
+                                        usersSi_nueve.push(obj.usuario);
+                                        sumarSi_nueve=sumarSi_nueve+1;
+                                    }
+                                    else{
+                                        usersNo_nueve.push(obj.usuario);
+                                        sumarNo_nueve=sumarNo_nueve+1;
+                                    }
+                                }
+                                if(clave=='respuesta_diez'){
+                                    if(valor==1){
+                                        usersSi_diez.push(obj.usuario);
+                                        sumarSi_diez=sumarSi_diez+1;
+                                    }
+                                    else{
+                                        usersNo_diez.push(obj.usuario);
+                                        sumarNo_diez=sumarNo_diez+1;
+                                    }
+                                }
                             }
                             }
    
@@ -172,7 +214,8 @@
                         const responses = {response_uno:[sumarSi_uno,sumarNo_uno,'Se le enseño a votar?',usersSi_uno,usersNo_uno],response_dos:[sumarSi_dos,sumarNo_dos,'Se le pego publicidad?',usersSi_dos,usersNo_dos],
                                             response_tres:[sumarSi_tres,sumarNo_tres,'El dia de las elecciones tiene trasporte?',usersSi_tres,usersNo_tres],response_cuatro:[sumarSi_cuatro,sumarNo_cuatro,'Se le ha echo seguimiento constante?',usersSi_cuatro,usersNo_cuatro],
                                             response_cinco:[sumarSi_cinco,sumarNo_cinco,'Se le ha visitado?',usersSi_cinco,usersNo_cinco],response_seis:[sumarSi_seis,sumarNo_seis,'El lugar de votacion es cerca a su casa?',usersSi_seis,usersNo_seis],
-                                            response_siete:[sumarSi_siete,sumarNo_siete,'Ha participado en actividades de forma frecuente?',usersSi_siete,usersNo_siete]};
+                                            response_siete:[sumarSi_siete,sumarNo_siete,'Ha participado en actividades de forma frecuente?',usersSi_siete,usersNo_siete],response_ocho:[sumarSi_ocho,sumarNo_ocho,'Se sabe el numero del candidato?',usersSi_ocho,usersNo_ocho],
+                                            response_nueve:[sumarSi_nueve,sumarNo_nueve,'Realizo reuniones con familiares o amigos?',usersSi_nueve,usersNo_nueve],response_diez:[sumarSi_diez,sumarNo_diez,'Mensaje de texto el dia de elecciones?',usersSi_diez,usersNo_diez]};
                         //console.log(responses.response_uno[0]);
                         for (let clave in responses) {
                             generateChart(responses[clave][0],responses[clave][1],responses[clave][2],cont,responses[clave][3],responses[clave][4]);
@@ -268,6 +311,9 @@
             const contenedor5 = document.getElementById('contenedor5');
             const contenedor6 = document.getElementById('contenedor6');
             const contenedor7 = document.getElementById('contenedor7');
+            const contenedor8 = document.getElementById('contenedor8');
+            const contenedor9 = document.getElementById('contenedor9');
+            const contenedor10 = document.getElementById('contenedor10');
 
 
             if(response == 1){
@@ -278,6 +324,9 @@
                 contenedor5.style.display = 'none';
                 contenedor6.style.display = 'none';
                 contenedor7.style.display = 'none';
+                contenedor8.style.display = 'none';
+                contenedor9.style.display = 'none';
+                contenedor10.style.display = 'none';
             }
             if(response == 2){
                 contenedor2.style.display = 'block';
@@ -287,6 +336,9 @@
                 contenedor5.style.display = 'none';
                 contenedor6.style.display = 'none';
                 contenedor7.style.display = 'none';
+                contenedor8.style.display = 'none';
+                contenedor9.style.display = 'none';
+                contenedor10.style.display = 'none';
             }
             if(response == 3){
                 contenedor3.style.display = 'block';
@@ -296,6 +348,9 @@
                 contenedor5.style.display = 'none';
                 contenedor6.style.display = 'none';
                 contenedor7.style.display = 'none';
+                contenedor8.style.display = 'none';
+                contenedor9.style.display = 'none';
+                contenedor10.style.display = 'none';
             }
             if(response == 4){
                 contenedor4.style.display = 'block';
@@ -305,6 +360,9 @@
                 contenedor5.style.display = 'none';
                 contenedor6.style.display = 'none';
                 contenedor7.style.display = 'none';
+                contenedor8.style.display = 'none';
+                contenedor9.style.display = 'none';
+                contenedor10.style.display = 'none';
             }
             if(response == 5){
                 contenedor5.style.display = 'block';
@@ -314,6 +372,9 @@
                 contenedor2.style.display = 'none';
                 contenedor6.style.display = 'none';
                 contenedor7.style.display = 'none';
+                contenedor8.style.display = 'none';
+                contenedor9.style.display = 'none';
+                contenedor10.style.display = 'none';
             }
             if(response == 6){
                 contenedor6.style.display = 'block';
@@ -323,6 +384,9 @@
                 contenedor5.style.display = 'none';
                 contenedor2.style.display = 'none';
                 contenedor7.style.display = 'none';
+                contenedor8.style.display = 'none';
+                contenedor9.style.display = 'none';
+                contenedor10.style.display = 'none';
             }
             if(response == 7){
                 contenedor7.style.display = 'block';
@@ -332,6 +396,45 @@
                 contenedor5.style.display = 'none';
                 contenedor2.style.display = 'none';
                 contenedor6.style.display = 'none';
+                contenedor8.style.display = 'none';
+                contenedor9.style.display = 'none';
+                contenedor10.style.display = 'none';
+            }
+            if(response == 8){
+                contenedor8.style.display = 'block';
+                contenedor1.style.display = 'none';
+                contenedor3.style.display = 'none';
+                contenedor4.style.display = 'none';
+                contenedor5.style.display = 'none';
+                contenedor2.style.display = 'none';
+                contenedor6.style.display = 'none';
+                contenedor7.style.display = 'none';
+                contenedor9.style.display = 'none';
+                contenedor10.style.display = 'none';
+            }
+            if(response == 9){
+                contenedor9.style.display = 'block';
+                contenedor1.style.display = 'none';
+                contenedor3.style.display = 'none';
+                contenedor4.style.display = 'none';
+                contenedor5.style.display = 'none';
+                contenedor2.style.display = 'none';
+                contenedor6.style.display = 'none';
+                contenedor8.style.display = 'none';
+                contenedor7.style.display = 'none';
+                contenedor10.style.display = 'none';
+            }
+            if(response == 10){
+                contenedor10.style.display = 'block';
+                contenedor1.style.display = 'none';
+                contenedor3.style.display = 'none';
+                contenedor4.style.display = 'none';
+                contenedor5.style.display = 'none';
+                contenedor2.style.display = 'none';
+                contenedor6.style.display = 'none';
+                contenedor8.style.display = 'none';
+                contenedor9.style.display = 'none';
+                contenedor7.style.display = 'none';
             }
         }
     </script>

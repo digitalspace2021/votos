@@ -122,6 +122,9 @@
                 <th>Se le ha visitado?</th>
                 <th>Lugar votacion cerca?</th>
                 <th>Participacion en actividades?</th>
+                <th>Sabe numero candidato?</th>
+                <th>Reuniones familiares, amigos?</th>
+                <th>Mensaje de texto?</th>
                 <!--<th>Accion</th>-->
             </tr>
         </thead>
@@ -192,6 +195,9 @@
                 { data: 'res_cinco', name: 'res_cinco', render: function(data) {return '<span >' +((data == 1) ? 'SI' : 'NO')+ '</span>';} },
                 { data: 'res_seis', name: 'res_seis', render: function(data) {return '<span >' +((data == 1) ? 'SI' : 'NO')+ '</span>';} },
                 { data: 'res_siete', name: 'res_siete', render: function(data) { return '<span >' +((data == 1) ? 'SI' : 'NO')+ '</span>';} },
+                { data: 'res_ocho', name: 'res_ocho', render: function(data) {return '<span >' +((data == 1) ? 'SI' : 'NO')+ '</span>';} },
+                { data: 'res_nueve', name: 'res_nueve', render: function(data) {return '<span >' +((data == 1) ? 'SI' : 'NO')+ '</span>';} },
+                { data: 'res_diez', name: 'res_diez', render: function(data) {return '<span >' +((data == 1) ? 'SI' : 'NO')+ '</span>';} },
                 //{ data: 'acciones', name: 'acciones'}
             ],
             rowCallback: function(row, data, dataIndex) {
