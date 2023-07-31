@@ -62,9 +62,12 @@
                         <label for="genero" class="form-label">Genero</label>
                         <select class="form-select" name="genero" id="genero" required readonly>
                             <option value="">Seleccione un genero</option>
-                            <option value="masculino" {{$info->genero ?? null == 'masculino' ? 'selected' : ''}}>Masculino</option>
-                            <option value="femenino" {{$info->genero ?? null == 'femnino' ? 'selected' : ''}}>Femenino</option>
-                            <option value="Otro" {{$info->genero ?? null == 'Otro' ? 'selected' : ''}}>Otro</option>
+                            @php
+                                $genero = $info->genero ?? null;
+                            @endphp
+                            <option value="masculino" {{$genero == 'masculino' ? 'selected' : ''}}>Masculino</option>
+                            <option value="femenino" {{$genero == 'femnino' ? 'selected' : ''}}>Femenino</option>
+                            <option value="Otro" {{$genero == 'Otro' ? 'selected' : ''}}>Otro</option>
                         </select>
                     </div>
                     <div class="col-md-6">
