@@ -166,8 +166,11 @@
                             <label for="tipo_zona" class="form-label">Tipo de ubicacion</label>
                             <select name="tipo_zona" id="tipo_zona" class="form-control" required>
                                 <option value="0">Seleccion el tipo de zona</option>
-                                <option value="Comuna" {{$info->tipo_zona ?? null == 'Comuna' ? 'selected' : ''}}>Comuna</option>
-                                <option value="Corregimiento" {{$info->tipo_zona ?? null == 'Corregimiento' ? 'selected' : ''}}>Corregimiento</option>
+                                @php
+                                    $tipo_zona = $info->tipo_zona ?? null;
+                                @endphp
+                                <option value="Comuna" {{$tipo_zona == 'Comuna' ? 'selected' : ''}}>Comuna</option>
+                                <option value="Corregimiento" {{$tipo_zona == 'Corregimiento' ? 'selected' : ''}}>Corregimiento</option>
                             </select>
                             <div class="invalid-feedback">
                                 Seleccion un tipo de zona valido
