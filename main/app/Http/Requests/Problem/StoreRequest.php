@@ -33,7 +33,7 @@ class StoreRequest extends FormRequest
             'vinculo' => ['required'],
             'puesto' => ['required'],
             'descripcion' => ['required_if:check_problem,on'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:formularios,id,'. $this->id],
+            'email' => ['nullable', 'email', 'max:255', 'unique:formularios,id,'. $this->id],
             'genero' => ['required', 'string', 'in:Hombre,Mujer,Otro'],
             'edil' => ['required'],
             'cons' => ['required'],
