@@ -46,6 +46,9 @@
                 <option value="5">Se le ha visitado?</option>
                 <option value="6">El lugar de votacion es cerca a su casa?</option>
                 <option value="7">Ha participado en actividades de forma frecuente?</option>
+                <option value="8">Se sabe el numero del candidato?</option>
+                <option value="9">Realizo reuniones con familiares o amigos?</option>
+                <option value="10">Mensaje de texto el dia de las elecciones</option>
               </select>
         </div>
       </div>
@@ -129,6 +132,9 @@
                 <th>Se le ha visitado?</th>
                 <th>Lugar votacion cerca?</th>
                 <th>Participacion en actividades?</th>
+                <th>Sabe numero candidato?</th>
+                <th>Reuniones familiares, amigos?</th>
+                <th>Mensaje de texto?</th>
                 <th>Accion</th>
             </tr>
         </thead>
@@ -232,6 +238,9 @@
                 { data: 'res_cinco', name: 'res_cinco', render: function(data) {const colorClass = (data == 1) ? 'text-success' : 'text-danger'; return '<span class="' + colorClass + '">' +((data == 1) ? 'SI' : 'NO')+ '</span>';} },
                 { data: 'res_seis', name: 'res_seis', render: function(data) {const colorClass = (data == 1) ? 'text-success' : 'text-danger'; return '<span class="' + colorClass + '">' +((data == 1) ? 'SI' : 'NO')+ '</span>';} },
                 { data: 'res_siete', name: 'res_siete', render: function(data) {const colorClass = (data == 1) ? 'text-success' : 'text-danger'; return '<span class="' + colorClass + '">' +((data == 1) ? 'SI' : 'NO')+ '</span>';} },
+                { data: 'res_ocho', name: 'res_ocho', render: function(data) {const colorClass = (data == 1) ? 'text-success' : 'text-danger'; return '<span class="' + colorClass + '">' +((data == 1) ? 'SI' : 'NO')+ '</span>';} },
+                { data: 'res_nueve', name: 'res_nueve', render: function(data) {const colorClass = (data == 1) ? 'text-success' : 'text-danger'; return '<span class="' + colorClass + '">' +((data == 1) ? 'SI' : 'NO')+ '</span>';} },
+                { data: 'res_diez', name: 'res_diez', render: function(data) {const colorClass = (data == 1) ? 'text-success' : 'text-danger'; return '<span class="' + colorClass + '">' +((data == 1) ? 'SI' : 'NO')+ '</span>';} },
                 { data: 'acciones', name: 'acciones'}
             ]
         });

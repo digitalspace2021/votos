@@ -82,6 +82,9 @@ class MatrizSeguimientoController extends Controller
             'pregunta5' => 'required',
             'pregunta6' => 'required',
             'pregunta7' => 'required',
+            'pregunta8' => 'required',
+            'pregunta9' => 'required',
+            'pregunta10' => 'required',
         ]);
 
         $matriz= new MatrizSeguimiento();
@@ -98,6 +101,9 @@ class MatrizSeguimientoController extends Controller
         $matriz->respuesta_seis = $request->pregunta6;
         $matriz->respuesta_siete = $request->pregunta7;
         $matriz->fechas_siete = ($request->datesInputStake && $request->pregunta7 == 1) ? json_encode($request->datesInputStake) : NULL;
+        $matriz->respuesta_ocho = $request->pregunta8;
+        $matriz->respuesta_nueve = $request->pregunta9;
+        $matriz->respuesta_diez = $request->pregunta10;
         $matriz->save();
 
         Alert::success('Seguimiento', 'Se ha creado el registro con exito!');
@@ -192,6 +198,9 @@ class MatrizSeguimientoController extends Controller
             'pregunta5' => 'required',
             'pregunta6' => 'required',
             'pregunta7' => 'required',
+            'pregunta8' => 'required',
+            'pregunta9' => 'required',
+            'pregunta10' => 'required',
         ]);
         $matriz = $this->model::find($id);
         if (!$matriz) {
@@ -211,6 +220,9 @@ class MatrizSeguimientoController extends Controller
         $matriz->respuesta_seis = $request->pregunta6;
         $matriz->respuesta_siete = $request->pregunta7;
         $matriz->fechas_siete = ($request->datesInputStake && $request->pregunta7 == 1) ? json_encode($request->datesInputStake) : NULL;
+        $matriz->respuesta_ocho = $request->pregunta8;
+        $matriz->respuesta_nueve = $request->pregunta9;
+        $matriz->respuesta_diez = $request->pregunta10;
         $matriz->save();
 
         Alert::success('Seguimiento', 'Se ha actualizado el seguimiento con exito!');
@@ -244,6 +256,9 @@ class MatrizSeguimientoController extends Controller
             if($request->pregunta == 5){ $seguimientos->where('matriz_seguimiento.respuesta_cinco',1);}
             if($request->pregunta == 6){ $seguimientos->where('matriz_seguimiento.respuesta_seis',1);}
             if($request->pregunta == 7){ $seguimientos->where('matriz_seguimiento.respuesta_siete',1);}
+            if($request->pregunta == 8){ $seguimientos->where('matriz_seguimiento.respuesta_ocho',1);}
+            if($request->pregunta == 9){ $seguimientos->where('matriz_seguimiento.respuesta_nueve',1);}
+            if($request->pregunta == 10){ $seguimientos->where('matriz_seguimiento.respuesta_diez',1);}
         }
         if(!empty($request->cedula)){$seguimientos->where('formularios.identificacion',$request->cedula);}
         if(!empty($request->comuna)){
@@ -265,7 +280,8 @@ class MatrizSeguimientoController extends Controller
             ->select('matriz_seguimiento.id as id','matriz_seguimiento.formulario_id as id_formulario','formularios.identificacion as identificacion', 'formularios.nombre as nombre','users.name as creador',
                         'candidatos.name as candidato','formularios.email as email','formularios.direccion as direccion','formularios.telefono as telefono',
                         'matriz_seguimiento.respuesta_uno as res_uno', 'matriz_seguimiento.respuesta_dos as res_dos','matriz_seguimiento.respuesta_tres as res_tres',
-                        'matriz_seguimiento.respuesta_cuatro as res_cuatro','matriz_seguimiento.respuesta_cinco as res_cinco','matriz_seguimiento.respuesta_seis as res_seis','matriz_seguimiento.respuesta_siete as res_siete')
+                        'matriz_seguimiento.respuesta_cuatro as res_cuatro','matriz_seguimiento.respuesta_cinco as res_cinco','matriz_seguimiento.respuesta_seis as res_seis','matriz_seguimiento.respuesta_siete as res_siete',
+                        'matriz_seguimiento.respuesta_ocho as res_ocho','matriz_seguimiento.respuesta_nueve as res_nueve','matriz_seguimiento.respuesta_diez as res_diez')
             
             ->orderBy('matriz_seguimiento.id');
 

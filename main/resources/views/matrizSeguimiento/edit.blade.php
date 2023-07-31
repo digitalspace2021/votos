@@ -73,7 +73,7 @@
                 </div>
             </div>
     
-            <div class="row">
+            <div class="row mt-2">
                 <div class="col">
                     <label for="">El dia de las elecciones tiene trasporte?</label>
                     <div class="input-group-text">
@@ -115,7 +115,7 @@
                 </div>    
             </div>
     
-            <div class="row">
+            <div class="row mt-2">
                 <div class="col">
                     <label for="">Se le ha visitado?</label>
                     <div class="input-group-text">
@@ -156,7 +156,7 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row mt-2">
                 <div class="col">
                     <label for="">Ha participado en actividades de forma frecuente?</label>
                     <div class="input-group-text">
@@ -179,6 +179,36 @@
                     </div>
 
                 </div>
+                <div class="col">
+                    <label for="">Se sabe el numero del candidato?</label>
+                    <div class="input-group-text">
+                        <label for="">Si</label>
+                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta8" value="1" class="grupo8" @if ($seguimientos[0]->respuesta_ocho == 1) checked @endif>
+                        <label for="">No</label>
+                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta8" value="0" class="grupo8" @if ($seguimientos[0]->respuesta_ocho == 0) checked @endif>
+                      </div>
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="col">
+                    <label for="">Realizo reuniones con familiares o amigos?</label>
+                    <div class="input-group-text">
+                        <label for="">Si</label>
+                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta9" value="1" class="grupo9" @if ($seguimientos[0]->respuesta_nueve == 1) checked @endif>
+                        <label for="">No</label>
+                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta9" value="0" class="grupo9" @if ($seguimientos[0]->respuesta_nueve == 0) checked @endif>
+                      </div>
+                </div>
+                <div class="col">
+                    <label for="">Mensaje de texto el dia de elecciones?</label>
+                    <div class="input-group-text">
+                        <label for="">Si</label>
+                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta10" value="1" class="grupo10" @if ($seguimientos[0]->respuesta_diez == 1) checked @endif>
+                        <label for="">No</label>
+                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta10" value="0" class="grupo10" @if ($seguimientos[0]->respuesta_diez == 0) checked @endif>
+                      </div>
+                </div>
             </div>
         </div>
 
@@ -194,7 +224,7 @@
     <script>
         //control de los checkBox
         $(document).ready(function() {
-            $('.grupo1, .grupo2, .grupo3, .grupo4, .grupo5, .grupo6, .grupo7').on('change', function() {
+            $('.grupo1, .grupo2, .grupo3, .grupo4, .grupo5, .grupo6, .grupo7, .grupo8, .grupo9, .grupo10').on('change', function() {
                 // Obtenemos el grupo al que pertenece el checkbox que cambió de estado
                 var grupo = $(this).attr('class');
 

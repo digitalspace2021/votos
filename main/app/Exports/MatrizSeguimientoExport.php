@@ -100,7 +100,10 @@ class MatrizSeguimientoExport implements FromCollection, WithHeadings, ShouldQue
             DB::raw("CASE matriz_seguimiento.respuesta_cuatro WHEN 1 THEN 'Si' WHEN 0 THEN 'No' END as res_cuatro"),
             DB::raw("CASE matriz_seguimiento.respuesta_cinco WHEN 1 THEN 'Si' WHEN 0 THEN 'No' END as res_cinco"),
             DB::raw("CASE matriz_seguimiento.respuesta_seis WHEN 1 THEN 'Si' WHEN 0 THEN 'No' END as res_seis"),
-            DB::raw("CASE matriz_seguimiento.respuesta_siete WHEN 1 THEN 'Si' WHEN 0 THEN 'No' END as res_siete")
+            DB::raw("CASE matriz_seguimiento.respuesta_siete WHEN 1 THEN 'Si' WHEN 0 THEN 'No' END as res_siete"),
+            DB::raw("CASE matriz_seguimiento.respuesta_ocho WHEN 1 THEN 'Si' WHEN 0 THEN 'No' END as res_ocho"),
+            DB::raw("CASE matriz_seguimiento.respuesta_nueve WHEN 1 THEN 'Si' WHEN 0 THEN 'No' END as res_nueve"),
+            DB::raw("CASE matriz_seguimiento.respuesta_diez WHEN 1 THEN 'Si' WHEN 0 THEN 'No' END as res_diez")
         );
 
         return $seguimientos->get();
@@ -124,7 +127,10 @@ class MatrizSeguimientoExport implements FromCollection, WithHeadings, ShouldQue
             'Se le ha echo seguimiento Constante?',
             'Se le ha visitado?',
             'El lugar de votacion es cerca a su casa?',
-            'Ha participado en actividades de forma frecuente?'
+            'Ha participado en actividades de forma frecuente?',
+            'Se sabe el numero del candidato?',
+            'Realizo reuniones con familiares o amigos?',
+            'Mensaje de texto el dia de elecciones?'
         ];
     }
 
