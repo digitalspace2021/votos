@@ -18,7 +18,7 @@ class TablaFormularios extends Migration
             $table->unsignedBigInteger('propietario_id');
             $table->string('nombre');
             $table->string('apellido');
-            $table->string('email');
+            $table->string('email')->nullable();
             $table->string('telefono');
             $table->string('genero');
             $table->string('direccion');
