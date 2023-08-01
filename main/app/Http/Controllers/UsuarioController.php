@@ -57,7 +57,7 @@ class UsuarioController extends Controller
             'email' => 'required|email|max:255|unique:users,email',
             'rol' => 'required',
             'password' => 'required|confirmed|min:6',
-            'identificacion' => 'required|unique:users,identificacion|min:8|max:15',
+            'identificacion' => 'required|unique:users,identificacion|min:7|max:15',
             'foto' => 'image|mimes:jpeg,png,jpg,gif,svg|nullable',
             'tipo_zona' => 'required',
             'zona' => 'required'
@@ -161,7 +161,7 @@ class UsuarioController extends Controller
         }
 
         $request->validate([
-            'identificacion' => 'required|min:8|max:15|unique:users,identificacion,' . $usuario->id,
+            'identificacion' => 'required|min:7|max:15|unique:users,identificacion,' . $usuario->id,
             'nombre' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . $usuario->id,
             'rol' => 'required',
