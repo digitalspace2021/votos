@@ -57,10 +57,11 @@ class UsuarioController extends Controller
             'email' => 'required|email|max:255|unique:users,email',
             'rol' => 'required',
             'password' => 'required|confirmed|min:6',
-            'identificacion' => 'required|unique:users,identificacion|min:8|max:15',
+            'identificacion' => 'required|unique:users,identificacion|min:7|max:15',
             'foto' => 'image|mimes:jpeg,png,jpg,gif,svg|nullable',
             'tipo_zona' => 'required',
-            'zona' => 'required'
+            'zona' => 'required',
+            'telefono' => 'required|min:7|max:15',
         ]);
 
         $usuario = new $this->model();
@@ -78,6 +79,8 @@ class UsuarioController extends Controller
                 'zona' => $request->zona,
                 'observaciones' => $request->descripcion,
                 'referido_id' => $request->referido,
+                'puesto' => $request->puesto_votacion,
+                'mesa' => $request->mesa,
                 'created_at' => Carbon::now(),
             ]);
 
@@ -146,8 +149,26 @@ class UsuarioController extends Controller
         $info = DB::table('info_users')->where('id', $usuario->info_id)->first();
         $users = DB::table('users')->get();
 
+        $puestos = DB::table('puestos_votacion AS pv')
+            ->select(DB::raw("CONCAT('Puesto: ', COALESCE(pv.name, 'Sin información'), ', ', 
+                CASE
+                    WHEN pv.zone_type = 'Comuna' THEN CONCAT('Barrio: ', COALESCE(barrios.name, 'Sin información'))
+                    WHEN pv.zone_type = 'Corregimiento' THEN CONCAT('Vereda: ', COALESCE(veredas.name, 'Sin información'))
+                END) AS puesto_nombre, pv.id"))
+                /* after case */
+                /* , ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre */
+            ->leftJoin('barrios', function ($join) {
+                $join->on('pv.zone', '=', 'barrios.id')
+                    ->where('pv.zone_type', '=', 'Comuna');
+            })
+            ->leftJoin('veredas', function ($join) {
+                $join->on('pv.zone', '=', 'veredas.id')
+                    ->where('pv.zone_type', '=', 'Corregimiento');
+            })
+            ->get();
+
         $usuario->rol = implode(",", $usuario->getRoleNames()->toArray());
-        return view(trans($this->plural) . ".actualizar", compact('usuario', 'info', 'users'));
+        return view(trans($this->plural) . ".actualizar", compact('usuario', 'info', 'users', 'puestos'));
     }
 
     //diferents?
@@ -161,7 +182,7 @@ class UsuarioController extends Controller
         }
 
         $request->validate([
-            'identificacion' => 'required|min:8|max:15|unique:users,identificacion,' . $usuario->id,
+            'identificacion' => 'required|min:7|max:15|unique:users,identificacion,' . $usuario->id,
             'nombre' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . $usuario->id,
             'rol' => 'required',
@@ -186,6 +207,8 @@ class UsuarioController extends Controller
                 'tipo_zona' => $request->tipo_zona,
                 'zona' => $request->zona,
                 'observaciones' => $request->descripcion,
+                'puesto' => $request->puesto_votacion,
+                'mesa' => $request->mesa,
                 'referido_id' => $request->referido,
                 'updated_at' => Carbon::now(),
             ]);
