@@ -142,6 +142,37 @@
                             </div>
                         </div>
 
+                        <div class="col-md-6 mb-2">
+                            <div class="form-group">
+                                <label for="puesto_votacion" class="form-label">Puesto de votacion</label>
+                                <select name="puesto_votacion" id="puesto" class="form-select" required>
+                                    <option value="" selected disabled>Seleccione un puesto</option>
+                                    @foreach ($puestos as $puesto)
+                                    <option value="{{$puesto->puesto_nombre}}" 
+                                        {{old('puesto_votacion')==$puesto->puesto_nombre ? 'selected' : '' }}
+                                        puesto_id="{{$puesto->id}}">{{$puesto->puesto_nombre}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @error('puesto_votacion')
+                            <div class="text-danger">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+        
+                        <div class="col-md-6 mb-2">
+                            <label for="mesa" class="form-label">Mesa</label>
+                            <select name="mesa" id="mesa" class="form-select" required>
+                                <option value="" selected disabled>Seleccione una mesa</option>
+                            </select>
+                            {{-- @error('mesa')
+                            <div class="text-danger">
+                                {{ $message }}
+                            </div>
+                            @enderror --}}
+                        </div>
+
                         <div class="col-md-12">
                             <textarea name="descripcion" id="" cols="30" rows="5" class="form-control" placeholder="Descripcion del producto">{{old('descripcion')}}</textarea>
                         </div>
@@ -243,6 +274,26 @@
                     } else {
                         $("#label_zona").html('Barrio');
                     }
+                });
+
+                $('#puesto').select2();
+                $('#mesa').select2();
+
+                let mesas = "{{route('ut.get_mesas')}}";
+                $('#puesto').change(function(){
+                    let puesto_id = $(this).children("option:selected").attr('puesto_id');
+                    $('#mesa').empty();
+                    $.ajax({
+                        url: mesas,
+                        type: 'GET',
+                        data: {puesto_id: puesto_id},
+                        success: function(data){
+                            $('#mesa').append('<option value="" selected disabled>Seleccione una mesa</option>');
+                            $.each(data, function(i, item){
+                                $('#mesa').append('<option value="'+item.numero_mesa+'">'+item.numero_mesa+'</option>');
+                            });
+                        }
+                    });
                 });
             })
         </script>

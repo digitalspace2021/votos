@@ -110,6 +110,19 @@
                         </div>
                     </div>
 
+                    <div class="col-md-6 mb-2">
+                        <div class="form-group">
+                            <label for="puesto_votacion" id="puesto_votacion" class="form-label">Puesto de votacion</label>
+                            <input type="text" name="puesto_votacion" id="" class="form-control" value="{{$info->puesto ?? 'No establecida'}}" readonly required>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <div class="form-group">
+                            <label for="puesto_votacion" id="puesto_votacion" class="form-label">Mesa de votacion</label>
+                            <input type="text" name="puesto_votacion" id="" class="form-control" value="{{$info->mesa ?? 'No establecida'}}" readonly required>
+                        </div>
+                    </div>
+
                     <div class="col-md-12">
                         <textarea name="descripcion" id="" cols="30" rows="5" class="form-control" placeholder="Descripcion del producto" readonly>{{$info->direccion ?? ''}}</textarea>
                     </div>
