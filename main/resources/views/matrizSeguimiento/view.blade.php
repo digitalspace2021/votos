@@ -127,7 +127,7 @@
                     </div>
                     <div class="form-group mt-2 mb-2" id="visit5" @if ($seguimientos[0]->respuesta_cinco == 0) style="display: none;" @endif>
                         <label  for="">En que fecha se le ha visitado?</label><br>
-                        <label for="">Fechas Seleccionadas: {{$seguimientos[0]->fechas_cuatro}}</label>
+                        <label for="">Fechas Seleccionadas: {{$seguimientos[0]->fechas_cinco}}</label>
                     </div>
                     @php $observacionesVisit = explode(',', $seguimientos[0]->obs_cinco); $i=0; @endphp
                     <div class="accordion" id="accordionPanelsStayOpenExample">
@@ -195,7 +195,31 @@
                         <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta9" value="1" class="grupo9" @if ($seguimientos[0]->respuesta_nueve == 1) checked @endif disabled>
                         <label for="">No</label>
                         <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta9" value="0" class="grupo9" @if ($seguimientos[0]->respuesta_nueve == 0) checked @endif disabled>
-                      </div>
+                    </div>
+                    <div class="form-group mt-2 mb-2" id="visit5" @if ($seguimientos[0]->respuesta_nueve == 0) style="display: none;" @endif>
+                        <label  for="">En que fecha se le ha visitado?</label><br>
+                        <label for="">Fechas Seleccionadas: {{$seguimientos[0]->fechas_nueve}}</label>
+                    </div>
+                    @php $observacionesMeeting = explode(',', $seguimientos[0]->obs_nueve); $i=0; @endphp
+                    <div class="accordion" id="accordionPanelsStayOpenExample">
+                        @foreach ($observacionesMeeting as $obsMeeting)
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#obsMeeting{{$i}}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                Observacion
+                              </button>
+                            </h2>
+                            <div id="obsMeeting{{$i}}" class="accordion-collapse collapse show">
+                              <div class="accordion-body">
+                                {{$obsMeeting}}
+                              </div>
+                            </div>
+                          </div>
+                          @php $i++;  @endphp
+                        @endforeach
+                        
+                    </div>
+
                 </div>
                 <div class="col">
                     <label for="">Mensaje de texto el dia de elecciones?</label>

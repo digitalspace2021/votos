@@ -97,7 +97,10 @@ class UsuarioController extends Controller
 
         if ($request->rol == 'admin') {
             $usuario->assignRole('administrador');
-        } else {
+        }elseif($request->rol == 'callcenter') {
+            $usuario->assignRole('callcenter');
+        }
+        else {
             $usuario->assignRole('simple');
         }
 
@@ -244,9 +247,16 @@ class UsuarioController extends Controller
         if ($request->rol == 'admin') {
             $usuario->assignRole('administrador');
             $usuario->removeRole('simple');
-        } else {
+            $usuario->removeRole('callcenter');
+        }elseif($request->rol == 'callcenter') {
+            $usuario->assignRole('callcenter');
+            $usuario->removeRole('simple');
+            $usuario->removeRole('administrador');
+        }
+        else {
             $usuario->assignRole('simple');
             $usuario->removeRole('administrador');
+            $usuario->removeRole('callcenter');
         }
 
         Alert::success(trans($this->className), 'Se ha actualizado el usuario con exito!');

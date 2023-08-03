@@ -22,29 +22,34 @@
             <div class="col">
                 <label for="exampleFormControlInput1">Celula</label>
                 <input type="number" class="form-control" id="ID" name="ID" placeholder="123456789" required>
-                <input type="hidden" id="formulario_id" name="formulario_id" value="">
-              </div>
+                <input type="hidden" id="formulario_id" name="formulario_id" value="{{old('ID')}}">
+            </div>
+            @error('ID')
+                <div class="text-danger">
+                    {{$message}}
+                </div>
+            @enderror
               <div class="col">
                   <label for="exampleFormControlInput1">Nombre</label>
-                  <input type="text" class="form-control" id="name" name="name" placeholder="Su nombre" readonly>
+                  <input type="text" class="form-control" id="name" name="name" placeholder="Su nombre" value="{{old('name')}}" readonly>
               </div>
         </div>
         
         <div class="row">
             <div class="col">
                 <label for="exampleFormControlInput1">Direccion</label>
-                <input type="text" class="form-control" id="address" name="address" placeholder="Su direccion" readonly>
+                <input type="text" class="form-control" id="address" name="address" placeholder="Su direccion" value="{{old('address')}}" readonly>
             </div>
             <div class="col">
                 <label for="exampleFormControlInput1">Telefono</label>
-                <input type="number" class="form-control" id="phone" name="phone" placeholder="5555555" readonly>
+                <input type="number" class="form-control" id="phone" name="phone" placeholder="5555555" value="{{old('phone')}}" readonly>
             </div>
         </div>
         
         <div class="row">
             <div class="col">
                 <label for="exampleFormControlInput1">Referido</label>
-                <input type="text" class="form-control" id="referred" name="referred" placeholder="" readonly>
+                <input type="text" class="form-control" id="referred" name="referred" placeholder="" {{old('referred')}} readonly>
             </div>
         </div>
         <div class="text-center mt-2">
@@ -58,20 +63,30 @@
                     <label for="">Se le enseño a votar?</label>
                     <div class="input-group-text">
                         <label for="">Si</label>
-                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta1" value="1" class="grupo1">
+                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta1" value="1" class="grupo1"  @if(old('pregunta1') == '1') checked @endif>
                         <label for="">No</label>
-                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta1" value="0" class="grupo1">
+                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta1" value="0" class="grupo1" @if(old('pregunta1') == '0') checked @endif>
                       </div>
+                      @error('pregunta1')
+                            <div class="text-danger">
+                                Este campo es obligatorio
+                            </div>
+                      @enderror
                 </div>
         
                 <div class="col">
                     <label for="">Se le pego publicidad?</label>
                     <div class="input-group-text">
                         <label for="">Si</label>
-                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta2" value="1" class="grupo2">
+                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta2" value="1" class="grupo2" @if(old('pregunta2') == '1') checked @endif>
                         <label for="">No</label>
-                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta2" value="0" class="grupo2">
+                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta2" value="0" class="grupo2" @if(old('pregunta2') == '0') checked @endif>
                       </div>
+                      @error('pregunta2')
+                            <div class="text-danger">
+                                Este campo es obligatorio
+                            </div>
+                      @enderror
                 </div>
             </div>
     
@@ -80,20 +95,30 @@
                     <label for="">El dia de las elecciones tiene trasporte?</label>
                     <div class="input-group-text">
                         <label for="">Si</label>
-                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta3" value="1" class="grupo3">
+                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta3" value="1" class="grupo3" @if(old('pregunta3') == '1') checked @endif>
                         <label for="">No</label>
-                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta3" value="0" class="grupo3">
+                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta3" value="0" class="grupo3" @if(old('pregunta3') == '0') checked @endif>
                       </div>
+                      @error('pregunta3')
+                            <div class="text-danger">
+                                Este campo es obligatorio
+                            </div>
+                      @enderror
                 </div>
         
                 <div class="col">
                     <label for="">Se le ha echo seguimiento constante?</label>
                     <div class="input-group-text">
                         <label for="">Si</label>
-                        <input id="pregunta4" type="checkbox" aria-label="Checkbox for following text input" name="pregunta4" value="1" class="grupo4">
+                        <input id="pregunta4" type="checkbox" aria-label="Checkbox for following text input" name="pregunta4" value="1" class="grupo4" @if(old('pregunta4') == '1') checked @endif>
                         <label for="">No</label>
-                        <input id="pregunta4Not" type="checkbox" aria-label="Checkbox for following text input" name="pregunta4" value="0" class="grupo4">
+                        <input id="pregunta4Not" type="checkbox" aria-label="Checkbox for following text input" name="pregunta4" value="0" class="grupo4" @if(old('pregunta4') == '0') checked @endif>
                     </div>
+                    @error('pregunta4')
+                            <div class="text-danger">
+                                Este campo es obligatorio
+                            </div>
+                      @enderror
                     
                     <div class="form-group" id="visit4" style="display: none;">
                         <label for="">En que fecha se le ha llamado?</label>
@@ -124,10 +149,15 @@
                     <label for="">Se le ha visitado?</label>
                     <div class="input-group-text">
                         <label for="">Si</label>
-                        <input id="pregunta5" type="checkbox" aria-label="Checkbox for following text input" name="pregunta5" value="1" class="grupo5">
+                        <input id="pregunta5" type="checkbox" aria-label="Checkbox for following text input" name="pregunta5" value="1" class="grupo5" @if(old('pregunta5') == '1') checked @endif>
                         <label for="">No</label>
-                        <input id="pregunta5Not" type="checkbox" aria-label="Checkbox for following text input" name="pregunta5" value="0" class="grupo5">
+                        <input id="pregunta5Not" type="checkbox" aria-label="Checkbox for following text input" name="pregunta5" value="0" class="grupo5" @if(old('pregunta5') == '0') checked @endif>
                     </div>
+                    @error('pregunta5')
+                            <div class="text-danger">
+                                Este campo es obligatorio
+                            </div>
+                      @enderror
                     
                     <div class="form-group" id="visit5" style="display: none;">
                         <label for="">En que fecha se le ha visitado?</label>
@@ -157,10 +187,15 @@
                     <label for="">El lugar de votacion es cerca a su casa?</label>
                     <div class="input-group-text">
                         <label for="">Si</label>
-                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta6" value="1" class="grupo6">
+                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta6" value="1" class="grupo6" @if(old('pregunta6') == '1') checked @endif>
                         <label for="">No</label>
-                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta6" value="0" class="grupo6">
+                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta6" value="0" class="grupo6" @if(old('pregunta6') == '0') checked @endif>
                       </div>
+                      @error('pregunta6')
+                            <div class="text-danger">
+                                Este campo es obligatorio
+                            </div>
+                      @enderror
                 </div>
             </div>
 
@@ -169,10 +204,15 @@
                     <label for="">Ha participado en actividades de forma frecuente?</label>
                     <div class="input-group-text">
                         <label for="">Si</label>
-                        <input id="pregunta7" type="checkbox" aria-label="Checkbox for following text input" name="pregunta7" value="1" class="grupo7">
+                        <input id="pregunta7" type="checkbox" aria-label="Checkbox for following text input" name="pregunta7" value="1" class="grupo7" @if(old('pregunta7') == '1') checked @endif>
                         <label for="">No</label>
-                        <input id="pregunta7Not" type="checkbox" aria-label="Checkbox for following text input" name="pregunta7" value="0" class="grupo7">
+                        <input id="pregunta7Not" type="checkbox" aria-label="Checkbox for following text input" name="pregunta7" value="0" class="grupo7" @if(old('pregunta7') == '0') checked @endif>
                     </div>
+                    @error('pregunta7')
+                            <div class="text-danger">
+                                Este campo es obligatorio
+                            </div>
+                      @enderror
                     
                     <div class="form-group" id="stake" style="display: none;">
                         <label for="">En que fechas ha participado?</label>
@@ -191,10 +231,15 @@
                     <label for="">Se sabe el numero del candidato?</label>
                     <div class="input-group-text">
                         <label for="">Si</label>
-                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta8" value="1" class="grupo8">
+                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta8" value="1" class="grupo8" @if(old('pregunta8') == '1') checked @endif>
                         <label for="">No</label>
-                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta8" value="0" class="grupo8">
+                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta8" value="0" class="grupo8" @if(old('pregunta8') == '0') checked @endif>
                       </div>
+                      @error('pregunta8')
+                            <div class="text-danger">
+                                Este campo es obligatorio
+                            </div>
+                      @enderror
                 </div>
             </div>
 
@@ -203,19 +248,50 @@
                     <label for="">Realizo reuniones con familiares o amigos?</label>
                     <div class="input-group-text">
                         <label for="">Si</label>
-                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta9" value="1" class="grupo9">
+                        <input id="pregunta9" type="checkbox" aria-label="Checkbox for following text input" name="pregunta9" value="1" class="grupo9" @if(old('pregunta9') == '1') checked @endif>
                         <label for="">No</label>
-                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta9" value="0" class="grupo9">
-                      </div>
+                        <input id="pregunta9Not" type="checkbox" aria-label="Checkbox for following text input" name="pregunta9" value="0" class="grupo9" @if(old('pregunta9') == '0') checked @endif>
+                    </div>
+                    @error('pregunta9')
+                            <div class="text-danger">
+                                Este campo es obligatorio
+                            </div>
+                      @enderror
+
+                    <div class="form-group" id="meeting" style="display: none;">
+                        <label for="">En que fechas se ha reunido?</label>
+                        <input type="date" name="date_meeting" id="date_meeting">
+                        <hr>
+                        <label id="datesLabelMeeting">Fechas Seleccionadas: </label>
+                        <hr>
+                        
+                        <input type="hidden" name="datesInputMeeting" id="datesInputMeeting">
+                        <div id="obsMeeting_content">
+                            <label for="">Observaciones</label><br>
+                            <textarea name="" id="obsMeeting" cols="70" rows="3" ></textarea><br>
+                            <button class="btn btn-primary" type="button" onclick="addDate('datesLabelMeeting','date_meeting','datesInputMeeting','meeting','obsMeeting','obsInputMeeting','accordionMeeting')">add</button>
+                            <button class="btn btn-danger" type="button" onclick="deleteDate('datesLabelMeeting','date_meeting','datesInputMeeting','meeting','obsMeeting','obsInputMeeting','accordionMeeting')">del</button>
+                            <input type="hidden" name="obsInputMeeting" id="obsInputMeeting" >
+                        </div>
+                        <div class="accordion mt-2" id="accordionMeeting">
+                            <!-- conetenido -->
+                        </div><br>
+                    </div>
+
                 </div>
                 <div class="col">
                     <label for="">Mensaje de texto el dia de elecciones?</label>
                     <div class="input-group-text">
                         <label for="">Si</label>
-                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta10" value="1" class="grupo10">
+                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta10" value="1" class="grupo10" @if(old('pregunta10') == '1') checked @endif>
                         <label for="">No</label>
-                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta10" value="0" class="grupo10">
+                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta10" value="0" class="grupo10" @if(old('pregunta10') == '0') checked @endif>
                       </div>
+                      @error('pregunta10')
+                            <div class="text-danger">
+                                Este campo es obligatorio
+                            </div>
+                      @enderror
                 </div>
             </div>
         </div>
@@ -306,6 +382,28 @@
                     div7.style.display = 'none';
                 } 
             });
+
+            //check pregunta 9
+            const chek_pre9 = $('#pregunta9');
+            const chek_pre9Not = $('#pregunta9Not');
+            const div9 = document.getElementById('meeting');
+            //YES
+            chek_pre9.change(function() {
+                if (this.checked) {
+                    console.log('YES');
+                    div9.style.display = 'block';
+                } 
+                else{
+                    div9.style.display = 'none';
+                }
+            });
+            //NOT
+            chek_pre9Not.change(function() {
+                if (this.checked) {
+                    console.log('NOT');
+                    div9.style.display = 'none';
+                } 
+            });
   
         });
 
@@ -356,9 +454,11 @@
       <script>
         const obsCall = [];
         const obsVisit = [];
+        const obsMeeting = [];
         const datesCall = [];
         const datesVisit = [];
         const datesStake = [];
+        const datesMeeting = [];
 
         //agregar una fecha seleccionada en el array dates[]
         function addDate(label_date,input_date_in,input_date_out,array,input_obs_in,input_obs_out,accordion) {
@@ -366,6 +466,7 @@
         const date = inputDate.value;
         const obsCall = document.getElementById('obsCall');
         const obsVisit = document.getElementById('obsVisit');
+        const obsMeeting = document.getElementById('obsMeeting');
 
         if (date) {
             if(array=='call'){
@@ -393,7 +494,17 @@
             }   
             if(array=='stake'){
                 datesStake.push(date);
-                console.log(datesStake);
+            }  
+            if(array=='meeting'){
+                if (obsMeeting.value == '') {
+                    obsMeeting.setCustomValidity('Los campos fecha y observaciones son obligatorios'); 
+                    obsMeeting.reportValidity();
+                }
+                else{
+                    const index = datesMeeting.push(date) - 1;
+                    addObs(input_obs_in,input_obs_out,array,index,accordion);
+                    inputDate.value = '';
+                }
             }  
             updateLabelDates(label_date,input_date_out,array);
         }
@@ -414,6 +525,10 @@
                 labelDates.textContent = "Fechas Seleccionadas: " + datesStake.join(", ");
                 inputDates.value = datesStake.join(", ");
             }   
+            if(array=='meeting'){
+                labelDates.textContent = "Fechas Seleccionadas: " + datesMeeting.join(", ");
+                inputDates.value = datesMeeting.join(", ");
+            }  
             
         }
         //eliminar una fecha del array dates[]
@@ -451,6 +566,17 @@
                     updateLabelDates(label_date,input_date_out,array);
                 }
             }   
+            if(array=='meeting'){
+                const index = datesMeeting.indexOf(dateDel);
+
+                if (index !== -1) {
+                    datesMeeting.splice(index, 1);
+                    
+                    updateLabelDates(label_date,input_date_out,array);
+                    inputDateDel.value = '';
+                    delObs(input_obs_out,array,index,accordion);
+                }   
+            }  
         }
         //----------------------------------------------------------------------------
         function newObservation(title, text, index,accordion){
@@ -509,6 +635,11 @@
                     input_obs.value = '';  
                     updateInputObs(input_obs_out,array,accordion);
                 } 
+                if(array=='meeting'){
+                    obsMeeting.push(obs);
+                    input_obs.value = '';  
+                    updateInputObs(input_obs_out,array,accordion);
+                } 
             }
         }
         function updateInputObs(input_obs_out,array,accordion){
@@ -528,6 +659,13 @@
                     newObservation('Observacion', obsVisit[i], i,accordion);
                 }
             }
+            if(array=='meeting'){
+                inputObs.value = obsMeeting.join(", ");
+                accordionDiv.innerHTML='';
+                for(let i=0; i<obsMeeting.length;i++){
+                    newObservation('Observacion', obsMeeting[i], i,accordion);
+                }
+            }
         }
 
         function delObs(input_obs_out,array,index,accordion) {
@@ -540,6 +678,12 @@
             if(array=='visit'){
                 if (index !== -1) {
                     obsVisit.splice(index, 1);
+                    updateInputObs(input_obs_out,array,accordion);
+                }   
+            }
+            if(array=='meeting'){
+                if (index !== -1) {
+                    obsMeeting.splice(index, 1);
                     updateInputObs(input_obs_out,array,accordion);
                 }   
             }

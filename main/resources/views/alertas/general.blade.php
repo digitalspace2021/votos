@@ -201,11 +201,37 @@
                 //{ data: 'acciones', name: 'acciones'}
             ],
             rowCallback: function(row, data, dataIndex) {
+                function arr_obj(obj){
+                    let arr_fechas = [];
+                    let string_fechas = null;
+                    if(obj !== null && obj !== ''){
+                        string_fechas = obj.replace(/"/g, '')
+                        arr_fechas = string_fechas.split(',');
+                    }
+                    
+                    return arr_fechas.length;
+                }
+
                 const alert = data.alerta;
-                if (alert == "Rojo") {
+
+                //fechas cuatro
+                const fec_cuatro = data.fec_cuatro;
+                let arr_cuatro = arr_obj(fec_cuatro);
+                //fechas cinco
+                const fec_cinco = data.fec_cinco;
+                let arr_cinco = arr_obj(fec_cinco);     
+                //fechas siete
+                const fec_siete = data.fec_siete;
+                let arr_siete = arr_obj(fec_siete); 
+                //fechas siete
+                const fec_nueve = data.fec_nueve;
+                let arr_nueve = arr_obj(fec_nueve); 
+                console.log(arr_nueve) ;
+      
+                if ((alert == "Rojo" || alert == "Amarillo" || alert == "Verde") && (arr_cuatro <=4 || arr_cinco <=4 || arr_siete <=4 || arr_nueve <=4) ) {
                     $(row).addClass('bg-danger text-light');
                 } 
-                else if(alert == "Amarillo"){
+                else if((alert == "Amarillo" || alert == "Verde") && ((arr_cuatro >=5 && arr_cuatro <=9) || (arr_cinco >=5 && arr_cinco <=9) || (arr_siete >=5 && arr_siete <=9) || (arr_nueve >=5 && arr_nueve <=9))){
                     $(row).addClass('bg-warning text-light');
                 }
                 else {

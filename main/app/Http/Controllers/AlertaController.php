@@ -46,6 +46,8 @@ class AlertaController extends Controller
         ->select('matriz_seguimiento.id as id_matriz','formularios.id as id_form','formularios.*', 'users.name as referido',
                 'matriz_seguimiento.fechas_cuatro as llamadas',
                 'matriz_seguimiento.fechas_cinco as visitas',
+                'matriz_seguimiento.fechas_siete as actividades',
+                'matriz_seguimiento.fechas_nueve as reuniones',
         DB::raw('CASE
                     WHEN (matriz_seguimiento.respuesta_uno + matriz_seguimiento.respuesta_dos + matriz_seguimiento.respuesta_tres +
                         matriz_seguimiento.respuesta_cuatro + matriz_seguimiento.respuesta_cinco + matriz_seguimiento.respuesta_seis +
@@ -114,8 +116,10 @@ class AlertaController extends Controller
             ->select('matriz_seguimiento.id as id','matriz_seguimiento.formulario_id as id_formulario','formularios.identificacion as identificacion', 'formularios.nombre as nombre','users.name as creador',
                         'candidatos.name as candidato','formularios.email as email','formularios.direccion as direccion','formularios.telefono as telefono',
                         'matriz_seguimiento.respuesta_uno as res_uno', 'matriz_seguimiento.respuesta_dos as res_dos','matriz_seguimiento.respuesta_tres as res_tres',
-                        'matriz_seguimiento.respuesta_cuatro as res_cuatro','matriz_seguimiento.respuesta_cinco as res_cinco','matriz_seguimiento.respuesta_seis as res_seis','matriz_seguimiento.respuesta_siete as res_siete',
-                        'matriz_seguimiento.respuesta_ocho as res_ocho','matriz_seguimiento.respuesta_nueve as res_nueve','matriz_seguimiento.respuesta_diez as res_diez',
+                        'matriz_seguimiento.respuesta_cuatro as res_cuatro','matriz_seguimiento.fechas_cuatro as fec_cuatro','matriz_seguimiento.obs_cuatro as obs_cuatro','matriz_seguimiento.respuesta_cinco as res_cinco',
+                        'matriz_seguimiento.fechas_cinco as fec_cinco','matriz_seguimiento.obs_cinco as obs_cinco','matriz_seguimiento.respuesta_seis as res_seis','matriz_seguimiento.respuesta_siete as res_siete',
+                        'matriz_seguimiento.fechas_siete as fec_siete','matriz_seguimiento.respuesta_ocho as res_ocho','matriz_seguimiento.respuesta_nueve as res_nueve','matriz_seguimiento.fechas_nueve as fec_nueve',
+                        'matriz_seguimiento.obs_nueve as obs_nueve','matriz_seguimiento.respuesta_diez as res_diez',
                         DB::raw('CASE
                                     WHEN (matriz_seguimiento.respuesta_uno + matriz_seguimiento.respuesta_dos + matriz_seguimiento.respuesta_tres +
                                     matriz_seguimiento.respuesta_cuatro + matriz_seguimiento.respuesta_cinco + matriz_seguimiento.respuesta_seis +
