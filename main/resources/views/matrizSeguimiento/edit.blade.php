@@ -198,7 +198,26 @@
                         <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta9" value="1" class="grupo9" @if ($seguimientos[0]->respuesta_nueve == 1) checked @endif>
                         <label for="">No</label>
                         <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta9" value="0" class="grupo9" @if ($seguimientos[0]->respuesta_nueve == 0) checked @endif>
-                      </div>
+                    </div>
+                    <div class="form-group" id="meeting" @if ($seguimientos[0]->respuesta_nueve == 0) style="display: none;" @endif>
+                        <label for="">En que fechas se ha reunido?</label>
+                        <input type="date" name="date_meeting" id="date_meeting">
+                        <hr>
+                        <label id="datesLabelMeeting">Fechas Seleccionadas: </label>
+                        <hr>
+                        
+                        <input type="hidden" name="datesInputMeeting" id="datesInputMeeting">
+                        <div id="obsMeeting_content">
+                            <label for="">Observaciones</label><br>
+                            <textarea name="" id="obsMeeting" cols="70" rows="3" ></textarea><br>
+                            <button class="btn btn-primary" type="button" onclick="addDate('datesLabelMeeting','date_meeting','datesInputMeeting','meeting','obsMeeting','obsInputMeeting','accordionMeeting')">add</button>
+                            <button class="btn btn-danger" type="button" onclick="deleteDate('datesLabelMeeting','date_meeting','datesInputMeeting','meeting','obsMeeting','obsInputMeeting','accordionMeeting')">del</button>
+                            <input type="hidden" name="obsInputMeeting" id="obsInputMeeting" >
+                        </div>
+                        <div class="accordion mt-2" id="accordionMeeting">
+                            <!-- conetenido -->
+                        </div><br>
+                    </div>
                 </div>
                 <div class="col">
                     <label for="">Mensaje de texto el dia de elecciones?</label>
@@ -269,7 +288,6 @@
             }
             });
             //NOT
-            //NOT
             chek_pre4Not.change(function() {
                 if (this.checked) {
                     console.log('NOT');
@@ -298,6 +316,28 @@
                     div7.style.display = 'none';
                 } 
             });
+
+            //check pregunta 9
+            const chek_pre9 = $('#pregunta9');
+            const chek_pre9Not = $('#pregunta9Not');
+            const div9 = document.getElementById('meeting');
+            //YES
+            chek_pre9.change(function() {
+                if (this.checked) {
+                    console.log('YES');
+                    div9.style.display = 'block';
+                } 
+                else{
+                    div9.style.display = 'none';
+                }
+            });
+            //NOT
+            chek_pre9Not.change(function() {
+                if (this.checked) {
+                    console.log('NOT');
+                    div9.style.display = 'none';
+                } 
+            });
      
         });
 
@@ -307,9 +347,11 @@
       <script>
         const obsCall = [];
         const obsVisit = [];
+        const obsMeeting = [];
         const datesCall = [];
         const datesVisit = [];
         const datesStake = [];
+        const datesMeeting = [];
 
         var fechas_cuatro='<?= $seguimientos[0]->fechas_cuatro;?>';
         let string_fechas_cuatro = fechas_cuatro.replace(/"/g, '');
@@ -319,7 +361,9 @@
         var arr_fechas_cinco = string_fechas_cinco.split(',');
         var fechas_siete='<?= $seguimientos[0]->fechas_siete;?>';
         let string_fechas_siete = fechas_siete.replace(/"/g, '');
-        
+        var fechas_nueve='<?= $seguimientos[0]->fechas_nueve;?>';
+        let string_fechas_nueve = fechas_nueve.replace(/"/g, '');
+        var arr_fechas_nueve = string_fechas_nueve.split(',');
         //observaciones
         var obs_cuatro='<?= $seguimientos[0]->obs_cuatro;?>';
         let string_obs_cuatro = obs_cuatro.replace(/"/g, '');
@@ -327,6 +371,9 @@
         var obs_cinco='<?= $seguimientos[0]->obs_cinco;?>';
         let string_obs_cinco = obs_cinco.replace(/"/g, '');
         var arr_obs_cinco = string_obs_cinco.split(',');
+        var obs_nueve='<?= $seguimientos[0]->obs_nueve;?>';
+        let string_obs_nueve = obs_nueve.replace(/"/g, '');
+        var arr_obs_nueve = string_obs_nueve.split(',');
 
         if(string_fechas_cuatro !== 'null' && string_fechas_cuatro !== ''){
             for(let i=0; i<arr_fechas_cuatro.length;i++){
@@ -347,6 +394,13 @@
             updateLabelDates('datesLabelStake','datesInputStake','stake');
         }
 
+        if(string_fechas_nueve !== 'null' && string_fechas_nueve !== ''){
+            for(let i=0; i<arr_fechas_nueve.length;i++){
+                datesMeeting.push(arr_fechas_nueve[i].trim());
+            }
+            updateLabelDates('datesLabelMeeting','datesInputMeeting','meeting');
+        }
+
         if(string_obs_cuatro !== 'null' && string_obs_cuatro !== ''){
             for(let i=0; i<arr_obs_cuatro.length;i++){
                 obsCall.push(arr_obs_cuatro[i].trim());
@@ -363,12 +417,21 @@
             updateInputObs('obsInputVisit','visit','accordionVisit');
         }
 
+        if(string_obs_nueve !== 'null' && string_obs_nueve !== ''){
+            for(let i=0; i<arr_obs_nueve.length;i++){
+                obsMeeting.push(arr_obs_nueve[i].trim());
+            }
+            updateLabelDates('datesLabelMeeting','datesInputMeeting','meeting');
+            updateInputObs('obsInputMeeting','meeting','accordionMeeting');
+        }
+
         //agregar una fecha seleccionada en el array dates[]
         function addDate(label_date,input_date_in,input_date_out,array,input_obs_in,input_obs_out,accordion) {
             const inputDate = document.getElementById(input_date_in);
         const date = inputDate.value;
         const obsCall = document.getElementById('obsCall');
         const obsVisit = document.getElementById('obsVisit');
+        const obsMeeting = document.getElementById('obsMeeting');
 
         if (date) {
             if(array=='call'){
@@ -397,7 +460,18 @@
             if(array=='stake'){
                 datesStake.push(date);
                 console.log(datesStake);
-            }  
+            } 
+            if(array=='meeting'){
+                if (obsMeeting.value == '') {
+                    obsMeeting.setCustomValidity('Los campos fecha y observaciones son obligatorios'); 
+                    obsMeeting.reportValidity();
+                }
+                else{
+                    const index = datesMeeting.push(date) - 1;
+                    addObs(input_obs_in,input_obs_out,array,index,accordion);
+                    inputDate.value = '';
+                }
+            }      
             updateLabelDates(label_date,input_date_out,array);
         }
         }
@@ -416,7 +490,11 @@
             if(array=='stake'){
                 labelDates.textContent = "Fechas Seleccionadas: " + datesStake.join(", ");
                 inputDates.value = datesStake.join(", ");
-            }   
+            } 
+            if(array=='meeting'){
+                labelDates.textContent = "Fechas Seleccionadas: " + datesMeeting.join(", ");
+                inputDates.value = datesMeeting.join(", ");
+            }     
             
         }
         //eliminar una fecha del array dates[]
@@ -456,7 +534,18 @@
                     
                     updateLabelDates(label_date,input_date_out,array);
                 }
-            }   
+            }  
+            if(array=='meeting'){
+                const index = datesMeeting.findIndex((date) => date == dateDel);
+
+                if (index !== -1) {
+                    datesMeeting.splice(index, 1);
+                    
+                    updateLabelDates(label_date,input_date_out,array);
+                    inputDateDel.value = '';
+                    delObs(input_obs_out,array,index,accordion);
+                }
+            }    
         }
 
 
@@ -517,6 +606,11 @@
                     input_obs.value = '';  
                     updateInputObs(input_obs_out,array,accordion);
                 } 
+                if(array=='meeting'){
+                    obsMeeting.push(obs);
+                    input_obs.value = '';  
+                    updateInputObs(input_obs_out,array,accordion);
+                } 
             }
         }
         function updateInputObs(input_obs_out,array,accordion){
@@ -536,6 +630,13 @@
                     newObservation('Observacion', obsVisit[i], i,accordion);
                 }
             }
+            if(array=='meeting'){
+                inputObs.value = obsMeeting.join(", ");
+                accordionDiv.innerHTML='';
+                for(let i=0; i<obsMeeting.length;i++){
+                    newObservation('Observacion', obsMeeting[i], i,accordion);
+                }
+            }
         }
 
         function delObs(input_obs_out,array,index,accordion) {
@@ -549,6 +650,12 @@
             if(array=='visit'){
                 if (index !== -1) {
                     obsVisit.splice(index, 1);
+                    updateInputObs(input_obs_out,array,accordion);
+                }   
+            }
+            if(array=='meeting'){
+                if (index !== -1) {
+                    obsMeeting.splice(index, 1);
                     updateInputObs(input_obs_out,array,accordion);
                 }   
             }

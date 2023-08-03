@@ -18,6 +18,8 @@ class AddColumnToMatrizSeguimientoTable extends Migration
             $table->json('obs_cinco')->nullable()->default(null);
             $table->boolean('respuesta_ocho');
             $table->boolean('respuesta_nueve');
+            $table->json('fechas_nueve')->nullable()->default(null);
+            $table->json('obs_nueve')->nullable()->default(null);
             $table->boolean('respuesta_diez');
             
         });
@@ -35,6 +37,8 @@ class AddColumnToMatrizSeguimientoTable extends Migration
             $table->dropColumn('obs_cinco');
             $table->dropColumn('respuesta_ocho');
             $table->dropColumn('respuesta_nueve');
+            $table->dropColumn('fechas_nueve');
+            $table->dropColumn('obs_nueve');
             $table->dropColumn('respuesta_diez');
             
         });

@@ -31,6 +31,7 @@
         <table class="table text-center" id="tablas-usuarios">
             <thead>
                 <tr>
+                    <th>#</th>
                     <th>Nombre completo</th>
                     <th>Email</th>
                     <th>Rol</th>
@@ -54,6 +55,11 @@
                 },
                 ajax: "{!! route('usuarios.tabla') !!}",
                 columns: [{
+                        data: 'identificacion',
+                        name: 'identificacion',
+                        visible: false
+                    },
+                    {
                         data: 'name',
                         name: 'name'
                     },

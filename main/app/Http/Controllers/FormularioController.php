@@ -216,7 +216,7 @@ class FormularioController extends Controller
             'creador_id' => 'required|exists:users,id',
             'nombres' => 'required|max:255',
             'apellidos' => 'required|max:255',
-            'email' => 'required|email|max:255',
+            'email' => 'nullable|email|max:255',
             'telefono' => 'required|max:255',
             'genero' => 'nullable|max:255',
             'direccion' => 'required|max:255',

@@ -163,6 +163,36 @@
         <p class="text-light h5 p-3">Durante las siguientes fechas: <span id="dateVisits"></span></p>
     </div>
     <br><hr><br>
+
+    <h3>Ha participado en actividades de forma frecuente? <span id="activities"></span></h3>
+    <br>
+    <form action="{{route('matriz.editPregunta')}}" method="get">
+        <input type="hidden" class="form-control" name="id_matriz" id="id_matriz_siete" readonly>
+        <input type="hidden" class="form-control" name="pregunta" id="pregunta" value="7" readonly>
+        <!--<button class="btn btn-primary" type="submit" >Editar</button>-->
+    </form>
+
+    <br><hr><br>
+    <div id="containerActivities">
+        <p class="text-light h5 p-3">Ha participado <span id="numActivities"></span> veces.</p>
+        <p class="text-light h5 p-3">Durante las siguientes fechas: <span id="dateActivities"></span></p>
+    </div>
+    <br><hr><br>
+
+    <h3>Realizo reuniones con familiares y amigos? <span id="meeting"></span></h3>
+    <br>
+    <form action="{{route('matriz.editPregunta')}}" method="get">
+        <input type="hidden" class="form-control" name="id_matriz" id="id_matriz_nueve" readonly>
+        <input type="hidden" class="form-control" name="pregunta" id="pregunta" value="9" readonly>
+        <!--<button class="btn btn-primary" type="submit" >Editar</button>-->
+    </form>
+
+    <br><hr><br>
+    <div id="containerMeeting">
+        <p class="text-light h5 p-3">Se han reunido <span id="numMeeting"></span> veces.</p>
+        <p class="text-light h5 p-3">Durante las siguientes fechas: <span id="dateMeeting"></span></p>
+    </div>
+    <br><hr><br>
 </div>
 
 <div class="text-center">
@@ -198,6 +228,7 @@
                             const status = document.getElementById('status');
                             document.getElementById('id_matriz_cuatro').value = response[0].id_matriz;
                             document.getElementById('id_matriz_cinco').value = response[0].id_matriz;
+                            document.getElementById('id_matriz_siete').value = response[0].id_matriz;
                             document.getElementById('inputNombre').value = response[0].nombre;
                             document.getElementById('inputDireccion').value = response[0].direccion;
                             document.getElementById('inputTelefono').value = response[0].telefono;
@@ -231,64 +262,9 @@
                                 const arrayllamadas = llamadas.split(", ");
                                 numLlamadas = arrayllamadas.length;
                             }
+                            getAlert(numLlamadas, 'calls', 'containerCalls', 'dateCalls','numCalls', llamadas);
+
                             
-                            const statusCall = document.getElementById('calls');
-                            const containerCall = document.getElementById('containerCalls');
-                            const numCall = document.getElementById('numCalls');
-                            const dateCall = document.getElementById('dateCalls');
-
-                            if(numLlamadas <= 3 && numLlamadas > 0){
-                                statusCall.textContent = "!Alerta" ;
-                                statusCall.classList.remove("text-warning");
-                                statusCall.classList.remove("text-success");
-                                statusCall.classList.add("text-danger");
-
-                                containerCall.classList.remove("bg-success");
-                                containerCall.classList.remove("bg-warning");
-                                containerCall.classList.add("bg-danger");
-
-                                numCall.textContent = numLlamadas ;
-                                dateCall.textContent = llamadas ;
-                            }
-                            else if(numLlamadas >= 4 && numLlamadas <= 8){
-                                statusCall.textContent = "!Advertencia" ;
-                                statusCall.classList.remove("text-success");
-                                statusCall.classList.remove("text-danger");
-                                statusCall.classList.add("text-warning");
-
-                                containerCall.classList.remove("bg-success");
-                                containerCall.classList.remove("bg-danger");
-                                containerCall.classList.add("bg-warning");
-
-                                numCall.textContent = numLlamadas ;
-                                dateCall.textContent = llamadas ;
-                            }
-                            else if(numLlamadas > 8){
-                                statusCall.textContent = "!Excelente" ;
-                                statusCall.classList.remove("text-danger");
-                                statusCall.classList.remove("text-warning");
-                                statusCall.classList.add("text-success");
-
-                                containerCall.classList.remove("bg-warning");
-                                containerCall.classList.remove("bg-danger");
-                                containerCall.classList.add("bg-success");
-
-                                numCall.textContent = numLlamadas ;
-                                dateCall.textContent = llamadas ;
-                            }
-                            else {
-                                statusCall.textContent = "!Alerta" ;
-                                statusCall.classList.remove("text-warning");
-                                statusCall.classList.remove("text-success");
-                                statusCall.classList.add("text-danger");
-
-                                containerCall.classList.remove("bg-success");
-                                containerCall.classList.remove("bg-warning");
-                                containerCall.classList.add("bg-danger");
-
-                                numCall.textContent = 0;
-                                dateCall.textContent = "No se ha llamado" ;
-                            }
 
                             //Visitas
                             const visitas = response[0].visitas ?? '';
@@ -298,64 +274,29 @@
                                 const arrayVisitas = visitas.split(", ");
                                  numVisitas = arrayVisitas.length;
                            }
+                           getAlert(numVisitas, 'visits', 'containerVisits', 'dateVisits','numVisits', visitas);
                         
-                            const statusVisit = document.getElementById('visits');
-                            const containerVisit = document.getElementById('containerVisits');
-                            const numVisit = document.getElementById('numVisits');
-                            const dateVisit = document.getElementById('dateVisits');
+                            
 
-                            if(numVisitas <= 3 && numVisitas > 0){
-                                statusVisit.textContent = "!Alerta" ;
-                                statusVisit.classList.remove("text-warning");
-                                statusVisit.classList.remove("text-success");
-                                statusVisit.classList.add("text-danger");
+                            //Actividades
+                            const actividades = response[0].actividades ?? '';
+                            var numActividades = 0;
 
-                                containerVisit.classList.remove("bg-warning");
-                                containerVisit.classList.remove("bg-success");
-                                containerVisit.classList.add("bg-danger");
+                           if(actividades){
+                                const arrayActividades = actividades.split(", ");
+                                 numActividades = arrayActividades.length;
+                           }
+                           getAlert(numActividades, 'activities', 'containerActivities', 'dateActivities','numActivities', actividades);
+                        
+                           //Reuniones
+                           const reuniones = response[0].reuniones ?? '';
+                            var numReuniones = 0;
 
-                                numVisit.textContent = numVisitas ;
-                                dateVisit.textContent = visitas ;
-                            }
-                            else if(numVisitas >= 4 && numVisitas <= 8){
-                                statusVisit.textContent = "!Advertencia" ;
-                                statusVisit.classList.remove("text-success");
-                                statusVisit.classList.remove("text-danger");
-                                statusVisit.classList.add("text-warning");
-
-                                containerVisit.classList.remove("bg-success");
-                                containerVisit.classList.remove("bg-danger");
-                                containerVisit.classList.add("bg-warning");
-
-                                numVisit.textContent = numVisitas ;
-                                dateVisit.textContent = visitas ;
-                            }
-                            else if(numVisitas > 8){
-                                statusVisit.textContent = "!Excelente" ;
-                                statusVisit.classList.remove("text-danger");
-                                statusVisit.classList.remove("text-warning");
-                                statusVisit.classList.add("text-success");
-
-                                containerVisit.classList.remove("bg-warning");
-                                containerVisit.classList.remove("bg-danger");
-                                containerVisit.classList.add("bg-success");
-
-                                numVisit.textContent = numVisitas ;
-                                dateVisit.textContent = visitas ;
-                            }
-                            else  {
-                                statusVisit.textContent = "!Alerta" ;
-                                statusVisit.classList.remove("text-warning");
-                                statusVisit.classList.remove("text-success");
-                                statusVisit.classList.add("text-danger");
-
-                                containerVisit.classList.remove("bg-success");
-                                containerVisit.classList.remove("bbg-warning");
-                                containerVisit.classList.add("bg-danger");
-
-                                numVisit.textContent = numVisitas ;
-                                dateVisit.textContent = "No se ha visitado" ;
-                            }
+                           if(reuniones){
+                                const arrayReuniones = reuniones.split(", ");
+                                 numReuniones = arrayReuniones.length;
+                           }
+                           getAlert(numReuniones, 'meeting', 'containerMeeting', 'dateMeeting','numMeeting', reuniones);
                         }
                         
                     },
@@ -366,6 +307,64 @@
     
             });
         });
+        function getAlert(cant, status_e, container_e,pDate_e, pCant_e, data){
+            const status = document.getElementById(status_e);
+            const container = document.getElementById(container_e);
+            const numCall = document.getElementById(pCant_e);
+            const dateCall = document.getElementById(pDate_e);
+            if(cant <= 3 && cant > 0){
+                                status.textContent = "!Alerta" ;
+                                status.classList.remove("text-warning");
+                                status.classList.remove("text-success");
+                                status.classList.add("text-danger");
+
+                                container.classList.remove("bg-success");
+                                container.classList.remove("bg-warning");
+                                container.classList.add("bg-danger");
+
+                                numCall.textContent = cant ;
+                                dateCall.textContent = data ;
+                            }
+                            else if(cant >= 4 && cant <= 8){
+                                status.textContent = "!Advertencia" ;
+                                status.classList.remove("text-success");
+                                status.classList.remove("text-danger");
+                                status.classList.add("text-warning");
+
+                                container.classList.remove("bg-success");
+                                container.classList.remove("bg-danger");
+                                container.classList.add("bg-warning");
+
+                                numCall.textContent = cant ;
+                                dateCall.textContent = data ;
+                            }
+                            else if(cant > 8){
+                                status.textContent = "!Excelente" ;
+                                status.classList.remove("text-danger");
+                                status.classList.remove("text-warning");
+                                status.classList.add("text-success");
+
+                                container.classList.remove("bg-warning");
+                                container.classList.remove("bg-danger");
+                                container.classList.add("bg-success");
+
+                                numCall.textContent = cant ;
+                                dateCall.textContent = data ;
+                            }
+                            else {
+                                status.textContent = "!Alerta" ;
+                                status.classList.remove("text-warning");
+                                status.classList.remove("text-success");
+                                status.classList.add("text-danger");
+
+                                container.classList.remove("bg-success");
+                                container.classList.remove("bg-warning");
+                                container.classList.add("bg-danger");
+
+                                numCall.textContent = 0;
+                                dateCall.textContent = "No hay registros" ;
+                            }
+        }
     </script>
     <script>
         function viewTable(cedula,nombre,color){

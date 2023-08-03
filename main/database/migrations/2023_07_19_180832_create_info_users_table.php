@@ -20,6 +20,8 @@ class CreateInfoUsersTable extends Migration
             $table->string('genero');
             $table->string('tipo_zona');
             $table->integer('zona');
+            $table->string('puesto')->nullable();
+            $table->string('mesa')->nullable();
             $table->unsignedBigInteger('referido_id');
             $table->timestamps();
 
