@@ -201,6 +201,53 @@
                                 </div>
                             @enderror
                         </div>
+                        
+                        <div class="col-md-6 mb-2">
+                            <div class="form-group">
+                                <label for="puesto_votacion" class="form-label">Puesto de votacion</label>
+                                        @php
+                                            $status = false;
+                                            $puestoA = $info->puesto ?? 'No establecido';
+                                        @endphp
+                                        
+                                <select name="puesto_votacion" id="puesto" class="form-select" required>
+                                    <option value="" selected disabled>Seleccione un puesto</option>
+                                        @foreach ($puestos as $puesto)
+                                        <option value="{{$puesto->puesto_nombre}}" 
+                                            @if ($puesto->puesto_nombre == $puestoA)
+                                                @php
+                                                    $status = true;
+                                                @endphp
+                                                selected
+                                            @endif
+                                            puesto_id="{{$puesto->id}}">{{$puesto->puesto_nombre}}</option>
+                                        @endforeach
+        
+                                        @if ($status == false)
+                                            <option value="{{$puestoA}}" selected>{{$puestoA}}</option>
+                                        @endif
+                                </select>
+                            </div>
+                            @error('zona')
+                            <div class="text-danger">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label for="mesa" class="form-label">Mesa</label>
+                            @php
+                                $mesa = $info->mesa ?? null;
+                            @endphp
+                            <select name="mesa" id="mesa" class="form-select" required>
+                                <option value="" selected disabled>Seleccione una mesa</option>
+                            </select>
+                            {{-- @error('mesa')
+                            <div class="text-danger">
+                                {{ $message }}
+                            </div>
+                            @enderror --}}
+                        </div>
 
                         <div class="col-md-12">
                             <textarea name="descripcion" id="" cols="30" rows="5" class="form-control" placeholder="Descripcion del producto">{{$info->direccion ?? ''}}</textarea>
@@ -242,7 +289,9 @@
     @section('js-extra')
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
         <script>
+            let mesas = "{{route('ut.get_mesas')}}";
             $(document).ready(async function() {
+
                 (() => {
                     'use strict'
 
@@ -316,9 +365,43 @@
                     },
                     cache: true
                 }).then(function(data) {
+                    if (data.length == 0) {
+                        $('#zona').empty();
+                        $('#zona').append('<option value="" selected disabled>No hay zonas</option>');
+
+                        return false;
+                    }
                     var option = new Option(data[0].text, data[0].id, true, true);
                     $('#zona').append(option).trigger('change');
                 });
+
+                $('#puesto').select2();
+                $('#mesa').select2();
+
+                function getMesas(){
+                    let puesto_id = $(this).children("option:selected").attr('puesto_id');
+                    $('#mesa').empty();
+                    $.ajax({
+                        url: mesas,
+                        type: 'GET',
+                        data: {puesto_id: puesto_id},
+                        success: function(data){
+                            $('#mesa').append('<option value="" selected disabled>Seleccione una mesa</option>');
+                            $.each(data, function(i, item){
+                                $('#mesa').append(`
+                                    <option value="${item.numero_mesa}"
+                                        ${item.numero_mesa == '{{$mesa ?? ''}}' ? 'selected' : ''}>${item.numero_mesa}</option>
+                                `);
+                            });
+                        }
+                    });
+                }
+        
+                $('#puesto').change(function(){
+                    getMesas.call(this);
+                });
+
+                getMesas.call($('#puesto'));
             })
         </script>
     @endsection
