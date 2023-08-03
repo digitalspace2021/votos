@@ -219,7 +219,7 @@
                                 cantidad_uno = response[0].cantidad;
                                 cantidad_dos = 0;
                             }
-                            generateChart(cantidad_uno,cantidad_dos,'Actividades','content_actividades',response[0].nombre,response[0].nombre,'Aprobado / Desaprobado','Participaciones');  
+                            generateChart(parseInt(cantidad_uno),parseInt(cantidad_dos),'Actividades','content_actividades',response[0].nombre,response[0].nombre,'Aprobado / Desaprobado','Participaciones');  
                         }
                     },
                     error: function(xhr, status, error) {
@@ -235,11 +235,12 @@
                     dataType: 'json', 
                     data: {candidato:candidato,cedula:cedula},
                     success: function(response) {
-                        cantidad = 0;
+                        console.log(response);
+                        var cantidad = 0;
                             if(response.length > 0){
                                 cantidad= response[0].cantidad;
                             }
-                           generateChart(cantidad,0,'Votos','content_votos',response[0].nombre,response[0].nombre,'Votos','Cantidad');  
+                           generateChart(parseInt(cantidad),0,'Votos','content_votos',response[0].nombre,response[0].nombre,'Votos','Cantidad');  
                         
                     },
                     error: function(xhr, status, error) {

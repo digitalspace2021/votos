@@ -82,6 +82,8 @@
                                 </option>
                                 <option value="admin" {{ $usuario->rol == 'administrador' ? 'selected' : '' }}>
                                     Administrador</option>
+                                    <option value="callcenter" {{ $usuario->rol == 'callcenter' ? 'selected' : '' }}>
+                                    Usuario CallCenter</option>
                             </select>
                             @error('rol')
                                 <div class="text-danger">

@@ -87,27 +87,38 @@ class MatrizSeguimientoController extends Controller
             'pregunta10' => 'required',
         ]);
 
-        $matriz= new MatrizSeguimiento();
-        $matriz->formulario_id = $request->formulario_id;
-        $matriz->respuesta_uno = $request->pregunta1;
-        $matriz->respuesta_dos = $request->pregunta2;
-        $matriz->respuesta_tres = $request->pregunta3;
-        $matriz->respuesta_cuatro = $request->pregunta4;
-        $matriz->fechas_cuatro = ($request->datesInputCall && $request->pregunta4 == 1) ? json_encode($request->datesInputCall) : NULL;
-        $matriz->obs_cuatro = ($request->obsInputCall && $request->pregunta4 == 1) ? json_encode($request->obsInputCall) : NULL;
-        $matriz->respuesta_cinco = $request->pregunta5;
-        $matriz->fechas_cinco = ($request->datesInputVisit && $request->pregunta5 == 1) ? json_encode($request->datesInputVisit) : NULL;
-        $matriz->obs_cinco = ($request->obsInputVisit && $request->pregunta5 == 1) ? json_encode($request->obsInputVisit) : NULL;
-        $matriz->respuesta_seis = $request->pregunta6;
-        $matriz->respuesta_siete = $request->pregunta7;
-        $matriz->fechas_siete = ($request->datesInputStake && $request->pregunta7 == 1) ? json_encode($request->datesInputStake) : NULL;
-        $matriz->respuesta_ocho = $request->pregunta8;
-        $matriz->respuesta_nueve = $request->pregunta9;
-        $matriz->respuesta_diez = $request->pregunta10;
-        $matriz->save();
+        $matrizExist = $this->model::where('formularios.identificacion',$request->ID)
+        ->join('formularios','matriz_seguimiento.formulario_id','=','formularios.id')
+        ->exists();
+        if($matrizExist){
+            Alert::error('Seguimiento', 'Ya existe un seguimiento para el usuario '.$request->name);
+        }
 
-        Alert::success('Seguimiento', 'Se ha creado el registro con exito!');
-        return redirect()->route('matriz');
+        else{
+            $matriz= new MatrizSeguimiento();
+            $matriz->formulario_id = $request->formulario_id;
+            $matriz->respuesta_uno = $request->pregunta1;
+            $matriz->respuesta_dos = $request->pregunta2;
+            $matriz->respuesta_tres = $request->pregunta3;
+            $matriz->respuesta_cuatro = $request->pregunta4;
+            $matriz->fechas_cuatro = ($request->datesInputCall && $request->pregunta4 == 1) ? json_encode($request->datesInputCall) : NULL;
+            $matriz->obs_cuatro = ($request->obsInputCall && $request->pregunta4 == 1) ? json_encode($request->obsInputCall) : NULL;
+            $matriz->respuesta_cinco = $request->pregunta5;
+            $matriz->fechas_cinco = ($request->datesInputVisit && $request->pregunta5 == 1) ? json_encode($request->datesInputVisit) : NULL;
+            $matriz->obs_cinco = ($request->obsInputVisit && $request->pregunta5 == 1) ? json_encode($request->obsInputVisit) : NULL;
+            $matriz->respuesta_seis = $request->pregunta6;
+            $matriz->respuesta_siete = $request->pregunta7;
+            $matriz->fechas_siete = ($request->datesInputStake && $request->pregunta7 == 1) ? json_encode($request->datesInputStake) : NULL;
+            $matriz->respuesta_ocho = $request->pregunta8;
+            $matriz->respuesta_nueve = $request->pregunta9;
+            $matriz->fechas_nueve = ($request->datesInputMeeting && $request->pregunta9 == 1) ? json_encode($request->datesInputMeeting) : NULL;
+            $matriz->obs_nueve = ($request->obsInputMeeting && $request->pregunta9 == 1) ? json_encode($request->obsInputMeeting) : NULL;
+            $matriz->respuesta_diez = $request->pregunta10;
+            $matriz->save();
+
+            Alert::success('Seguimiento', 'Se ha creado el registro con exito!');
+            return redirect()->route('matriz');
+        }
     }
 
     //Redirect to statistics view
@@ -170,13 +181,13 @@ class MatrizSeguimientoController extends Controller
             
             $matriz->respuesta_cuatro = $request->pregunta4;
             $matriz->fechas_cuatro = ($request->datesInputCall && $request->pregunta4 == 1) ? json_encode($request->datesInputCall) : NULL;
-            
+            $matriz->obs_cuatro = ($request->obsInputCall && $request->pregunta4 == 1) ? json_encode($request->obsInputCall) : NULL;
         }
 
         if($request->pregunta == 5){
             $matriz->respuesta_cinco = $request->pregunta5;
             $matriz->fechas_cinco = ($request->datesInputVisit && $request->pregunta5 == 1) ? json_encode($request->datesInputVisit) : NULL;
-            
+            $matriz->obs_cinco = ($request->obsInputVisit && $request->pregunta5 == 1) ? json_encode($request->obsInputVisit) : NULL;
         }
        
         $matriz->save();
@@ -222,6 +233,8 @@ class MatrizSeguimientoController extends Controller
         $matriz->fechas_siete = ($request->datesInputStake && $request->pregunta7 == 1) ? json_encode($request->datesInputStake) : NULL;
         $matriz->respuesta_ocho = $request->pregunta8;
         $matriz->respuesta_nueve = $request->pregunta9;
+        $matriz->fechas_nueve = ($request->datesInputMeeting && $request->pregunta9 == 1) ? json_encode($request->datesInputMeeting) : NULL;
+        $matriz->obs_nueve = ($request->obsInputMeeting && $request->pregunta9 == 1) ? json_encode($request->obsInputMeeting) : NULL;
         $matriz->respuesta_diez = $request->pregunta10;
         $matriz->save();
 

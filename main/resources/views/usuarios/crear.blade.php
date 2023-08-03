@@ -77,6 +77,7 @@
                                 <option value="">Seleccione un rol</option>
                                 <option value="simple" {{old('rol') == 'simple' ? 'selected' : ''}}>Usuario simple</option>
                                 <option value="admin" {{old('rol' == 'admin' ? 'selected' : '')}}>Administrador</option>
+                                <option value="callcenter" {{old('rol' == 'callcenter' ? 'selected' : '')}}>Usuario CallCenter</option>
                             </select>
                         </div>
 
