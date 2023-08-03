@@ -218,7 +218,7 @@ class FormularioController extends Controller
             'apellidos' => 'required|max:255',
             'email' => 'nullable|email|max:255',
             'telefono' => 'required|max:255',
-            'genero' => 'required|max:255',
+            'genero' => 'nullable|max:255',
             'direccion' => 'required|max:255',
             'zona' => 'required|max:255',
             'tipo_zona' => 'required|max:255',
