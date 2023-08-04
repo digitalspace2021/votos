@@ -231,10 +231,10 @@
                 if ((alert == "Rojo" || alert == "Amarillo" || alert == "Verde") && (arr_cuatro <=4 || arr_cinco <=4 || arr_siete <=4 || arr_nueve <=4) ) {
                     $(row).addClass('bg-danger text-light');
                 } 
-                else if((alert == "Amarillo" || alert == "Verde") && ((arr_cuatro >=5 && arr_cuatro <=9) || (arr_cinco >=5 && arr_cinco <=9) || (arr_siete >=5 && arr_siete <=9) || (arr_nueve >=5 && arr_nueve <=9))){
+                 if((alert == "Amarillo" || alert == "Verde") && ((arr_cuatro >=5 && arr_cuatro <=8) || (arr_cinco >=5 && arr_cinco <=8) || (arr_siete >=5 && arr_siete <=8) || (arr_nueve >=5 && arr_nueve <=8))){
                     $(row).addClass('bg-warning text-light');
                 }
-                else {
+                if((alert == "Verde") && (arr_cuatro > 8 && arr_cinco >8 && arr_siete >8 || arr_nueve >8) ) {
                     $(row).addClass('bg-success text-light');
                 }
             }

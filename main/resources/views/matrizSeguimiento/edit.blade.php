@@ -195,9 +195,9 @@
                     <label for="">Realizo reuniones con familiares o amigos?</label>
                     <div class="input-group-text">
                         <label for="">Si</label>
-                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta9" value="1" class="grupo9" @if ($seguimientos[0]->respuesta_nueve == 1) checked @endif>
+                        <input id="pregunta9" type="checkbox" aria-label="Checkbox for following text input" name="pregunta9" value="1" class="grupo9" @if ($seguimientos[0]->respuesta_nueve == 1) checked @endif>
                         <label for="">No</label>
-                        <input type="checkbox" aria-label="Checkbox for following text input" name="pregunta9" value="0" class="grupo9" @if ($seguimientos[0]->respuesta_nueve == 0) checked @endif>
+                        <input id="pregunta9Not" type="checkbox" aria-label="Checkbox for following text input" name="pregunta9" value="0" class="grupo9" @if ($seguimientos[0]->respuesta_nueve == 0) checked @endif>
                     </div>
                     <div class="form-group" id="meeting" @if ($seguimientos[0]->respuesta_nueve == 0) style="display: none;" @endif>
                         <label for="">En que fechas se ha reunido?</label>
@@ -550,6 +550,7 @@
 
 
         //----------------------------------------------------------------------------
+        //Crear un nuevo elemento acordion de bootstrap
         function newObservation(title, text, index,accordion){
             const accordionDiv = document.getElementById(accordion);
 
@@ -592,6 +593,7 @@
             accordionDiv.appendChild(content);
             
         }
+        //añadir una observacion en un acordion bootstrap
         function addObs(input_obs_in,input_obs_out,array,index,accordion) {
             const input_obs = document.getElementById(input_obs_in);
             const obs = input_obs.value;
@@ -613,6 +615,7 @@
                 } 
             }
         }
+        //Actualizar los acordiones con la informacion contenida en los array
         function updateInputObs(input_obs_out,array,accordion){
             const inputObs = document.getElementById(input_obs_out);
             const accordionDiv = document.getElementById(accordion);
@@ -638,7 +641,7 @@
                 }
             }
         }
-
+ //Elimina un elemento del array y actualiza los acordiones
         function delObs(input_obs_out,array,index,accordion) {
             if(array=='call'){
                 console.log('entro a call borrar');
