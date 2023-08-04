@@ -196,6 +196,16 @@ Crear formulario
                     @enderror --}}
                 </div>
 
+                <div class="col-md-6 mb-2">
+                    <label for="fecha_nacimiento" class="form-label">Fecha de nacimiento</label>
+                    <input type="date" class="form-control" name="fecha_nacimiento" value="{{old('fecha_nacimiento')}}">
+                    @error('fecha_nacimiento')
+                    <div class="text-danger">
+                        {{ $message }}
+                    </div>
+                    @enderror
+                </div>
+
                 <div class="col-md-12 mb-2">
                     <input type="checkbox" name="check_problem" id="check_problem" class="form-check-input"
                         @error('descripcion') checked @enderror>

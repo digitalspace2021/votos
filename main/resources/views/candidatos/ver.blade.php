@@ -54,7 +54,7 @@
                         </div>
                     </div>
 
-                    <div class="col-12">
+                    <div class="col-12 mb-2">
                         <label for="cargo_id" class="form-label">Cargo</label>
                         <select class="form-control" name="cargo_id" value="{{ $candidato->cargo_id }}" id="cargo_id"
                             required>
@@ -64,6 +64,12 @@
                                 } ?> value="{{ $item->id }}">{{ $item->name }}</option>
                             @endforeach
                         </select>
+                    </div>
+
+                    <div class="col-md-6 mb-2">
+                        <label for="fecha_nacimiento" class="form-label">Fecha de nacimiento</label>
+                        <input type="date" class="form-control" name="fecha_nacimiento" value="{{ $candidato->fecha_nacimiento }}"
+                            required readonly>
                     </div>
                 </div>
                 <hr class="my-4">

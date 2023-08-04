@@ -105,6 +105,11 @@
                         </div>
                     </div>
 
+                    <div class="col-md-6 mb-2">
+                        <label for="fecha_nacimiento" class="form-label">Fecha de nacimiento</label>
+                        <input type="date" class="form-control" name="fecha_nacimiento" value="{{$info->fecha_nacimiento ?? ''}}" required readonly>
+                    </div>
+
                     <div class="col-md-12">
                         <textarea name="descripcion" id="" cols="30" rows="5" class="form-control" placeholder="Descripcion del producto" readonly>{{$info->direccion ?? ''}}</textarea>
                     </div>
