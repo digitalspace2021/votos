@@ -146,7 +146,7 @@
                         <div class="col-md-6 mb-2">
                             <div class="form-group">
                                 <label for="puesto_votacion" class="form-label">Puesto de votacion</label>
-                                <select name="puesto_votacion" id="puesto" class="form-select" required>
+                                <select name="puesto_votacion" id="puesto" class="form-select">
                                     <option value="" selected disabled>Seleccione un puesto</option>
                                     @foreach ($puestos as $puesto)
                                     <option value="{{$puesto->puesto_nombre}}" 
@@ -164,7 +164,7 @@
         
                         <div class="col-md-6 mb-2">
                             <label for="mesa" class="form-label">Mesa</label>
-                            <select name="mesa" id="mesa" class="form-select" required>
+                            <select name="mesa" id="mesa" class="form-select">
                                 <option value="" selected disabled>Seleccione una mesa</option>
                             </select>
                             {{-- @error('mesa')
