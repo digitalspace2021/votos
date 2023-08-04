@@ -251,8 +251,7 @@
 
                         <div class="col-md-6 mb-2">
                             <label for="fecha_nacimiento" class="form-label">Fecha de nacimiento</label>
-                            <input type="date" class="form-control" name="fecha_nacimiento" value="{{$info->fecha_nacimiento ?? ''}}"
-                                required>
+                            <input type="date" class="form-control" name="fecha_nacimiento" value="{{$info->fecha_nacimiento ?? ''}}">
                             @error('fecha_nacimiento')
                             <div class="text-danger">
                                 {{ $message }}
