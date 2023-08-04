@@ -34,6 +34,7 @@ class StoreRequest extends FormRequest
             'zona' => ['required'],
             'puesto_votacion' => ['required'],
             'foto' => ['image', 'nullable'],
+            'fecha_nacimiento' => ['nullable','date', 'before:today'],
         ];
 
         return $validate;

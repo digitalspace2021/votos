@@ -95,6 +95,11 @@ Posibles Votantes
                     <input type="text" class="form-control" name="mesa" value="{{$problem->mesa}}" required
                         disabled>
                 </div>
+                <div class="col-md-6 mb-2">
+                    <label for="fecha_nacimiento" class="form-label">Fecha de nacimiento</label>
+                    <input type="date" class="form-control" name="fecha_nacimiento" value="{{$problem->fecha_nacimiento}}"
+                        required disabled>
+                </div>
                 <div class="col-md-12 mb-2">
                     <input type="checkbox" name="check_problem" id="check_problem" class="form-check-input" @if ($problem->mensaje) checked @endif disabled>
                     <label for="check_problem" class="form-check-label">¿Tiene alguna problemática?</label>

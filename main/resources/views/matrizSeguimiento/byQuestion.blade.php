@@ -1,3 +1,4 @@
+
 @extends('layouts.base')
 
 @section('titulo')
@@ -25,7 +26,13 @@
         @if($pregunta==5)
         <input type="hidden" value="5" name="pregunta">
         @endif
-        <div class="row" id="pregunta_cuatro" @if($pregunta==5) style="display:none;" @endif>
+        @if($pregunta==7)
+        <input type="hidden" value="7" name="pregunta">
+        @endif
+        @if($pregunta==9)
+        <input type="hidden" value="9" name="pregunta">
+        @endif
+        <div class="row" id="pregunta_cuatro" @if($pregunta==4) style="display:block;" @else style="display:none;" @endif>
             <div class="col">
                 <label for="">Se le ha echo seguimiento Constante?</label>
                 <div class="input-group-text">
@@ -44,7 +51,7 @@
                     <input type="hidden" name="datesInputCall" id="datesInputCall">
                     <div id="obsCall_content">
                         <label for="">Observaciones</label><br>
-                        <textarea name="" id="obsCall" cols="70" rows="3" ></textarea>
+                        <textarea name="" id="obsCall" cols="70" rows="3" ></textarea><br>
                         <button class="btn btn-primary" type="button" onclick="addDate('datesLabelCall','date_call','datesInputCall','call','obsCall','obsInputCall','accordionCall')">add</button>
                         <button class="btn btn-danger" type="button" onclick="deleteDate('datesLabelCall','date_call','datesInputCall','call','obsCall','obsInputCall','accordionCall')">del</button>
                         <input type="hidden" name="obsInputCall" id="obsInputCall" >
@@ -56,7 +63,7 @@
             </div> 
         </div>
 
-        <div class="row" id="pregunta_cinco" @if($pregunta==4) style="display:none;" @endif>
+        <div class="row" id="pregunta_cinco" @if($pregunta==5) style="display:block;" @else style="display:none;" @endif>
             <div class="col">
                 <label for="">Se le ha visitado?</label>
                 <div class="input-group-text">
@@ -75,7 +82,7 @@
                     <input type="hidden" name="datesInputVisit" id="datesInputVisit">
                     <div id="obsvisit_content">
                         <label for="">Observaciones</label><br>
-                        <textarea name="" id="obsVisit" cols="70" rows="3" ></textarea>
+                        <textarea name="" id="obsVisit" cols="70" rows="3" ></textarea><br>
                         <button class="btn btn-primary" type="button" onclick="addDate('datesLabelVisit','date_visit','datesInputVisit','visit','obsVisit','obsInputVisit','accordionVisit')">add</button>
                         <button class="btn btn-danger" type="button" onclick="deleteDate('datesLabelVisit','date_visit','datesInputVisit','visit','obsVisit','obsInputVisit','accordionVisit')">del</button>
                         <input type="hidden" name="obsInputVisit" id="obsInputVisit" >
@@ -86,10 +93,62 @@
                 </div>
             </div>
         </div>
-        {{-- <div class="row">
-            <label for="">Observaciones</label>
-            <textarea name="observaciones" id="obs" cols="30" rows="10"></textarea>
-        </div> --}}
+
+        <div class="row" id="pregunta_siete" @if($pregunta==7) style="display:block;" @else style="display:none;" @endif>
+            <div class="col">
+                <label for="">Ha participado en actividades de forma frecuente?</label>
+                <div class="input-group-text">
+                    <label for="">Si</label>
+                    <input id="pregunta7" type="checkbox" aria-label="Checkbox for following text input" name="pregunta7" value="1" class="grupo7" @if ($seguimientos[0]->respuesta_siete == 1) checked @endif>
+                    <label for="">No</label>
+                    <input id="pregunta7Not" type="checkbox" aria-label="Checkbox for following text input" name="pregunta7" value="0" class="grupo7" @if ($seguimientos[0]->respuesta_siete == 0) checked @endif>
+                </div>
+                
+                <div class="form-group" id="stake" @if ($seguimientos[0]->respuesta_siete == 0) style="display: none;" @endif>
+                    <label for="">En que fechas ha participado?</label>
+                    <input type="date" name="date_stake" id="date_stake">
+                    <button class="btn btn-primary" type="button" onclick="addDate('datesLabelStake','date_stake','datesInputStake','stake')">add</button>
+                    <button class="btn btn-danger" type="button" onclick="deleteDate('datesLabelStake','date_stake','datesInputStake','stake')">del</button>
+                    <hr>
+                    <label id="datesLabelStake">Fechas Seleccionadas: </label>
+                    <hr>
+                    
+                    <input type="hidden" name="datesInputStake" id="datesInputStake">
+                </div>
+            </div>
+        </div>
+
+        <div class="row" id="pregunta_nueve" @if($pregunta==9) style="display:block;" @else style="display:none;" @endif>
+            <div class="col">
+                <label for="">Realizo reuniones con familiares o amigos?</label>
+                <div class="input-group-text">
+                    <label for="">Si</label>
+                    <input id="pregunta9" type="checkbox" aria-label="Checkbox for following text input" name="pregunta9" value="1" class="grupo9" @if ($seguimientos[0]->respuesta_nueve == 1) checked @endif>
+                    <label for="">No</label>
+                    <input id="pregunta9Not" type="checkbox" aria-label="Checkbox for following text input" name="pregunta9" value="0" class="grupo9" @if ($seguimientos[0]->respuesta_nueve == 0) checked @endif>
+                </div>
+                <div class="form-group" id="meeting" @if ($seguimientos[0]->respuesta_nueve == 0) style="display: none;" @endif>
+                    <label for="">En que fechas se ha reunido?</label>
+                    <input type="date" name="date_meeting" id="date_meeting">
+                    <hr>
+                    <label id="datesLabelMeeting">Fechas Seleccionadas: </label>
+                    <hr>
+                    
+                    <input type="hidden" name="datesInputMeeting" id="datesInputMeeting">
+                    <div id="obsMeeting_content">
+                        <label for="">Observaciones</label><br>
+                        <textarea name="" id="obsMeeting" cols="70" rows="3" ></textarea><br>
+                        <button class="btn btn-primary" type="button" onclick="addDate('datesLabelMeeting','date_meeting','datesInputMeeting','meeting','obsMeeting','obsInputMeeting','accordionMeeting')">add</button>
+                        <button class="btn btn-danger" type="button" onclick="deleteDate('datesLabelMeeting','date_meeting','datesInputMeeting','meeting','obsMeeting','obsInputMeeting','accordionMeeting')">del</button>
+                        <input type="hidden" name="obsInputMeeting" id="obsInputMeeting" >
+                    </div>
+                    <div class="accordion mt-2" id="accordionMeeting">
+                        <!-- conetenido -->
+                    </div><br>
+                </div>
+            </div>
+            
+        </div>
 
         <div class="text-center">
             <button type="submit" class="btn btn-primary">Actualizar</button>
@@ -104,10 +163,12 @@
 <script>
     //control de los checkBox
     $(document).ready(function() {
-        const pregunta_cuatro = document.getElementById('pregunta_cuatro');
+        /* const pregunta_cuatro = document.getElementById('pregunta_cuatro');
         const pregunta_cinco = document.getElementById('pregunta_cinco');
+        const pregunta_siete = document.getElementById('pregunta_siete');
+        const pregunta_nueve = document.getElementById('pregunta_nueve'); */
 
-            $('.grupo4, .grupo5').on('change', function() {
+            $('.grupo4, .grupo5, .grupo7, .grupo9').on('change', function() {
                 // Obtenemos el grupo al que pertenece el checkbox que cambió de estado
                 var grupo = $(this).attr('class');
 
@@ -152,37 +213,90 @@
             }
             });
             //NOT
-            //NOT
             chek_pre4Not.change(function() {
                 if (this.checked) {
                     console.log('NOT');
                     div4.style.display = 'none';
                 } 
             });
+
+            //check pregunta 7
+            const chek_pre7 = $('#pregunta7');
+            const chek_pre7Not = $('#pregunta7Not');
+            const div7 = document.getElementById('stake');
+            //YES
+            chek_pre7.change(function() {
+            if (this.checked) {
+                div7.style.display = 'block';
+            } else {
+                div7.style.display = 'none';
+            }
+            });
+            //NOT
+            chek_pre7Not.change(function() {
+                if (this.checked) {
+                    div7.style.display = 'none';
+                } 
+            });
+
+            //check pregunta 9
+            const chek_pre9 = $('#pregunta9');
+            const chek_pre9Not = $('#pregunta9Not');
+            const div9 = document.getElementById('meeting');
+            //YES
+            chek_pre9.change(function() {
+            if (this.checked) {
+                div9.style.display = 'block';
+            } else {
+                div9.style.display = 'none';
+            }
+            });
+            //NOT
+            chek_pre9Not.change(function() {
+                if (this.checked) {
+                    div9.style.display = 'none';
+                } 
+            });
+
         });
 </script>
 
     <script>
+        //declaracion de arrays para contener las fechas y las observaciones
         const obsCall = [];
         const obsVisit = [];
+        const obsMeeting = [];
         const datesCall = [];
         const datesVisit = [];
+        const datesStake = [];
+        const datesMeeting = [];
 
+        //Obtener y añadir las fechas del campo tipo JSON en un array
         var fechas_cuatro='<?= $seguimientos[0]->fechas_cuatro;?>';
         let string_fechas_cuatro = fechas_cuatro.replace(/"/g, '');
         var arr_fechas_cuatro = string_fechas_cuatro.split(',');
         var fechas_cinco='<?= $seguimientos[0]->fechas_cinco;?>';
         let string_fechas_cinco = fechas_cinco.replace(/"/g, '');
         var arr_fechas_cinco = string_fechas_cinco.split(',');
+        var fechas_siete='<?= $seguimientos[0]->fechas_siete;?>';
+        let string_fechas_siete = fechas_siete.replace(/"/g, '');
+        var arr_fechas_siete = string_fechas_siete.split(',');
+        var fechas_nueve='<?= $seguimientos[0]->fechas_nueve;?>';
+        let string_fechas_nueve = fechas_nueve.replace(/"/g, '');
+        var arr_fechas_nueve = string_fechas_nueve.split(',');
 
-        //observaciones
+        //obtener y añadir las observaciones del campo tipo JSON en un array
         var obs_cuatro='<?= $seguimientos[0]->obs_cuatro;?>';
         let string_obs_cuatro = obs_cuatro.replace(/"/g, '');
         var arr_obs_cuatro = string_obs_cuatro.split(',');
         var obs_cinco='<?= $seguimientos[0]->obs_cinco;?>';
         let string_obs_cinco = obs_cinco.replace(/"/g, '');
         var arr_obs_cinco = string_obs_cinco.split(',');
+        var obs_nueve='<?= $seguimientos[0]->obs_nueve;?>';
+        let string_obs_nueve = obs_nueve.replace(/"/g, '');
+        var arr_obs_nueve = string_obs_nueve.split(',');
 
+        //Añadir los elementos de fecha y observaciones al array correspondiente.
         if(string_fechas_cuatro !== 'null' && string_fechas_cuatro !== ''){
             for(let i=0; i<arr_fechas_cuatro.length;i++){
                 datesCall.push(arr_fechas_cuatro[i].trim());
@@ -197,11 +311,24 @@
             updateLabelDates('datesLabelVisit','datesInputVisit','visit');
         }
 
+        if(string_fechas_siete !== 'null' && string_fechas_siete !== ''){
+            for(let i=0; i<arr_fechas_siete.length;i++){
+                datesStake.push(arr_fechas_siete[i].trim());
+            }
+            updateLabelDates('datesLabelStake','datesInputStake','stake');
+        }
+
+        if(string_fechas_nueve !== 'null' && string_fechas_nueve !== ''){
+            for(let i=0; i<arr_fechas_nueve.length;i++){
+                datesMeeting.push(arr_fechas_nueve[i].trim());
+            }
+            updateLabelDates('datesLabelMeeting','datesInputMeeting','meeting');
+        }
+
         if(string_obs_cuatro !== 'null' && string_obs_cuatro !== ''){
             for(let i=0; i<arr_obs_cuatro.length;i++){
                 obsCall.push(arr_obs_cuatro[i].trim());
             }
-            updateLabelDates('datesLabelStake','datesInputStake','stake');
             updateInputObs('obsInputCall','call','accordionCall');
         }
 
@@ -209,8 +336,14 @@
             for(let i=0; i<arr_obs_cinco.length;i++){
                 obsVisit.push(arr_obs_cinco[i].trim());
             }
-            updateLabelDates('datesLabelStake','datesInputStake','stake');
             updateInputObs('obsInputVisit','visit','accordionVisit');
+        }
+
+        if(string_obs_nueve !== 'null' && string_obs_nueve !== ''){
+            for(let i=0; i<arr_obs_nueve.length;i++){
+                obsMeeting.push(arr_obs_nueve[i].trim());
+            }
+            updateInputObs('obsInputMeeting','meeting','accordionMeeting');
         }
 
 
@@ -220,6 +353,7 @@
             const date = inputDate.value;
             const obsCall = document.getElementById('obsCall');
             const obsVisit = document.getElementById('obsVisit');
+            const obsMeeting = document.getElementById('obsMeeting');
 
             if (date) {
                 if(array=='call'){
@@ -244,8 +378,22 @@
                         addObs(input_obs_in,input_obs_out,array,index,accordion);
                         inputDate.value = '';
                     }
-                }     
-                
+                }  
+                if(array=='stake'){
+                    datesStake.push(date);
+                    inputDate.value = '';   
+                }   
+                if(array=='meeting'){
+                if (obsMeeting.value == '') {
+                    obsMeeting.setCustomValidity('Los campos fecha y observaciones son obligatorios'); 
+                    obsMeeting.reportValidity();
+                }
+                else{
+                    const index = datesMeeting.push(date) - 1;
+                    addObs(input_obs_in,input_obs_out,array,index,accordion);
+                    inputDate.value = '';
+                }
+            }        
                 updateLabelDates(label_date,input_date_out,array);
             }
         }
@@ -261,8 +409,17 @@
                 labelDates.textContent = "Fechas Seleccionadas: " + datesVisit.join(", ");
                 inputDates.value = datesVisit.join(", ");
             }   
+            if(array=='stake'){
+                labelDates.textContent = "Fechas Seleccionadas: " + datesStake.join(", ");
+                inputDates.value = datesStake.join(", ");
+            } 
+            if(array=='meeting'){
+                labelDates.textContent = "Fechas Seleccionadas: " + datesMeeting.join(", ");
+                inputDates.value = datesMeeting.join(", ");
+            }     
             
         }
+
         //eliminar una fecha del array dates[]
         function deleteDate(label_date,input_date_in,input_date_out,array,input_obs_in,input_obs_out,accordion) {
             const inputDateDel = document.getElementById(input_date_in);
@@ -291,11 +448,32 @@
                     inputDateDel.value = '';
                     delObs(input_obs_out,array,index,accordion);
                 }
-            }   
+            }  
+            if(array=='stake'){
+                const index = datesStake.indexOf(dateDel);
+
+                if (index !== -1) {
+                    datesStake.splice(index, 1);
+                    
+                    updateLabelDates(label_date,input_date_out,array);
+                }
+            }  
+            if(array=='meeting'){
+                const index = datesMeeting.findIndex((date) => date == dateDel);
+
+                if (index !== -1) {
+                    datesMeeting.splice(index, 1);
+                    
+                    updateLabelDates(label_date,input_date_out,array);
+                    inputDateDel.value = '';
+                    delObs(input_obs_out,array,index,accordion);
+                }
+            }     
         }
 
 
         //----------------------------------------------------------------------------
+        //Crear un nuevo elemento acordion de bootstrap
         function newObservation(title, text, index,accordion){
             const accordionDiv = document.getElementById(accordion);
 
@@ -338,6 +516,7 @@
             accordionDiv.appendChild(content);
             
         }
+        //añadir una observacion en un array, y actualizar los acordiones
         function addObs(input_obs_in,input_obs_out,array,index,accordion) {
             const input_obs = document.getElementById(input_obs_in);
             const obs = input_obs.value;
@@ -352,8 +531,14 @@
                     input_obs.value = '';  
                     updateInputObs(input_obs_out,array,accordion);
                 } 
+                if(array=='meeting'){
+                    obsMeeting.push(obs);
+                    input_obs.value = '';  
+                    updateInputObs(input_obs_out,array,accordion);
+                } 
             }
         }
+        //Actualizar los acordiones con la informacion contenida en los array
         function updateInputObs(input_obs_out,array,accordion){
             const inputObs = document.getElementById(input_obs_out);
             const accordionDiv = document.getElementById(accordion);
@@ -371,8 +556,15 @@
                     newObservation('Observacion', obsVisit[i], i,accordion);
                 }
             }
+            if(array=='meeting'){
+                inputObs.value = obsMeeting.join(", ");
+                accordionDiv.innerHTML='';
+                for(let i=0; i<obsMeeting.length;i++){
+                    newObservation('Observacion', obsMeeting[i], i,accordion);
+                }
+            }
         }
-
+        //Elimina un elemento del array y actualiza los acordiones
         function delObs(input_obs_out,array,index,accordion) {
             if(array=='call'){
                 console.log('entro a call borrar');
@@ -384,6 +576,12 @@
             if(array=='visit'){
                 if (index !== -1) {
                     obsVisit.splice(index, 1);
+                    updateInputObs(input_obs_out,array,accordion);
+                }   
+            }
+            if(array=='meeting'){
+                if (index !== -1) {
+                    obsMeeting.splice(index, 1);
                     updateInputObs(input_obs_out,array,accordion);
                 }   
             }

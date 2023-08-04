@@ -22,6 +22,7 @@ class CreateInfoUsersTable extends Migration
             $table->integer('zona');
             $table->string('puesto')->nullable();
             $table->string('mesa')->nullable();
+            $table->date('fecha_nacimiento')->nullable();
             $table->unsignedBigInteger('referido_id');
             $table->timestamps();
 

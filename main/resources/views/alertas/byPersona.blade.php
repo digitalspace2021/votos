@@ -169,7 +169,7 @@
     <form action="{{route('matriz.editPregunta')}}" method="get">
         <input type="hidden" class="form-control" name="id_matriz" id="id_matriz_siete" readonly>
         <input type="hidden" class="form-control" name="pregunta" id="pregunta" value="7" readonly>
-        <!--<button class="btn btn-primary" type="submit" >Editar</button>-->
+        <button class="btn btn-primary" type="submit" >Editar</button>
     </form>
 
     <br><hr><br>
@@ -184,7 +184,7 @@
     <form action="{{route('matriz.editPregunta')}}" method="get">
         <input type="hidden" class="form-control" name="id_matriz" id="id_matriz_nueve" readonly>
         <input type="hidden" class="form-control" name="pregunta" id="pregunta" value="9" readonly>
-        <!--<button class="btn btn-primary" type="submit" >Editar</button>-->
+        <button class="btn btn-primary" type="submit" >Editar</button>
     </form>
 
     <br><hr><br>
@@ -229,6 +229,7 @@
                             document.getElementById('id_matriz_cuatro').value = response[0].id_matriz;
                             document.getElementById('id_matriz_cinco').value = response[0].id_matriz;
                             document.getElementById('id_matriz_siete').value = response[0].id_matriz;
+                            document.getElementById('id_matriz_nueve').value = response[0].id_matriz;
                             document.getElementById('inputNombre').value = response[0].nombre;
                             document.getElementById('inputDireccion').value = response[0].direccion;
                             document.getElementById('inputTelefono').value = response[0].telefono;

@@ -18,6 +18,7 @@ class AddColumnsToFormulariosTable extends Migration
             $table->boolean('estado')->default(true);
             $table->string('foto')->nullable();
             $table->string ('mesa')->nullable();
+            $table->date('fecha_nacimiento')->nullable();
 
             $table->unsignedBigInteger('candidato_id')->nullable()->change();
             $table->string('zona')->nullable()->change();
@@ -36,6 +37,7 @@ class AddColumnsToFormulariosTable extends Migration
             $table->dropColumn('estado');
             $table->dropColumn('foto');
             $table->dropColumn('mesa');
+            $table->dropColumn('fecha_nacimiento');
 
             $table->unsignedBigInteger('candidato_id')->change();
             $table->string('zona')->change();

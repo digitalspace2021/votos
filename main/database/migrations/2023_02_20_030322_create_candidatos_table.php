@@ -21,6 +21,7 @@ class CreateCandidatosTable extends Migration
             $table->string('direccion');
             $table->unsignedInteger('cargo_id');
             $table->string('email');
+            $table->date('fecha_nacimiento')->nullable();
             $table->timestamps();
         });
     }

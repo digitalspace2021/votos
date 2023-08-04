@@ -176,6 +176,16 @@
                             @enderror --}}
                         </div>
 
+                        <div class="col-md-6 mb-2">
+                            <label for="fecha_nacimiento" class="form-label">Fecha de nacimiento</label>
+                            <input type="date" class="form-control" name="fecha_nacimiento" value="{{old('fecha_nacimiento')}}">
+                            @error('fecha_nacimiento')
+                            <div class="text-danger">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+
                         <div class="col-12">
                             <label for="mensaje" class="form-label">Problematica <span
                                     class="text-muted">(Opcional)</span></label>
