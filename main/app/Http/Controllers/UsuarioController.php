@@ -62,6 +62,7 @@ class UsuarioController extends Controller
             'tipo_zona' => 'required',
             'zona' => 'required',
             'telefono' => 'required|min:7|max:15',
+            'fecha_nacimiento' => ['nullable','date', 'before:today'],
         ]);
 
         $usuario = new $this->model();
@@ -82,6 +83,7 @@ class UsuarioController extends Controller
                 'puesto' => $request->puesto_votacion,
                 'mesa' => $request->mesa,
                 'created_at' => Carbon::now(),
+                'fecha_nacimiento' => $request->fecha_nacimiento,
             ]);
 
             if ($info) {
@@ -192,7 +194,8 @@ class UsuarioController extends Controller
             'password' => 'nullable|confirmed',
             'foto' => 'image|mimes:jpeg,png,jpg,gif,svg|nullable', 
             'tipo_zona' => 'required',
-            'zona' => 'required'
+            'zona' => 'required',
+            'fecha_nacimiento' => ['nullable','date', 'before:today'],
         ]);
 
         $usuario->name = $request->nombre;
@@ -214,6 +217,7 @@ class UsuarioController extends Controller
                 'mesa' => $request->mesa,
                 'referido_id' => $request->referido,
                 'updated_at' => Carbon::now(),
+                'fecha_nacimiento' => $request->fecha_nacimiento
             ]);
         } else {
             $info = DB::table('info_users')->insertGetId([
@@ -225,6 +229,7 @@ class UsuarioController extends Controller
                 'observaciones' => $request->descripcion,
                 'referido_id' => $request->referido,
                 'created_at' => Carbon::now(),
+                'fecha_nacimiento' => $request->fecha_nacimiento
             ]);
 
             if ($info) {

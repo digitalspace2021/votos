@@ -136,7 +136,7 @@
                                     $genero = $info->genero ?? null;
                                 @endphp
                                 <option value="masculino" {{$genero == 'masculino' ? 'selected' : ''}}>Masculino</option>
-                                <option value="femenino" {{$genero == 'femnino' ? 'selected' : ''}}>Femenino</option>
+                                <option value="femenino" {{$genero == 'femenino' ? 'selected' : ''}}>Femenino</option>
                                 <option value="Otro" {{$genero == 'Otro' ? 'selected' : ''}}>Otro</option>
                             </select>
                             @error('genero')
@@ -247,6 +247,17 @@
                                 {{ $message }}
                             </div>
                             @enderror --}}
+                        </div>
+
+                        <div class="col-md-6 mb-2">
+                            <label for="fecha_nacimiento" class="form-label">Fecha de nacimiento</label>
+                            <input type="date" class="form-control" name="fecha_nacimiento" value="{{$info->fecha_nacimiento ?? ''}}"
+                                required>
+                            @error('fecha_nacimiento')
+                            <div class="text-danger">
+                                {{ $message }}
+                            </div>
+                            @enderror
                         </div>
 
                         <div class="col-md-12">
