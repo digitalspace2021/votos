@@ -210,7 +210,7 @@
                                             $puestoA = $info->puesto ?? 'No establecido';
                                         @endphp
                                         
-                                <select name="puesto_votacion" id="puesto" class="form-select" required>
+                                <select name="puesto_votacion" id="puesto" class="form-select">
                                     <option value="" selected disabled>Seleccione un puesto</option>
                                         @foreach ($puestos as $puesto)
                                         <option value="{{$puesto->puesto_nombre}}" 
@@ -239,7 +239,7 @@
                             @php
                                 $mesa = $info->mesa ?? null;
                             @endphp
-                            <select name="mesa" id="mesa" class="form-select" required>
+                            <select name="mesa" id="mesa" class="form-select">
                                 <option value="" selected disabled>Seleccione una mesa</option>
                             </select>
                             {{-- @error('mesa')
