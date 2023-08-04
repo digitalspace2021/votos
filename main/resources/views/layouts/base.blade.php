@@ -154,6 +154,9 @@
 
                                 <a class="me-3 py-2 text-dark text-decoration-none btn-hover"
                                     href="{{ auth()->check() ? route('actividad.index') : route('actividad.create') }}"><i class="fa fa-tasks" aria-hidden="true"></i> Actividades</a>
+
+                                    <a class="me-3 py-2 text-dark text-decoration-none btn-hover"
+                                    href="{{ route('cumpleanios.index') }}"><i class="fa fa-birthday-cake" aria-hidden="true"></i> Cumpleaños</a>
                                 
                                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                                     <li class="nav-item dropdown">

@@ -81,7 +81,7 @@ class ProblemController extends Controller
             ->addColumn('acciones', function ($problem) {
                 $btn = '<a href="' . route('problems.show', $problem->id) . '" class="btn btn-outline-secondary btn-sm" title="Ver problema"><i class="fa fa-eye"></i></a>';
                 if (Auth::user()->hasRole('administrador')) {
-                    $btn .= '<a href="' . route('problems.destroy', $problem->id) . '" class="btn btn-outline-danger btn-sm" title="Eliminar problema"><i class="fa fa-times"></i></a>';
+                    $btn .= '<a href="' . route('problems.destroy', $problem->id) . '" class="btn btn-outline-danger m-2 btn-sm" title="Eliminar problema"><i class="fa fa-times"></i></a>';
                     $btn .= '<a href="' . route('problems.edit', $problem->id) . '" class="btn btn-outline-primary m-2 btn-sm" title="Editar problema"><i class="fa fa-edit"></i></a>';
 
                     $status = false;
@@ -203,6 +203,7 @@ class ProblemController extends Controller
             'email' => $request->email,
             'vinculo' => $request->vinculo,
             'mensaje' => $request->check_problem ? $request->mensaje : null,
+            'fecha_nacimiento' => $request->fecha_nacimiento
         ]);
 
         if ($request->hasFile('foto')) {
@@ -273,6 +274,7 @@ class ProblemController extends Controller
             'email' => $request->email,
             'vinculo' => $request->vinculo,
             'mensaje' => $request->descripcion,
+            'fecha_nacimiento' => $request->fecha_nacimiento
         ]);
 
         if ($request->hasFile('foto')) {

@@ -6,6 +6,7 @@ use App\Http\Controllers\AsambHighchartController;
 use App\Http\Controllers\CandidatoController;
 use App\Http\Controllers\CargoController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\CumpleaniosController;
 use App\Http\Controllers\EdilHighchartController;
 use App\Http\Controllers\FileManagementController;
 use App\Http\Controllers\FileOportunidadesManagementController;
@@ -199,6 +200,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/usuarios-vars/{id}/edit', [UsuariosEdilController::class, 'edit'])->name('users-edils.edit');
     Route::put('/usuarios-vars/{id}/update', [UsuariosEdilController::class, 'update'])->name('users-edils.update');
     Route::get('/usuarios-vars/{id}/delete', [UsuariosEdilController::class, 'destroy'])->name('users-edils.destroy');
+
+    /* cumpleanios */
+    Route::get('/cumpleanios/usuarios', [CumpleaniosController::class, 'index'])->name('cumpleanios.index');
+    Route::get('/cumpleanios/usuarios/getAll', [CumpleaniosController::class, 'getAll'])->name('cumpleanios.getAll');
 });
 Route::get('/oportunidades', [ProblemController::class, 'index'])->name('problems.index');
 Route::get('/oportunidades/getall', [ProblemController::class, 'getAll'])->name('problems.getAll');
