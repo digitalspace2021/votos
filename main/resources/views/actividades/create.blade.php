@@ -74,7 +74,7 @@
         
         <br>
         <div class="text-center">
-            <button type="submit" class="btn btn-primary">Crear</button>
+            <button type="submit" class="btn btn-primary" id="btn_create">Crear</button>
             <a  href="{{ auth()->check() ? route('actividad.index') : route('home') }}" class="btn btn-danger">Cancelar</a>
         </div>
       </form>
@@ -142,10 +142,10 @@
             $('#alert').removeClass('alert-danger').addClass('alert-success');
             $('#alert').text(data.success);
             $('#alert').show();
-
+            document.getElementById('btn_create').disabled = true;
             setTimeout(function() {
               window.location.href = data.redirect;
-            }, 3000);
+            }, 2000);
           }
         },
         error: function(xhr, status, error) {

@@ -128,6 +128,12 @@ Ver {{$edil->rol}}
                         <input type="text" name="puesto_votacion" id="" class="form-control" value="{{$edil->mesa}}" disabled required>
                     </div>
                 </div>
+
+                <div class="col-md-6 mb-2">
+                    <label for="fecha_nacimiento" class="form-label">Fecha de nacimiento</label>
+                    <input type="date" class="form-control" name="fecha_nacimiento" value="{{$edil->fecha_nacimiento}}" required disabled>
+                </div>
+
                 <div class="col-md-12">
                     <label for="descripcion" class="form-label">Descripcion</label>
                     <textarea name="descripcion" id="" cols="30" rows="5" class="form-control"

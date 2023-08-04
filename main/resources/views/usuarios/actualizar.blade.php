@@ -136,7 +136,7 @@
                                     $genero = $info->genero ?? null;
                                 @endphp
                                 <option value="masculino" {{$genero == 'masculino' ? 'selected' : ''}}>Masculino</option>
-                                <option value="femenino" {{$genero == 'femnino' ? 'selected' : ''}}>Femenino</option>
+                                <option value="femenino" {{$genero == 'femenino' ? 'selected' : ''}}>Femenino</option>
                                 <option value="Otro" {{$genero == 'Otro' ? 'selected' : ''}}>Otro</option>
                             </select>
                             @error('genero')
@@ -210,7 +210,7 @@
                                             $puestoA = $info->puesto ?? 'No establecido';
                                         @endphp
                                         
-                                <select name="puesto_votacion" id="puesto" class="form-select" required>
+                                <select name="puesto_votacion" id="puesto" class="form-select">
                                     <option value="" selected disabled>Seleccione un puesto</option>
                                         @foreach ($puestos as $puesto)
                                         <option value="{{$puesto->puesto_nombre}}" 
@@ -239,7 +239,7 @@
                             @php
                                 $mesa = $info->mesa ?? null;
                             @endphp
-                            <select name="mesa" id="mesa" class="form-select" required>
+                            <select name="mesa" id="mesa" class="form-select">
                                 <option value="" selected disabled>Seleccione una mesa</option>
                             </select>
                             {{-- @error('mesa')
@@ -247,6 +247,16 @@
                                 {{ $message }}
                             </div>
                             @enderror --}}
+                        </div>
+
+                        <div class="col-md-6 mb-2">
+                            <label for="fecha_nacimiento" class="form-label">Fecha de nacimiento</label>
+                            <input type="date" class="form-control" name="fecha_nacimiento" value="{{$info->fecha_nacimiento ?? ''}}">
+                            @error('fecha_nacimiento')
+                            <div class="text-danger">
+                                {{ $message }}
+                            </div>
+                            @enderror
                         </div>
 
                         <div class="col-md-12">

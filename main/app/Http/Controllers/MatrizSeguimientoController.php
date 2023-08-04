@@ -189,6 +189,17 @@ class MatrizSeguimientoController extends Controller
             $matriz->fechas_cinco = ($request->datesInputVisit && $request->pregunta5 == 1) ? json_encode($request->datesInputVisit) : NULL;
             $matriz->obs_cinco = ($request->obsInputVisit && $request->pregunta5 == 1) ? json_encode($request->obsInputVisit) : NULL;
         }
+
+        if($request->pregunta == 7){
+            $matriz->respuesta_siete = $request->pregunta7;
+            $matriz->fechas_siete = ($request->datesInputStake && $request->pregunta7 == 1) ? json_encode($request->datesInputStake) : NULL;
+        }
+
+        if($request->pregunta == 9){
+            $matriz->respuesta_nueve = $request->pregunta9;
+            $matriz->fechas_nueve = ($request->datesInputMeeting && $request->pregunta9 == 1) ? json_encode($request->datesInputMeeting) : NULL;
+            $matriz->obs_nueve = ($request->obsInputMeeting && $request->pregunta9 == 1) ? json_encode($request->obsInputMeeting) : NULL;
+        }
        
         $matriz->save();
 

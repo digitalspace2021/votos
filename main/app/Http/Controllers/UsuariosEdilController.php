@@ -129,6 +129,7 @@ class UsuariosEdilController
             'descripcion' => $request->descripcion,
             'puesto_votacion' => $request->puesto_votacion,
             'mesa' => $request->mesa,
+            'fecha_nacimiento' => $request->fecha_nacimiento,
         ]);
 
         if ($request->hasFile('foto')) {
