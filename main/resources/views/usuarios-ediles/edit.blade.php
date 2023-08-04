@@ -168,6 +168,17 @@ Editar {{$edil->rol}}
                     @enderror --}}
                 </div>
 
+                <div class="col-md-6 mb-2">
+                    <label for="fecha_nacimiento" class="form-label">Fecha de nacimiento</label>
+                    <input type="date" class="form-control" name="fecha_nacimiento" value="{{old('fecha_nacimiento') ?? $edil->fecha_nacimiento}}"
+                        required>
+                    @error('fecha_nacimiento')
+                    <div class="text-danger">
+                        {{ $message }}
+                    </div>
+                    @enderror
+                </div>
+
                 <div class="col-md-12">
                     <label for="descripcion" class="form-label">Descripcion</label>
                     <textarea name="descripcion" id="" cols="30" rows="5" class="form-control"
