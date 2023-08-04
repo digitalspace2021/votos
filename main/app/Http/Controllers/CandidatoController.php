@@ -62,6 +62,7 @@ class CandidatoController extends Controller
             'telefono' => 'required|max:255',
             'direccion' => 'required|max:255',
             'cargo_id' => 'required',
+            'fecha_nacimiento' => 'nullable|date|before:today',
         ]);
 
         $this->assigneValues($request)->save();
@@ -95,6 +96,7 @@ class CandidatoController extends Controller
             'telefono' => 'required|max:255',
             'direccion' => 'required|max:255',
             'cargo_id' => 'required',
+            'fecha_nacimiento' => 'nullable|date|before:today',
         ]);
 
         $this->assigneValues($request, $candidato)->save();
@@ -147,6 +149,7 @@ class CandidatoController extends Controller
         $item->direccion = $request->direccion;
         $item->cargo_id = $request->cargo_id;
         $item->email = ' ';
+        $item->fecha_nacimiento = $request->fecha_nacimiento;
         return $item;
     }
 }
