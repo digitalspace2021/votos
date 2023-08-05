@@ -43,6 +43,14 @@ class CumpleaniosController extends Controller
                     $btn = '<a href="' . route('users-edils.show',  ['id' => $user->id, 'type' => $user->rol]) . '" class="btn btn-sm btn-primary" target="_blank">Ver</a>';
                 }
 
+                if ($user->rol === 'Formulario') {
+                    $btn = '<a href="' . route('formularios.ver',  $user->id) . '" class="btn btn-sm btn-primary" target="_blank">Ver</a>';
+                }
+
+                if ($user->rol === 'Posible Votante') {
+                    $btn = '<a href="' . route('problems.show',  $user->id) . '" class="btn btn-sm btn-primary" target="_blank">Ver</a>';
+                }
+
                 return $btn;
             })
             ->rawColumns(['acciones'])
@@ -81,7 +89,23 @@ class CumpleaniosController extends Controller
             ->whereNotNull('usuarios_ediles.fecha_nacimiento')
             ->get();
 
-        $merged = $users->concat($candidatos)->concat($asam_and_edils);
+        $form_oficiales = DB::table('formularios')
+            ->select('formularios.id', 'formularios.identificacion', 'formularios.fecha_nacimiento', 'formularios.estado')
+            ->addSelect(DB::raw('CONCAT(formularios.nombre, " ", formularios.apellido) as name'))
+            ->whereNotNull('formularios.fecha_nacimiento')
+            ->get();
+        $form_oficiales->map(function ($form_oficial) {
+
+            if ($form_oficial->estado) {
+                $form_oficial->rol = 'Formulario';
+            } else {
+                $form_oficial->rol = 'Posible Votante';
+            }
+
+            return $form_oficial;
+        });
+
+        $merged = $users->concat($candidatos)->concat($asam_and_edils)->concat($form_oficiales);
         $merged = $merged->all();
 
         $merged = $this->calculateTime($merged);
@@ -89,7 +113,7 @@ class CumpleaniosController extends Controller
         usort($merged, function ($a, $b) {
             $aTimestamp = strtotime(date('Y-m-d', strtotime('+1 year', strtotime($a->fecha_nacimiento))));
             $bTimestamp = strtotime(date('Y-m-d', strtotime('+1 year', strtotime($b->fecha_nacimiento))));
-    
+
             return $aTimestamp - $bTimestamp;
         });
 
