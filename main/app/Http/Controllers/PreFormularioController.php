@@ -192,7 +192,7 @@ class PreFormularioController extends Controller
             return back()->with('error', 'Error al aprobar la preview del formulario');
         }
 
-        if (!$pre_formulario->email || !$pre_formulario->direccion || !$pre_formulario->puesto_votacion) {
+        if (!$pre_formulario->direccion || !$pre_formulario->puesto_votacion) {
             return back()->with('error', 'Para aprobar es necesario que el formulario tenga email, dirección y puesto de votación');
         }
 
@@ -207,7 +207,7 @@ class PreFormularioController extends Controller
             'puesto_votacion' => $pre_formulario->puesto_votacion,
             'mesa' => $pre_formulario->mesa,
             'genero' => $pre_formulario->genero,
-            'email' => $pre_formulario->email,
+            'email' => $pre_formulario->email ?? '',
             'mensaje' => $pre_formulario->mensaje,
             'tipo_zona' => $pre_formulario->tipo_zona,
             'zona' => $pre_formulario->zona,
