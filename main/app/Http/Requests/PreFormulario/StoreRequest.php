@@ -33,7 +33,7 @@ class StoreRequest extends FormRequest
             'direccion' => ['required', 'max:255'],
             'puesto' => ['required'],
             'descripcion' => ['required', 'min:10'],
-            'email' => ['required', 'email', 'max:255'],
+            'email' => ['nullable', 'email', 'max:255'],
             'genero' => ['required', 'string', 'in:Hombre,Mujer,Otro'],
             'tipo_zona' => ['required', 'string', 'in:Comuna,Corregimiento'],
             'zona' => ['required'],
