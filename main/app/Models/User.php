@@ -38,4 +38,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /* info_id is a relation with info_users table */
+    public function info()
+    {
+        return $this->belongsTo(InfoUser::class);
+    }
+    
 }

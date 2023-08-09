@@ -91,6 +91,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/usuarios/{id}/actualizar', [UsuarioController::class, 'actualizar_guardar'])->name('usuarios.actualizar.guardar');
     Route::get('/usuarios/{id}/eliminar', [UsuarioController::class, 'eliminar'])->name('usuarios.eliminar');
     Route::get('/usuarios/{id}/eliminar/conf', [UsuarioController::class, 'eliminar_confirmar'])->name('usuarios.eliminar.confirmar');
+    Route::post('/usuarios/{id}/form', [UsuarioController::class, 'generateForm'])->name('usuarios.form');
 
     Route::get('/candidatos', [CandidatoController::class, 'index'])->name('candidatos');
     Route::get('/candidatos/tabla', [CandidatoController::class, 'tabla'])->name('candidatos.tabla');
