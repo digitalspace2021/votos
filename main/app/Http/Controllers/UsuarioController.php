@@ -28,7 +28,12 @@ class UsuarioController extends Controller
     //diferents?
     public function tabla()
     {
-        return DataTables::of($this->model::query())
+        $users = $this->model::query();
+
+        $users = $users->select('users.*', 'formularios.id as formulario_id')
+            ->leftJoin('formularios', 'users.identificacion', '=', 'formularios.identificacion');
+
+        return DataTables::of($users)
             ->addColumn('rol', function ($col) {
                 return implode(",", $col->getRoleNames()->toArray());
             })
@@ -42,6 +47,10 @@ class UsuarioController extends Controller
                     if ($col->id != 1) {
                         $btn .= '<a href="' . route(trans($this->plural) . ".eliminar", $col->id) . '" class="btn btn-outline-danger" title="Eliminar ' . trans($this->singular) .  ' "><i class="fa fa-times"></i></a>';
                     }
+                }
+
+                if(!$col->formulario_id && Auth::user()->hasRole('administrador')){
+                    $btn .=  '<button user_id='.$col->id.' class="btn btn-outline-success ml-2 generate" title="Generar Formulario ' . trans($this->singular) .  '"><i class="fa fa-check"></i></button>';
                 }
                 return $btn;
             })
@@ -160,8 +169,8 @@ class UsuarioController extends Controller
                     WHEN pv.zone_type = 'Comuna' THEN CONCAT('Barrio: ', COALESCE(barrios.name, 'Sin información'))
                     WHEN pv.zone_type = 'Corregimiento' THEN CONCAT('Vereda: ', COALESCE(veredas.name, 'Sin información'))
                 END) AS puesto_nombre, pv.id"))
-                /* after case */
-                /* , ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre */
+            /* after case */
+            /* , ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre */
             ->leftJoin('barrios', function ($join) {
                 $join->on('pv.zone', '=', 'barrios.id')
                     ->where('pv.zone_type', '=', 'Comuna');
@@ -192,7 +201,7 @@ class UsuarioController extends Controller
             'email' => 'required|email|max:255|unique:users,email,' . $usuario->id,
             'rol' => 'required',
             'password' => 'nullable|confirmed',
-            'foto' => 'image|mimes:jpeg,png,jpg,gif,svg|nullable', 
+            'foto' => 'image|mimes:jpeg,png,jpg,gif,svg|nullable',
             'tipo_zona' => 'required',
             'zona' => 'required',
             'fecha_nacimiento' => ['nullable','date', 'before:today'],
@@ -266,5 +275,90 @@ class UsuarioController extends Controller
 
         Alert::success(trans($this->className), 'Se ha actualizado el usuario con exito!');
         return redirect()->route(trans($this->plural));
+    }
+
+    /**
+     * This function generates a form for a user with the given ID, based on their information and
+     * validates certain conditions before creating the form.
+     * 
+     * @param int id The ID of the user for whom the form is being generated.
+     * @param Request request The  parameter is an instance of the Request class, which is used
+     * to retrieve data from the HTTP request. It contains information such as form input values,
+     * headers, cookies, and more. In this function, it is used to retrieve the value of the
+     * 'candidato_id' field from
+     * 
+     * @return a redirect response.
+     */
+    public function generateForm(int $id, Request $request)
+    {
+        $user = User::find($id);
+
+        if ($this->validateUserToForm($user->identificacion)) {
+            return redirect()->route('usuarios')->with('error', 'El usuario ya tiene un formulario generado, con la identificación: ' . $user->identificacion );
+        }
+
+        /* validate if have realtion with info */
+        if (!$user->info) {
+            return redirect()->route('usuarios')->with('error', 'El usuario le hace falta información, por favor asignar una para poder generar el formulario');
+        }
+
+        if($user->info->puesto == null || $user->info->mesa == null){
+            return redirect()->route('usuarios')->with('error', 'El usuario no tiene puesto de votación asignado, por favor asignar uno para poder generar el formulario');
+        }
+
+        if ($user->info->genero == 'femenino') {
+            $user->info->genero = 'Mujer';
+        } else if ($user->info->genero == 'masculino') {
+            $user->info->genero = 'Hombre';
+        } else {
+            $user->info->genero = 'Otro';
+        }
+
+        Formulario::create([
+            'candidato_id' => $request->candidato_id,
+            'propietario_id' => $user->info->referido_id ? $user->info->referido_id : $user->id,
+            'nombre' => $user->name,
+            'apellido' => $user->name,
+            'identificacion' => $user->identificacion,
+            'email' => $user->email,
+            'telefono' => $user->info->telefono,
+            'direccion' => $user->info->direccion,
+            'genero' => $user->info->genero,
+            'tipo_zona' => $user->info->tipo_zona,
+            'zona' => $user->info->zona,
+            'puesto_votacion' => $user->info->puesto,
+            'mesa' => $user->info->mesa,
+            'mensaje' => $user->info->observaciones ? $user->info->observaciones : 'Sin información',
+            'foto' => $user->foto,
+            'created_at' => Carbon::now(),
+        ]);
+
+        /* if user has a file image copy the file and copy to the route formulario */
+        if ($user->foto) {
+            Storage::copy('public/' . $user->foto, 'public/formulario/' . $user->foto);
+        }
+
+        return redirect()->route('usuarios')->with('success', 'Se ha generado el formulario con exito!');
+    }
+
+    /**
+     * The function checks if a user with a given identification exists in the "formularios" table and
+     * returns a boolean value indicating the result.
+     * 
+     * @param string identificacion The parameter "identificacion" is a string that represents the
+     * identification of a user.
+     * 
+     * @return bool a boolean value. It returns true if there is a record in the "formularios" table
+     * with the given "identificacion" value, and false otherwise.
+     */
+    private function validateUserToForm(string $identificacion): bool
+    {
+        $forms = DB::table('formularios')->where('identificacion', $identificacion)->first(['identificacion']);
+
+        if (!$forms) {
+            return false;
+        }
+
+        return true;
     }
 }
