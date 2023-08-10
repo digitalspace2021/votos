@@ -49,8 +49,8 @@ class FormularioController extends Controller
     public function tabla(Request $request)
     {
         $formularios = $this->model::query();
-        $formularios->join('barrios', 'formularios.zona', '=', 'barrios.id')->join('comunas', 'barrios.comuna_id', '=', 'comunas.id');
-        $formularios->join('veredas', 'formularios.zona', '=', 'veredas.id')->join('corregimientos', 'veredas.corregimiento_id', '=', 'corregimientos.id');
+        $formularios->leftJoin('barrios', 'formularios.zona', '=', 'barrios.id')->leftJoin('comunas', 'barrios.comuna_id', '=', 'comunas.id');
+        $formularios->leftJoin('veredas', 'formularios.zona', '=', 'veredas.id')->leftJoin('corregimientos', 'veredas.corregimiento_id', '=', 'corregimientos.id');
         if (!empty($candidato = $request->candidato)) {
             $formularios->where(function ($query) use ($candidato) {
                 $query->where('candidato_id', $candidato)
