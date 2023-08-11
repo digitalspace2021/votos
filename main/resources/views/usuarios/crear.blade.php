@@ -102,7 +102,7 @@
                         </div>
                         <div class="col-md-6">
                             <label for="referido" class="form-label">Referido</label>
-                            <select name="referido" id="" class="form-select">
+                            <select name="referido" id="referido" class="form-select">
                                 <option value="">Selecciona el usuario que te asigno</option>
                                 @foreach ($users as $item)
                                     <option value="{{ $item->id }}"
@@ -289,6 +289,7 @@
 
                 $('#puesto').select2();
                 $('#mesa').select2();
+                $('#referido').select2();
 
                 let mesas = "{{route('ut.get_mesas')}}";
                 $('#puesto').change(function(){
