@@ -12,6 +12,7 @@ use App\Http\Controllers\FileManagementController;
 use App\Http\Controllers\FileOportunidadesManagementController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\FormularioController;
+use App\Http\Controllers\HelpersValidationController;
 use App\Http\Controllers\HighchartController;
 use App\Http\Controllers\MatrizSeguimientoController;
 use App\Http\Controllers\MesaVotacionController;
@@ -219,6 +220,10 @@ Route::post('/actividades/create',[ActividadController::class,'store'])->name('a
 
 /* utils */
 Route::get('get_mesas', [UtilityController::class, 'getMesas'])->name('ut.get_mesas');
+
+/* helers validation */
+Route::post('validate_email', [HelpersValidationController::class, 'validateEmail'])->name('validate_email');
+Route::post('validate_identification', [HelpersValidationController::class, 'validateIdentification'])->name('validate_identification');
 
 
 /* route storage link command */
