@@ -58,12 +58,12 @@ Crear formulario
 <div class="container">
 
     <div class="d-flex justify-content-center align-items-center w-75" style="margin-left: auto; margin-right: auto;">
-        <form action="{{route('problems.store')}}" method="POST" enctype="multipart/form-data" novalidate>
+        <form action="{{route('problems.store')}}" method="POST" enctype="multipart/form-data" id="createProblem">
             @csrf
             @if (Auth::check())
-                @if (Auth::user()->hasRole('simple'))
-                    <input type="hidden" name="creador" value="{{Auth::user()->id}}">
-                @endif
+            @if (Auth::user()->hasRole('simple'))
+            <input type="hidden" name="creador" value="{{Auth::user()->id}}">
+            @endif
             @endif
             <div class="row" id="step1">
                 <div class="col-md-12 mb-2">
@@ -87,7 +87,7 @@ Crear formulario
                 </div>
                 <div class="col-md-12 mb-2">
                     <label for="identificacion">Identificacion</label>
-                    <input type="number" name="identificacion" id="" class="form-control"
+                    <input type="number" name="identificacion" id="identificacion" class="form-control"
                         value="{{old('identificacion')}}" required>
                     @error('identificacion')
                     <div class="text-danger">
@@ -116,7 +116,7 @@ Crear formulario
                 </div>
                 <div class="col-md-6 mb-2">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" name="email" value="{{old('email')}}" required>
+                    <input type="email" class="form-control" name="email" id="email" value="{{old('email')}}" required>
                     @error('email')
                     <div class="text-danger">
                         {{ $message }}
@@ -169,9 +169,8 @@ Crear formulario
                     <select name="puesto" id="puesto" class="form-select" required>
                         <option value="" disabled>Seleccione un puesto</option>
                         @foreach ($puestos as $puesto)
-                        <option value="{{$puesto->puesto_nombre}}" 
-                            @if (old('puesto')==$puesto->puesto_nombre)
-                                selected
+                        <option value="{{$puesto->puesto_nombre}}" @if (old('puesto')==$puesto->puesto_nombre)
+                            selected
                             @endif
                             puesto_id="{{$puesto->id}}"
                             >{{$puesto->puesto_nombre}}</option>
@@ -266,10 +265,10 @@ Crear formulario
                     <label for="" class="form-label">Seleccione el edil al cual dara su apoyo:</label>
                     <div class="col-6">
                         @foreach ($edils as $item)
-                            @if ($item->rol == 'Edil')
-                                <input type="radio" name="user_edil" value="{{$item->id}}">
-                                <label for="" class="form-label">{{$item->nombres}} {{$item->apellidos}}</label>
-                            @endif
+                        @if ($item->rol == 'Edil')
+                        <input type="radio" name="user_edil" value="{{$item->id}}">
+                        <label for="" class="form-label">{{$item->nombres}} {{$item->apellidos}}</label>
+                        @endif
                         @endforeach
                     </div>
 
@@ -283,10 +282,10 @@ Crear formulario
                     <label for="" class="form-label">Seleccione el asambleista al cual dara su apoyo:</label>
                     <div class="col-6">
                         @foreach ($edils as $item)
-                            @if ($item->rol == 'Asambleista')
-                                <input type="radio" name="asamb_edil" value="{{$item->id}}">
-                                <label for="" class="form-label">{{$item->nombres}} {{$item->apellidos}}</label>
-                            @endif
+                        @if ($item->rol == 'Asambleista')
+                        <input type="radio" name="asamb_edil" value="{{$item->id}}">
+                        <label for="" class="form-label">{{$item->nombres}} {{$item->apellidos}}</label>
+                        @endif
                         @endforeach
                     </div>
 
@@ -425,6 +424,9 @@ Crear formulario
 
 @section('js-extra')
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"
+    integrity="sha512-rstIgDs0xPgmG6RX1Aba4KV5cWJbAMcvRCVmglpam9SoHZiUCyQVDdH2LPlxoHtrv17XWblE/V/PP+Tr04hbtA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     let edil1 = $("#edil1");
     let edil2 = $("#edil2");
@@ -562,6 +564,11 @@ Crear formulario
             }
         });
     });
+    
 
+    let routeValidateEmail = "{{route('validate_email')}}";
+    let routeValidateIdentificacion = "{{route('validate_identification')}}";
+    let _token = "{{csrf_token()}}";
 </script>
+<script src="{{ URL::asset('js/form-public/validate.js') }}"></script>
 @endsection
