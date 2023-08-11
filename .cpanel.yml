@@ -1,7 +1,7 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/politicosdevjvnt/public_html/
+    - export DEPLOYPATH=/home/carlosbeltranjvn/public_html/
     - /bin/cp -R  . $DEPLOYPATH
     - /bin/cp -r  .git
     # - /bin/cp -R --exclude='.git' .  $DEPLOYPATH
