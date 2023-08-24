@@ -143,7 +143,8 @@ class FormularioController extends Controller
             'puesto_votacion' => 'required|max:255',
             'mensaje' => 'nullable',
             'foto' => 'nullable|image',
-            'fecha_nacimiento' => 'nullable|date|before:today'
+            'fecha_nacimiento' => 'nullable|date|before:today',
+            'desc_persona' => 'nullable|max:500'
         ]);
 
         $formulario =  $this->model;
@@ -162,6 +163,7 @@ class FormularioController extends Controller
         $formulario->candidato_id = $request->candidato_id;
         $formulario->identificacion = $request->identificacion;
         $formulario->fecha_nacimiento = $request->fecha_nacimiento;
+        $formulario->per_descrip = $request->desc_persona;
 
         if ($request->hasFile('foto')) {
             $path = $request->file('foto')->store('formularios', 'public');
@@ -227,7 +229,8 @@ class FormularioController extends Controller
             'puesto_votacion' => 'required|max:255',
             'mensaje' => 'nullable',
             'foto' => 'nullable|image',
-            'fecha_nacimiento' => 'nullable|date|before:today'
+            'fecha_nacimiento' => 'nullable|date|before:today',
+            'per_descrip' => 'nullable|max:500'
         ]);
 
         $formulario->propietario_id = $request->creador_id;
@@ -245,6 +248,7 @@ class FormularioController extends Controller
         $formulario->identificacion = $request->identificacion;
         $formulario->candidato_id = $request->candidato_id;
         $formulario->fecha_nacimiento = $request->fecha_nacimiento;
+        $formulario->per_descrip = $request->desc_persona;
 
         if ($request->hasFile('foto')) {
 

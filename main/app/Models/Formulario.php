@@ -28,6 +28,7 @@ class Formulario extends Model
         'foto',
         'mesa',
         'fecha_nacimiento',
+        'per_descrip'
         
     ];
 

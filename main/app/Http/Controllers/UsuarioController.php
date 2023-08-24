@@ -328,7 +328,9 @@ class UsuarioController extends Controller
             'zona' => $user->info->zona,
             'puesto_votacion' => $user->info->puesto,
             'mesa' => $user->info->mesa,
+            'fecha_nacimiento' => $user->info->fecha_nacimiento,
             'mensaje' => $user->info->observaciones ? $user->info->observaciones : 'Sin información',
+            'per_descrip' => $user->info->observaciones ? $user->info->observaciones : 'Sin información',
             'foto' => $user->foto,
             'created_at' => Carbon::now(),
         ]);

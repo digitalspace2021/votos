@@ -26,9 +26,9 @@ class CreateInfoUsersTable extends Migration
             $table->unsignedBigInteger('referido_id');
             $table->timestamps();
 
-            $table->foreign('referido_id') 
+            /* $table->foreign('referido_id') 
                   ->references('id') 
-                  ->on('users'); 
+                  ->on('users');  */
         });
     }
 

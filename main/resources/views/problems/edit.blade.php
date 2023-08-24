@@ -206,6 +206,17 @@ Editar Posible Votante
                     @enderror
                 </div>
 
+                <div class="col-12 mb-2">
+                    <label for="mensaje" class="form-label">Descripcion Persona <span
+                            class="text-muted">(Opcional)</span></label>
+                    <textarea class="form-control" name="desc_persona" id="desc_persona" cols="30" rows="3">{{$problem->per_descrip}}</textarea>
+                    @error('desc_persona')
+                        <div class="text-danger">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+
                 <div class="col-md-12 mb-2">
                     <input type="checkbox" name="check_problem" id="check_problem" class="form-check-input" @if ($problem->mensaje) checked @endif>
                     <label for="check_problem" class="form-check-label">¿Tiene alguna problemática?</label>

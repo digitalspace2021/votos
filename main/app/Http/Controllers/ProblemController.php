@@ -203,7 +203,8 @@ class ProblemController extends Controller
             'email' => $request->email,
             'vinculo' => $request->vinculo,
             'mensaje' => $request->check_problem ? $request->mensaje : null,
-            'fecha_nacimiento' => $request->fecha_nacimiento
+            'fecha_nacimiento' => $request->fecha_nacimiento,
+            'per_descrip' => $request->desc_persona,
         ]);
 
         if ($request->hasFile('foto')) {
@@ -274,7 +275,8 @@ class ProblemController extends Controller
             'email' => $request->email,
             'vinculo' => $request->vinculo,
             'mensaje' => $request->descripcion,
-            'fecha_nacimiento' => $request->fecha_nacimiento
+            'fecha_nacimiento' => $request->fecha_nacimiento,
+            'per_descrip' => $request->desc_persona,
         ]);
 
         if ($request->hasFile('foto')) {
