@@ -39,6 +39,7 @@ class StoreRequest extends FormRequest
             'cons' => ['required'],
             'foto' => ['nullable', 'image'],
             'fecha_nacimiento' => ['nullable','date', 'before:today'],
+            'per_descrip' => ['nullable', 'max:500'],
         ];
 
         if ($this->edil) {
