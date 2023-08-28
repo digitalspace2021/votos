@@ -24,10 +24,20 @@
         <div class="mb-3">
           <label for="inputName" class="form-label">Nombre del puesto de Votacion</label>
           <input type="text" class="form-control" name="inputName" id="inputName" aria-describedby="puesto de votacion">
+          @error('inputName')
+              <div class="text-danger">
+                {{$message}}
+              </div>
+          @enderror
         </div>
         <div class="mb-3">
           <label for="inputDescript" class="form-label">Descripcion</label>
           <textarea type="text" class="form-control" id="inputDescript" name="inputDescript"></textarea>
+          @error('inputDescript')
+              <div class="text-danger">
+                {{$message}}
+              </div>
+          @enderror
         </div>
         <div class="mb-3">
             <label for="inputName" class="form-label">Tipo de ubicacion</label>
@@ -36,16 +46,26 @@
                 <option value="Comuna">Comuna</option>
                 <option value="Corregimiento">Corregimiento</option>
             </select>
+            @error('selectTypeZone')
+              <div class="text-danger">
+                {{$message}}
+              </div>
+          @enderror
         </div>
         <div class="mb-3">
             <label for="inputName" class="form-label" id="label_zone">Barrio / Vereda</label>
             <select class="form-select" aria-label="typeZone" id="zone" name="zone">
             </select>
+            @error('zone')
+              <div class="text-danger">
+                {{$message}}
+              </div>
+          @enderror
         </div>
         
         <div class="text-center">
             <button type="submit" class="btn btn-primary">Crear</button>
-            <a href="" class="btn btn-danger">Cancelar</a>
+            <a href="{{route('puestoVotacion.index')}}" class="btn btn-danger">Cancelar</a>
         </div>
       </form>
 </div>

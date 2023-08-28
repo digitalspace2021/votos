@@ -51,7 +51,7 @@ class PuestoVotacionController extends Controller
     {
         $request->validate([
             'inputName' => 'required|max:255',
-            'inputDescript' => 'required|max:255',
+            'inputDescript' => 'max:255',
             'selectTypeZone' => 'required|max:600',
             'zone' => 'required|max:255'    
         ]);
@@ -120,7 +120,7 @@ class PuestoVotacionController extends Controller
     {
         $request->validate([
             'inputName' => 'required|max:255',
-            'inputDescript' => 'required|max:255',
+            'inputDescript' => 'max:255',
             'selectTypeZone' => 'required|max:600',
             'zone' => 'required|max:255'    
         ]);
