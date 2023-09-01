@@ -113,7 +113,7 @@ Editar Posible Votante
                 </div>
                 <div class="col-md-6 mb-2">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" name="email" value="{{$problem->email}}" required>
+                    <input type="email" class="form-control" name="email" value="{{$problem->email}}" >
                     @error('email')
                     <div class="text-danger">
                         {{ $message }}

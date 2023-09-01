@@ -57,7 +57,7 @@ class MesaVotacionController extends Controller
     {
         $request->validate([
             'inputNumberTable' => 'required|max:255',
-            'inputDescript' => 'required|max:255',
+            'inputDescript' => 'nullable|max:255',
             'selectPolling_post' => 'required|max:600'  
         ]);
 
@@ -115,7 +115,7 @@ class MesaVotacionController extends Controller
     {
         $request->validate([
             'inputNumberTable' => 'required|max:255',
-            'inputDescript' => 'required|max:255',
+            'inputDescript' => 'nullable|max:255',
             'selectPolling_post' => 'required|max:600'  
         ]);
 

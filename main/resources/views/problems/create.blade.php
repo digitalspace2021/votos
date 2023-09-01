@@ -116,7 +116,7 @@ Crear formulario
                 </div>
                 <div class="col-md-6 mb-2">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" name="email" id="email" value="{{old('email')}}" required>
+                    <input type="email" class="form-control" name="email" id="email" value="{{old('email')}}">
                     @error('email')
                     <div class="text-danger">
                         {{ $message }}
