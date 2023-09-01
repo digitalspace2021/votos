@@ -21,7 +21,6 @@ jQuery.extend(jQuery.validator.messages, {
 $("#createProblem").validate({
     rules: {
         email: {
-            required: true,
             email: true,
             remote: {
                 /* meta name csrf-token */
@@ -59,7 +58,6 @@ $("#createProblem").validate({
     },
     messages: {
         email: {
-            required: "Por favor ingrese un email",
             email: "Por favor ingrese un email valido",
             remote: "El email ya se encuentra registrado"
         },
