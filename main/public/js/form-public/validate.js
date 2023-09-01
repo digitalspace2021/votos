@@ -58,7 +58,6 @@ $("#createProblem").validate({
     },
     messages: {
         email: {
-            required: "Por favor ingrese un email",
             email: "Por favor ingrese un email valido",
             remote: "El email ya se encuentra registrado"
         },

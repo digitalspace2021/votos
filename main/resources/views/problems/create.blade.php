@@ -166,7 +166,7 @@ Crear formulario
                 </div>
                 <div class="col-md-6 mb-2">
                     <label for="puesto" class="form-label">Puesto de votacion</label>
-                    <select name="puesto" id="puesto" class="form-select" required>
+                    <select name="puesto" id="puesto" class="form-select">
                         <option value="" disabled>Seleccione un puesto</option>
                         @foreach ($puestos as $puesto)
                         <option value="{{$puesto->puesto_nombre}}" @if (old('puesto')==$puesto->puesto_nombre)
@@ -185,7 +185,7 @@ Crear formulario
 
                 <div class="col-md-6 mb-2">
                     <label for="mesa" class="form-label">Mesa</label>
-                    <select name="mesa" id="mesa" class="form-select" required>
+                    <select name="mesa" id="mesa" class="form-select">
                         <option value="" selected disabled>Seleccione una mesa</option>
                     </select>
                     {{-- @error('mesa')
