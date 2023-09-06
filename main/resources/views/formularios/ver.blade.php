@@ -131,7 +131,14 @@
 
                     <div class="col-12">
                         <label for="mensaje" class="form-label">Problematica</label>
-                        <textarea name="mensaje" ea class="form-control" cols="30" rows="10">{{ $formulario->mensaje }}</textarea>
+                        <textarea name="mensaje" ea class="form-control" cols="30" rows="3">{{ $formulario->mensaje }}</textarea>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="mensaje" class="form-label">Descripcion Persona <span
+                                class="text-muted">(Opcional)</span></label>
+                        <textarea class="form-control" name="desc_persona" id="desc_persona" cols="30" rows="3"
+                        required readonly>{{$formulario->per_descrip}}</textarea>
                     </div>
                 </div>
 

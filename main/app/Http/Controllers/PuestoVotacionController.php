@@ -51,7 +51,7 @@ class PuestoVotacionController extends Controller
     {
         $request->validate([
             'inputName' => 'required|max:255',
-            'inputDescript' => 'required|max:255',
+            'inputDescript' => 'max:255',
             'selectTypeZone' => 'required|max:600',
             'zone' => 'required|max:255'    
         ]);
@@ -77,9 +77,9 @@ class PuestoVotacionController extends Controller
     {
         if(!empty($id)){
             $puestoVotacion = PuestoVotacion::join('barrios', 'puestos_votacion.zone', '=', 'barrios.id')
-            ->join('comunas','barrios.comuna_id','=','comunas.id')
-            ->join('veredas', 'puestos_votacion.zone', '=', 'veredas.id')
-            ->join('corregimientos','veredas.corregimiento_id','=','corregimientos.id')
+            ->leftJoin('comunas','barrios.comuna_id','=','comunas.id')
+            ->leftJoin('veredas', 'puestos_votacion.zone', '=', 'veredas.id')
+            ->leftJoin('corregimientos','veredas.corregimiento_id','=','corregimientos.id')
             ->select('puestos_votacion.*',
                     DB::raw("CASE puestos_votacion.zone_type WHEN 'Comuna' THEN barrios.name WHEN 'Corregimiento' THEN veredas.name END as zona"))
             ->where('puestos_votacion.id', $id) 
@@ -98,14 +98,15 @@ class PuestoVotacionController extends Controller
     {
         if(!empty($id)){
             $puestoVotacion = PuestoVotacion::join('barrios', 'puestos_votacion.zone', '=', 'barrios.id')
-            ->join('comunas','barrios.comuna_id','=','comunas.id')
-            ->join('veredas', 'puestos_votacion.zone', '=', 'veredas.id')
-            ->join('corregimientos','veredas.corregimiento_id','=','corregimientos.id')
+            ->leftJoin('comunas','barrios.comuna_id','=','comunas.id')
+            ->leftJoin('veredas', 'puestos_votacion.zone', '=', 'veredas.id')
+            ->leftJoin('corregimientos','veredas.corregimiento_id','=','corregimientos.id')
             ->select('puestos_votacion.*',
                     DB::raw("CASE puestos_votacion.zone_type WHEN 'Comuna' THEN barrios.name WHEN 'Corregimiento' THEN veredas.name END as zona"))
             ->where('puestos_votacion.id', $id) 
             ->get();
         }
+        //dd($puestoVotacion);
         return view('puestosVotacion.edit',['puestoVotacion' => $puestoVotacion]);
     }
 
@@ -120,7 +121,7 @@ class PuestoVotacionController extends Controller
     {
         $request->validate([
             'inputName' => 'required|max:255',
-            'inputDescript' => 'required|max:255',
+            'inputDescript' => 'max:255',
             'selectTypeZone' => 'required|max:600',
             'zone' => 'required|max:255'    
         ]);
@@ -183,10 +184,10 @@ class PuestoVotacionController extends Controller
                         ->where('puestos_votacion.zone',$request->vereda);
         }
         
-        $puestoVotacion->join('barrios', 'puestos_votacion.zone', '=', 'barrios.id')
-            ->join('comunas','barrios.comuna_id','=','comunas.id')
-            ->join('veredas', 'puestos_votacion.zone', '=', 'veredas.id')
-            ->join('corregimientos','veredas.corregimiento_id','=','corregimientos.id')
+        $puestoVotacion->leftJoin('barrios', 'puestos_votacion.zone', '=', 'barrios.id')
+            ->leftJoin('comunas','barrios.comuna_id','=','comunas.id')
+            ->leftJoin('veredas', 'puestos_votacion.zone', '=', 'veredas.id')
+            ->leftJoin('corregimientos','veredas.corregimiento_id','=','corregimientos.id')
             ->select('puestos_votacion.id as id','puestos_votacion.name as nombre','puestos_votacion.description as descripcion',
                      'puestos_votacion.zone_type as tipoZona',
                       DB::raw("CASE puestos_votacion.zone_type WHEN 'Comuna' THEN barrios.name WHEN 'Corregimiento' THEN veredas.name END as zona"))

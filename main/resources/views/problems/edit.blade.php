@@ -113,7 +113,7 @@ Editar Posible Votante
                 </div>
                 <div class="col-md-6 mb-2">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" name="email" value="{{$problem->email}}" required>
+                    <input type="email" class="form-control" name="email" value="{{$problem->email}}" >
                     @error('email')
                     <div class="text-danger">
                         {{ $message }}
@@ -163,7 +163,7 @@ Editar Posible Votante
                 </div>
                 <div class="col-md-6 mb-2">
                     <label for="puesto" class="form-label">Puesto de votacion</label>
-                    <select name="puesto" id="puesto" class="form-select" required>
+                    <select name="puesto" id="puesto" class="form-select">
                         <option value="" disabled>Seleccione un puesto</option>
                         
                         @foreach ($puestos as $puesto)
@@ -186,7 +186,7 @@ Editar Posible Votante
 
                 <div class="col-md-6 mb-2">
                     <label for="mesa" class="form-label">Mesa</label>
-                    <select name="mesa" id="mesa" class="form-select" required>
+                    <select name="mesa" id="mesa" class="form-select">
                         <option value="" selected disabled>Seleccione una mesa</option>
                     </select>
                     {{-- @error('mesa')
@@ -203,6 +203,17 @@ Editar Posible Votante
                     <div class="text-danger">
                         {{ $message }}
                     </div>
+                    @enderror
+                </div>
+
+                <div class="col-12 mb-2">
+                    <label for="mensaje" class="form-label">Descripcion Persona <span
+                            class="text-muted">(Opcional)</span></label>
+                    <textarea class="form-control" name="desc_persona" id="desc_persona" cols="30" rows="3">{{$problem->per_descrip}}</textarea>
+                    @error('desc_persona')
+                        <div class="text-danger">
+                            {{ $message }}
+                        </div>
                     @enderror
                 </div>
 

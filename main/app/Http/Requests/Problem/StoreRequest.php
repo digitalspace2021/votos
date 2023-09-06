@@ -31,7 +31,7 @@ class StoreRequest extends FormRequest
             'telefono' => ['required', 'string', 'max:255'],
             'direccion' => ['required', 'string', 'max:255'],
             'vinculo' => ['required'],
-            'puesto' => ['required'],
+            'puesto' => ['nullable'],
             'descripcion' => ['required_if:check_problem,on'],
             'email' => ['nullable', 'email', 'max:255', 'unique:formularios,id,'. $this->id],
             'genero' => ['required', 'string', 'in:Hombre,Mujer,Otro'],
@@ -39,6 +39,7 @@ class StoreRequest extends FormRequest
             'cons' => ['required'],
             'foto' => ['nullable', 'image'],
             'fecha_nacimiento' => ['nullable','date', 'before:today'],
+            'per_descrip' => ['nullable', 'max:500'],
         ];
 
         if ($this->edil) {
