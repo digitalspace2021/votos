@@ -71,6 +71,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/pre-formularios/{id}/update', [PreFormularioController::class, 'update'])->name('pre-formularios.update');
     Route::put('/pre-formularios/{id}/aprobar', [PreFormularioController::class, 'approvedInfo'])->name('pre-formularios.aprobar');
     Route::get('/pre-formularios/{id}/delete', [PreFormularioController::class, 'destroy'])->name('pre-formularios.destroy');
+    Route::get('/pre-formularios/export', [FileManagementController::class, 'exportPreFormulario'])->name('pre-formularios.export');
 
 
     Route::get('/formularios', [FormularioController::class, 'index'])->name('formularios');

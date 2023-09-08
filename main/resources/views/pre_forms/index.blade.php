@@ -18,9 +18,11 @@ Preview Formularios
 
 <!-- Select 2 -->
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+<link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
 <!-- Or for RTL support -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.rtl.min.css" />
+<link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.rtl.min.css" />
 @endsection
 
 @section('cabecera')
@@ -53,16 +55,16 @@ Preview Formularios
             <input class="form-control" type="date" id="inputDate">
         </div>
 
-        @if (auth()->user()->hasRole('admin')) 
-            <div class="col-md-4">
-                <label for="">Por creador</label>
-                <select class="form-select" aria-label="Default select example" id="selectCreador">
-                    <option value="" selected>Filtrar por creador</option>
-                    @foreach ($creadores as $creador)
-                    <option value="{{$creador->id}}">{{$creador->name}}</option>
-                    @endforeach
-                </select>
-            </div>
+        @if (auth()->user()->hasRole('admin'))
+        <div class="col-md-4">
+            <label for="">Por creador</label>
+            <select class="form-select" aria-label="Default select example" id="selectCreador">
+                <option value="" selected>Filtrar por creador</option>
+                @foreach ($creadores as $creador)
+                <option value="{{$creador->id}}">{{$creador->name}}</option>
+                @endforeach
+            </select>
+        </div>
         @endif
         <div class="col">
             <label for="">Por candidato</label>
@@ -118,6 +120,13 @@ Preview Formularios
             <button class="btn btn-warning" id="btnFiltrar">Filtrar</button>
         </div>
     </div>
+    <div class="row">
+        @if (Auth::user()->hasRole(['administrador']))
+        <div class="col-10">
+            <a href="{{ route('pre-formularios.export') }}" class="btn  btn-sm btn-warning">Exportar</a>
+        </div>
+        @endif
+    </div>
     <!-- End filtros -->
     <hr>
 </div>
@@ -129,7 +138,7 @@ Preview Formularios
 @endif
 
 @if (Session::has('message'))
-    <p class="alert {{ Session::get('alert-class') }}">{{ Session::get('message') }}</p>
+<p class="alert {{ Session::get('alert-class') }}">{{ Session::get('message') }}</p>
 @endif
 
 @endsection
