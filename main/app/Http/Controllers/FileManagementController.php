@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\AlertaExport;
 use App\Exports\FormularioExport;
 use App\Exports\MatrizSeguimientoExport;
+use App\Exports\PreFormularios\ExportPreService;
 use App\Imports\FormImport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -94,5 +95,15 @@ class FileManagementController extends Controller
     //for alertas
     public function exportAlerta(Request $request){
         return Excel::download(new AlertaExport($request->cedula,$request->nombre,$request->color), 'Alerta.xlsx');
+    }
+
+    /**
+     * The function exports a pre-formulario to an Excel file.
+     * 
+     * @return an Excel file download.
+     */
+    public function exportPreFormulario()
+    {
+        return Excel::download(new ExportPreService, now().'preFormulario.xlsx');
     }
 }
