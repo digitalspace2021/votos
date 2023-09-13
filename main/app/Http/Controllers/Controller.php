@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Candidato;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -69,7 +70,9 @@ class Controller extends BaseController
 
             $users = DB::table('users')->get();
 
-        return view(trans($this->plural) . ".crear", compact('puestos', 'users'));
+            $candidatos = Candidato::select('id', 'name')->get();
+
+        return view(trans($this->plural) . ".crear", compact('puestos', 'users', 'candidatos'));
     }
 
     public function eliminar_confirmar(Request $request, $id)

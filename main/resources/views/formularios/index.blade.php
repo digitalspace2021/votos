@@ -148,6 +148,7 @@
                     <th>Dirección</th>
                     <th>Puesto de votacion</th>
                     <th>Fecha Creado</th>
+                    <th>Candidatos</th>
                     <th>Accion</th>
                 </tr>
             </thead>
@@ -230,7 +231,7 @@
                     barrio: barrio,
                     corregimiento: corregimiento,
                     vereda: vereda,
-                    fecha: fecha   
+                    fecha: fecha, 
                 }
             },
                 columns: [{
@@ -264,6 +265,10 @@
                     {
                         data: 'created_at',
                         name: 'created_at'
+                    },
+                    {
+                        data: 'candidatos',
+                        name: 'candidatos'
                     },
                     {
                         data: 'acciones',

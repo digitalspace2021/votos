@@ -4,6 +4,12 @@
     Eliminar formulario
 @endsection
 
+@section('css-extra')
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css"
+        rel="stylesheet" />
+@endsection
+
 @section('cabecera')
     <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
         <h1 class="display-4 fw-normal">Eliminar formulario</h1>
@@ -24,10 +30,14 @@
                 <div class="row g-3">
 
                     <div class="col-12">
-                        <label for="candidato" class="form-label">Candidato</label>
-                        <select name="candidato" class="form-control" name="candidato" id="candidato" required>
-                            <option value="{{ $formulario->candidato_id }}">{{ $formulario->candidato_nombre }}
-                            </option>
+                        <label for="candidatos" class="form-label">Candidato</label>
+                        <select name="candidatos[]" id="candidatos" class="form-select" aria-multiselectable="true" multiple disabled>
+                            <option value="" disabled>Selecciona un candidato</option>
+                            @foreach ($candidatos as $candidato)
+                                <option value="{{ $candidato->id }}"
+                                    {{ in_array($candidato->id, $formulario_candidatos) ? 'selected' : '' }}
+                                    >{{ $candidato->name }}</option>
+                            @endforeach
                         </select>
                     </div>
 
@@ -211,31 +221,7 @@
                 });
 
                 $('#candidato').select2({
-                    theme: "bootstrap",
-                    ajax: {
-                        dataType: 'json',
-                        url: "{!! route('util.lista_candidatos') !!}",
-                        type: "get",
-                        delay: 250,
-                        data: function(params) {
-                            return {
-                                search: params.term
-                            };
-                        },
-                        processResults: function(response) {
-                            return {
-                                results: response
-                            };
-                        },
-                        cache: true
-                    }
-
-                });
-                $('#candidato').val('{{ $formulario->candidato_id }}').trigger('change');
-
-                $('#candidato').on('select2:select', function(e) {
-                    var data = e.params.data;
-                    $('#candidato_id').val(data.id);
+                    multiple: true,
                 });
 
                 (() => {
