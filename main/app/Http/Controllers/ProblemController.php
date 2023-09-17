@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Problem\StoreRequest;
+use App\Http\Services\Problems\ProblemsService;
+use App\Models\Candidato;
 use App\Models\Edil;
 use App\Models\Formulario;
 use Carbon\Carbon;
@@ -16,6 +18,14 @@ use Yajra\DataTables\Facades\DataTables;
 
 class ProblemController extends Controller
 {
+
+    protected $service;
+
+    public function __construct()
+    {
+        $this->service = new ProblemsService();
+    }
+
     /**
      * The function retrieves all users from the database and passes them to the view.
      * 
@@ -130,8 +140,8 @@ class ProblemController extends Controller
                     WHEN pv.zone_type = 'Comuna' THEN CONCAT('Barrio: ', COALESCE(barrios.name, 'Sin información'))
                     WHEN pv.zone_type = 'Corregimiento' THEN CONCAT('Vereda: ', COALESCE(veredas.name, 'Sin información'))
                 END) AS puesto_nombre, pv.id"))
-                /* after case */
-                /* , ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre */
+            /* after case */
+            /* , ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre */
             ->leftJoin('barrios', function ($join) {
                 $join->on('pv.zone', '=', 'barrios.id')
                     ->where('pv.zone_type', '=', 'Comuna');
@@ -188,7 +198,8 @@ class ProblemController extends Controller
      */
     public function store(StoreRequest $request): RedirectResponse
     {
-
+        /* initialized transaction db */
+        DB::beginTransaction();
         $problem = Formulario::create([
             'propietario_id' => $request->creador,
             'identificacion' => $request->identificacion,
@@ -215,19 +226,12 @@ class ProblemController extends Controller
         }
 
         if ($problem && $request->edil == 1) {
-            $edil = new Edil();
-            $edil->formulario_id = $problem->id;
-            $edil->edil_id = $request->user_edil;
-            $edil->asamblea_id = $request->asamb_edil;
-            $edil->concejo = $request->concejo;
+            $this->service->storeHelpEdil($problem, $request);
 
-            if ($request->apoyo == 1) {
-                $edil->alcaldia = (bool)$request->alcaldia;
-                $edil->gobernacion = (bool)$request->gobernacion;
-            }
-
-            $edil->save();
+            $this->service->storeHelpCandidates($problem, $request);
         }
+
+        DB::commit();
 
         if ($problem) {
             if (auth()->check()) {
@@ -261,6 +265,8 @@ class ProblemController extends Controller
             return back()->with('error', 'No se puede editar una Oportunidad de votante');
         }
 
+        DB::beginTransaction();
+
         $problem->update([
             'propietario_id' => $request->creador,
             'identificacion' => $request->identificacion,
@@ -291,21 +297,12 @@ class ProblemController extends Controller
         }
 
         if ($request->edil == 1) {
-            $edil = new Edil();
-            $edil->createOrUpdate([
-                'formulario_id' => $problem->id,
-                'edil_id' => $request->user_edil,
-                'asamblea_id' => $request->asamb_edil,
-                'concejo' => $request->concejo,
-                'alcaldia' => $request->apoyo == 1 ? (bool)$request->alcaldia : null,
-                'gobernacion' => $request->apoyo == 1 ? (bool)$request->gobernacion : null,
-            ]);
+            $this->service->updateHelpEdil($problem, $request);
         } else {
-            $edil = Edil::where('formulario_id', $problem->id)->first();
-            if ($edil) {
-                $edil->delete();
-            }
+            $this->service->clearCandAndEdil($problem);
         }
+
+        DB::commit();
 
         if ($problem) {
             return redirect()->route('problems.index')->with('success', 'Oportunidad de votante actualizado correctamente');
