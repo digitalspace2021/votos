@@ -42,7 +42,9 @@ class ProblemController extends Controller
         }
         $creadores = $creadores->get();
 
-        return view('problems.index', compact('creadores'));
+        $candidatos = Candidato::all();
+
+        return view('problems.index', compact('creadores', 'candidatos'));
     }
 
     /**
@@ -368,12 +370,19 @@ class ProblemController extends Controller
             return back()->with('error', 'Error al cambiar el estado de la Oportunidad de votante');
         }
 
+        DB::beginTransaction();
+
         $problem->update([
             'estado' => !$problem->estado,
             'zona' => $request->zona,
             'tipo_zona' => $request->tipo_zona,
-            'candidato_id' => $request->candidato_id,
         ]);
+
+        if($request->has('candidatos')){
+            $problem->candidatos()->sync($request->candidatos);
+        }
+
+        DB::commit();
 
         if ($problem->estado == true) {
             return back()->with('success', 'Oportunidad de votante confirmada correctamente');
