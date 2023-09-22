@@ -65,6 +65,11 @@ class PreFormularioController extends Controller
                 return $query->where('formularios.tipo_zona', 'comuna')
                     ->where('pre_formularios.zona', $vereda);
             })
+            ->when($request->get('candidato'), function($query, $candidato) {
+                return $query->whereHas('candidatos', function($query) use ($candidato) {
+                    $query->where('candidatos.id', $candidato);
+                });
+            })
             ->orderBy('pre_formularios.created_at', 'desc');
 
         $pre_forms->with('candidatos:id,name');
