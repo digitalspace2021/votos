@@ -152,7 +152,7 @@ Preview Formularios
                 <th>Nombre Completo</th>
                 <th>Telefono</th>
                 <th>Direccion</th>
-                <th>Email</th>
+                <th>Candidatos</th>
                 <th>Responsable</th>
                 <th>Creado</th>
                 <th>Acciones</th>
@@ -269,8 +269,8 @@ Preview Formularios
                         name: 'direccion'
                     },
                     {
-                        data: 'email',
-                        name: 'email'
+                        data: 'candidatos',
+                        name: 'candidatos'
                     },
                     {
                         data: 'name',

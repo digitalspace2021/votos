@@ -44,15 +44,18 @@ Editar Formulario
                     </div>
                     @enderror
                 </div>
-                <div class="col-md-12 mb-2">
-                    <label for="candidato" class="form-label">Quien lo diligencia</label>
-                    <select class="form-control" name="candidato" id="candidato" required>
+                <div class="col-12 mb-2">
+                    <label for="candidatos" class="form-label">Candidato</label>
+                    <select name="candidatos[]" id="candidatos" class="form-select" aria-multiselectable="true" multiple>
+                        <option value="" disabled>Selecciona un candidato</option>
                         @foreach ($candidatos as $candidato)
-                        <option value="{{ $candidato->id }}" @if ($candidato->id == $pre_formulario->candidato_id)
-                            selected @endif>{{ $candidato->name }}</option>
+                            <option value="{{ $candidato->id }}"
+                                {{ in_array($candidato->id, $formulario_candidatos) ? 'selected' : '' }}
+                                >{{ $candidato->name }}</option>
                         @endforeach
                     </select>
-                    @error('candidato')
+
+                    @error('candidatos')
                     <div class="text-danger">
                         {{ $message }}
                     </div>
@@ -298,26 +301,9 @@ Editar Formulario
             $('#creador_id').val(data.id);
         });
 
-        $('#candidato').select2({
-            theme: "bootstrap",
-            ajax: {
-                dataType: 'json',
-                url: "{!! route('util.lista_candidatos') !!}",
-                type: "get",
-                delay: 250,
-                data: function(params) {
-                    return {
-                        search: params.term
-                    };
-                },
-                processResults: function(response) {
-                    return {
-                        results: response
-                    };
-                },
-                cache: true
-            }
-        });
+        $('#candidatos').select2({
+            multiple: true,
+        })
 
         $('#puesto').select2();
         $('#mesa').select2();

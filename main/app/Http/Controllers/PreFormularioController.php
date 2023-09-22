@@ -30,7 +30,7 @@ class PreFormularioController extends Controller
 
     public function getAll(Request $request)
     {
-        $pre_forms = DB::table('pre_formularios')
+        $pre_forms = PreFormulario::query()
             ->join('users', 'pre_formularios.propietario_id', '=', 'users.id')
             ->leftJoin('barrios', 'pre_formularios.zona', '=', 'barrios.id')->leftJoin('comunas', 'barrios.comuna_id', '=', 'comunas.id')
             ->leftJoin('veredas', 'pre_formularios.zona', '=', 'veredas.id')->leftJoin('corregimientos', 'veredas.corregimiento_id', '=', 'corregimientos.id')
@@ -67,12 +67,18 @@ class PreFormularioController extends Controller
             })
             ->orderBy('pre_formularios.created_at', 'desc');
 
+        $pre_forms->with('candidatos:id,name');
+
         if (Auth::user()->hasRole('simple')) {
             $pre_forms = $pre_forms->where('propietario_id', Auth::user()->id);
         }
 
         /* colums nombre completo from pre_formularios nombre+apellido, telefono, direccion, responsable, pruesto_votacion from table pre_formularios and columns acciones view, edit and status */
         $pre_forms = DataTables::of($pre_forms->get())
+            ->addColumn('candidatos', function ($col) {
+                $candidatos = $col->candidatos->pluck('name')->toArray();
+                return implode(', ', $candidatos);
+            })
             ->editColumn('created_at', function ($col) {
                 return Carbon::parse($col->created_at)->format('d-m-Y H:i:s');
             })
@@ -80,7 +86,7 @@ class PreFormularioController extends Controller
                 /* $btn = ''; */
                 $btn = '<a href="' . route('pre-formularios.show', $pre_form->id) . '" class="btn btn-outline-secondary btn-sm" title="Ver problema"><i class="fa fa-eye"></i></a>';
                 $btn .= '<a href="' . route('pre-formularios.edit', $pre_form->id) . '" class="btn btn-outline-primary m-2 btn-sm" title="Editar problema"><i class="fa fa-edit"></i></a>';
-                if(Auth::user()->hasRole('administrador')){
+                if (Auth::user()->hasRole('administrador')) {
                     $btn .= '<a href="' . route('pre-formularios.destroy', $pre_form->id) . '" class="btn btn-outline-danger btn-sm" title="Eliminar problema"><i class="fa fa-times"></i></a>';
                 }
                 $btn .= '<button prid="' . $pre_form->id . '" class="btn btn-outline-success m-2 status btn-sm" title="Cambiar estado"><i class="fa fa-check"></i></button>';
@@ -97,15 +103,17 @@ class PreFormularioController extends Controller
     {
         $formulario = PreFormulario::findOrFail($id);
 
-        $formulario->candidato_nombre = Candidato::find($formulario->candidato_id)->name;
+        //$formulario->candidato_nombre = Candidato::find($formulario->candidato_id)->name;
         $formulario->propietario_nombre = User::find($formulario->propietario_id)->name;
         if (!$formulario) {
             return back()->with('error', 'Error al mostrar la preview del formulario');
         }
 
+        $candidatos = DB::table('candidatos')->get();
+        $formulario_candidatos = $formulario->candidatos->pluck('id')->toArray();
         /* dd($formulario); */
 
-        return view('pre_forms.show', compact('formulario'));
+        return view('pre_forms.show', compact('formulario', 'candidatos', 'formulario_candidatos'));
     }
 
     /**
@@ -134,8 +142,8 @@ class PreFormularioController extends Controller
                     WHEN pv.zone_type = 'Comuna' THEN CONCAT('Barrio: ', COALESCE(barrios.name, 'Sin información'))
                     WHEN pv.zone_type = 'Corregimiento' THEN CONCAT('Vereda: ', COALESCE(veredas.name, 'Sin información'))
                 END) AS puesto_nombre, pv.id"))
-                /* after case */
-                /* , ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre */
+            /* after case */
+            /* , ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre */
             ->leftJoin('barrios', function ($join) {
                 $join->on('pv.zone', '=', 'barrios.id')
                     ->where('pv.zone_type', '=', 'Comuna');
@@ -146,7 +154,9 @@ class PreFormularioController extends Controller
             })
             ->get();
 
-        return view('pre_forms.edit', compact('pre_formulario', 'users', 'candidatos', 'puestos'));
+        $formulario_candidatos = $pre_formulario->candidatos->pluck('id')->toArray();
+
+        return view('pre_forms.edit', compact('pre_formulario', 'users', 'candidatos', 'puestos', 'formulario_candidatos'));
     }
 
     public function update(StoreRequest $request, $id)
@@ -156,9 +166,10 @@ class PreFormularioController extends Controller
             return back()->with('error', 'Error al actualizar la preview del formulario');
         }
 
+        DB::beginTransaction();
+
         $pre_formulario->update([
             'propietario_id' => $request->creador,
-            'candidate_id' => $request->candidato,
             'identificacion' => $request->identificacion,
             'nombre' => $request->nombres,
             'apellido' => $request->apellidos,
@@ -172,6 +183,10 @@ class PreFormularioController extends Controller
             'tipo_zona' => $request->tipo_zona,
             'zona' => $request->zona,
         ]);
+
+        $pre_formulario->candidatos()->sync($request->candidatos);
+
+        DB::commit();
 
         return redirect()->route('pre-formularios')->with('success', 'Formulario actualizado correctamente');
     }
@@ -196,6 +211,8 @@ class PreFormularioController extends Controller
             return back()->with('error', 'Para aprobar es necesario que el formulario tenga email, dirección y puesto de votación');
         }
 
+        DB::beginTransaction();
+
         $formulario = Formulario::create([
             'propietario_id' => $pre_formulario->propietario_id,
             'candidato_id' => $pre_formulario->candidato_id,
@@ -212,6 +229,10 @@ class PreFormularioController extends Controller
             'tipo_zona' => $pre_formulario->tipo_zona,
             'zona' => $pre_formulario->zona,
         ]);
+
+        $formulario->candidatos()->sync($pre_formulario->candidatos->pluck('id')->toArray());
+
+        DB::commit();
 
         if (!$formulario) {
             return back()->with('error', 'Error al aprobar la preview del formulario');
