@@ -53,8 +53,9 @@ class FormularioController extends Controller
         $formularios->leftJoin('veredas', 'formularios.zona', '=', 'veredas.id')->leftJoin('corregimientos', 'veredas.corregimiento_id', '=', 'corregimientos.id');
         if (!empty($candidato = $request->candidato)) {
             $formularios->where(function ($query) use ($candidato) {
-                $query->where('candidato_id', $candidato)
-                    ->orWhereNull('candidato_id');
+                $query->whereHas('candidatos', function ($query) use ($candidato) {
+                    $query->where('candidatos.id', $candidato);
+                });
             });
         }
         if (!empty($request->creador)) {
