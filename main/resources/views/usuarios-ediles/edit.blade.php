@@ -158,7 +158,7 @@ Editar {{$edil->rol}}
                 </div>
                 <div class="col-md-6 mb-2">
                     <label for="mesa" class="form-label">Mesa</label>
-                    <select name="mesa" id="mesa" class="form-select" required>
+                    <select name="mesa" id="mesa" class="form-select">
                         <option value="" selected disabled>Seleccione una mesa</option>
                     </select>
                     {{-- @error('mesa')
