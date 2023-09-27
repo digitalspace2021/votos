@@ -1,7 +1,7 @@
 @extends('layouts.base')
 
 @section('titulo')
-    Actualizar usuario
+    Estadisticas generales
 @endsection
 
 @section('css-extra')
