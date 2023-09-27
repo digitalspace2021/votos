@@ -2,7 +2,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Confirmar Problematica</h5>
+                <h5 class="modal-title">Confirmar Votante</h5>
                 <button type="button" class="btn-close close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="" method="POST">
@@ -13,8 +13,18 @@
                         <input type="hidden" name="problem_id">
                         <div class="row">
                             <div class="col-md-12 mb-2" id="select_cand">
-                                <label for="candidato_id" class="form-label">Candidato</label>
-                                <select class="form-control" name="candidato_id" id="candidato_id" required></select>
+                                <label for="candidato_id" class="form-label">Candidato *</label>
+                                <select name="candidatos[]" id="candidatos" class="form-select">
+                                    <option value="" selected disabled>Selecciona un candidato</option>
+                                    @foreach ($candidatos as $candidato)
+                                    <option value="{{ $candidato->id }}">{{ $candidato->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('candidatos')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>
+                                @enderror
                             </div>
                             <div class="col-md-12 mb-2">
                                 <div class="form-group">

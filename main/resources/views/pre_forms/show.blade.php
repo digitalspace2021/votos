@@ -32,9 +32,16 @@ Ver Formulario
                     <label for="creador" class="form-label">Quien lo diligencia</label>
                     <input type="text" name="identificacion" id="" class="form-control" value="{{$formulario->propietario_nombre}}" required disabled>
                 </div>
-                <div class="col-md-12 mb-2">
-                    <label for="creador" class="form-label">Candidato</label>
-                    <input type="text" name="identificacion" id="" class="form-control" value="{{$formulario->candidato_nombre}}" required disabled>
+                <div class="col-12 mb-2">
+                    <label for="candidatos" class="form-label">Candidato</label>
+                    <select name="candidatos[]" id="candidatos" class="form-select" aria-multiselectable="true" multiple disabled>
+                        <option value="" disabled>Selecciona un candidato</option>
+                        @foreach ($candidatos as $candidato)
+                            <option value="{{ $candidato->id }}"
+                                {{ in_array($candidato->id, $formulario_candidatos) ? 'selected' : '' }}
+                                >{{ $candidato->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div class="col-md-12 mb-2">
                     <label for="identificacion">Identificacion</label>

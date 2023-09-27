@@ -6,7 +6,9 @@ use App\Exports\AlertaExport;
 use App\Exports\FormularioExport;
 use App\Exports\MatrizSeguimientoExport;
 use App\Exports\PreFormularios\ExportPreService;
+use App\Http\Requests\Import\ImportRequest;
 use App\Imports\FormImport;
+use App\Models\Candidato;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
@@ -21,7 +23,8 @@ class FileManagementController extends Controller
     }
     public function importFormularioView()
     {
-        return view('formularios.import');
+        $candidatos = Candidato::all();
+        return view('formularios.import', compact('candidatos'));
     }
 
     /**
@@ -34,7 +37,7 @@ class FileManagementController extends Controller
      * 
      * @return a response back to the previous page.
      */
-    public function importFormulario(Request $request)
+    public function importFormulario(ImportRequest $request)
     {
         try {
             $files = $request->file('file');
@@ -46,7 +49,7 @@ class FileManagementController extends Controller
             foreach ($files as $index => $file) {
                 $data = [
                     'propietario_id' => $request->input('creador_id'),
-                    'candidato_id' => $request->input('candidato_id'),
+                    'candidatos' => $request->input('candidatos'),
                     'tipo_zona' => $tipoZona[$index],
                     'zona' => $zona[$index],
                 ];

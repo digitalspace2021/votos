@@ -132,9 +132,10 @@ class MatrizSeguimientoController extends Controller
         $id = $request->candidato;
         if(!empty($id)){
             $seguimientos = MatrizSeguimiento::join('formularios', 'matriz_seguimiento.formulario_id', '=', 'formularios.id')
+            ->join('formulario_candidatos', 'formularios.id', '=', 'formulario_candidatos.formulario_id')
             ->join('users', 'formularios.propietario_id', '=', 'users.id')
             ->select('matriz_seguimiento.*', 'formularios.nombre as usuario', 'users.name as referido')
-            ->where('formularios.candidato_id', $id) 
+            ->where('formulario_candidatos.candidato_id', $id) 
             ->get();
         
         return $seguimientos;
@@ -271,7 +272,7 @@ class MatrizSeguimientoController extends Controller
     public function tabla(Request $request)
     {  
         $seguimientos = MatrizSeguimiento::query();
-        if(!empty($request->candidato)){$seguimientos->where('formularios.candidato_id',$request->candidato);}
+        if(!empty($request->candidato)){$seguimientos->where('formulario_candidatos.candidato_id',$request->candidato);}
         if(!empty($request->pregunta)){
             if($request->pregunta == 1){ $seguimientos->where('matriz_seguimiento.respuesta_uno',1);}
             if($request->pregunta == 2){ $seguimientos->where('matriz_seguimiento.respuesta_dos',1);}
@@ -300,14 +301,18 @@ class MatrizSeguimientoController extends Controller
         $seguimientos->join('formularios', 'matriz_seguimiento.formulario_id', '=', 'formularios.id')
             ->join('barrios', 'formularios.zona', '=', 'barrios.id')->join('comunas','barrios.comuna_id','=','comunas.id')
             ->join('users', 'formularios.propietario_id', '=', 'users.id')
-            ->join('candidatos','formularios.candidato_id','=','candidatos.id')
+            ->join(DB::raw('(SELECT formulario_candidatos.formulario_id, GROUP_CONCAT(candidatos.name) as candidatos_name FROM formulario_candidatos INNER JOIN candidatos ON formulario_candidatos.candidato_id = candidatos.id GROUP BY formulario_candidatos.formulario_id) as candidatos'), 'formularios.id', '=', 'candidatos.formulario_id')
+            ->join('formulario_candidatos', 'formularios.id', '=', 'formulario_candidatos.formulario_id')
             ->select('matriz_seguimiento.id as id','matriz_seguimiento.formulario_id as id_formulario','formularios.identificacion as identificacion', 'formularios.nombre as nombre','users.name as creador',
-                        'candidatos.name as candidato','formularios.email as email','formularios.direccion as direccion','formularios.telefono as telefono',
+                        'formularios.email as email','formularios.direccion as direccion','formularios.telefono as telefono',
                         'matriz_seguimiento.respuesta_uno as res_uno', 'matriz_seguimiento.respuesta_dos as res_dos','matriz_seguimiento.respuesta_tres as res_tres',
                         'matriz_seguimiento.respuesta_cuatro as res_cuatro','matriz_seguimiento.respuesta_cinco as res_cinco','matriz_seguimiento.respuesta_seis as res_seis','matriz_seguimiento.respuesta_siete as res_siete',
-                        'matriz_seguimiento.respuesta_ocho as res_ocho','matriz_seguimiento.respuesta_nueve as res_nueve','matriz_seguimiento.respuesta_diez as res_diez')
+                        'matriz_seguimiento.respuesta_ocho as res_ocho','matriz_seguimiento.respuesta_nueve as res_nueve','matriz_seguimiento.respuesta_diez as res_diez', 'candidatos_name as candidato')
             
-            ->orderBy('matriz_seguimiento.id');
+            ->orderBy('matriz_seguimiento.id')
+            ->groupBy('matriz_seguimiento.id');
+
+            //dd($seguimientos->get());
 
             return DataTables::eloquent($seguimientos)
             ->addColumn('acciones', function ($col) {

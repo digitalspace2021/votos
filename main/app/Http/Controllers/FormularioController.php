@@ -53,8 +53,9 @@ class FormularioController extends Controller
         $formularios->leftJoin('veredas', 'formularios.zona', '=', 'veredas.id')->leftJoin('corregimientos', 'veredas.corregimiento_id', '=', 'corregimientos.id');
         if (!empty($candidato = $request->candidato)) {
             $formularios->where(function ($query) use ($candidato) {
-                $query->where('candidato_id', $candidato)
-                    ->orWhereNull('candidato_id');
+                $query->whereHas('candidatos', function ($query) use ($candidato) {
+                    $query->where('candidatos.id', $candidato);
+                });
             });
         }
         if (!empty($request->creador)) {
@@ -99,6 +100,10 @@ class FormularioController extends Controller
         )
             ->where('formularios.estado', true);
 
+        $formularios->with('candidatos:id,name');
+
+        /* dd($formularios->get()); */
+
         if (Auth::user()->hasRole('simple')) {
             $formularios->where('formularios.propietario_id', Auth::user()->id);
         }
@@ -107,6 +112,10 @@ class FormularioController extends Controller
             ->addColumn('creador', function ($col) {
                 $creador = User::find($col->propietario_id);
                 return $creador ? $creador->name : '-';
+            })
+            ->addColumn('candidatos', function ($col) {
+                $candidatos = $col->candidatos->pluck('name')->toArray();
+                return implode(', ', $candidatos);
             })
             ->editColumn('nombre', function ($col) {
                 return $col->nombre . ' ' . $col->apellido;
@@ -130,7 +139,9 @@ class FormularioController extends Controller
     {
         $request->validate([
             'creador_id' => 'required|exists:users,id',
-            'candidato_id' => 'required|exists:candidatos,id',
+            //'candidato_id' => 'required|exists:candidatos,id',
+            'candidatos' => 'required|array|min:1',
+            'candidatos.*' => 'required|exists:candidatos,id',
             'nombres' => 'required|max:255',
             'apellidos' => 'required|max:255',
             'email' => 'nullable|email|max:255',
@@ -160,7 +171,6 @@ class FormularioController extends Controller
         $formulario->puesto_votacion = $request->puesto_votacion;
         $formulario->mesa = $request->mesa;
         $formulario->mensaje = $request->mensaje;
-        $formulario->candidato_id = $request->candidato_id;
         $formulario->identificacion = $request->identificacion;
         $formulario->fecha_nacimiento = $request->fecha_nacimiento;
         $formulario->per_descrip = $request->desc_persona;
@@ -170,7 +180,9 @@ class FormularioController extends Controller
             $formulario->foto = $path;
         }
 
-        $formulario->save();
+        if ($formulario->save()) {
+            $formulario->candidatos()->sync($request->candidatos);
+        }
 
         Alert::success(trans($this->className), 'Se ha creado el ' . $this->singular . ' con exito!');
         return redirect()->route(trans($this->plural));
@@ -184,7 +196,6 @@ class FormularioController extends Controller
             return redirect()->route(trans($this->plural));
         }
 
-        $formulario->candidato_nombre = Candidato::find($formulario->candidato_id)->name ?? null;
         $formulario->propietario_nombre = User::find($formulario->propietario_id)->name;
 
         $puestos = DB::table('puestos_votacion AS pv')
@@ -205,7 +216,9 @@ class FormularioController extends Controller
             })
             ->get();
 
-        return view(trans($this->plural) . '.actualizar', compact('formulario', 'puestos'));
+        $candidatos = Candidato::select('id', 'name')->get();
+
+        return view(trans($this->plural) . '.actualizar', compact('formulario', 'puestos', 'candidatos'));
     }
 
     public function actualizar_guardar(Request $request, $id)
@@ -230,7 +243,9 @@ class FormularioController extends Controller
             'mensaje' => 'nullable',
             'foto' => 'nullable|image',
             'fecha_nacimiento' => 'nullable|date|before:today',
-            'per_descrip' => 'nullable|max:500'
+            'per_descrip' => 'nullable|max:500',
+            'candidatos' => 'required|array|min:1',
+            'candidatos.*' => 'required|exists:candidatos,id'
         ]);
 
         $formulario->propietario_id = $request->creador_id;
@@ -260,6 +275,10 @@ class FormularioController extends Controller
             $formulario->foto = $path;
         }
 
+        if ($formulario->save()) {
+            $formulario->candidatos()->sync($request->candidatos);
+        }
+
         $formulario->save();
 
         Alert::success(trans($this->className), 'Se ha actualizado el ' . $this->singular . ' con exito!');
@@ -273,10 +292,12 @@ class FormularioController extends Controller
             Alert::error(trans($this->className), 'No se ha encontrado el ' . $this->singular . ' solicitado.');
             return redirect()->route(trans($this->plural));
         }
-
-        $formulario->candidato_nombre = Candidato::find($formulario->candidato_id)->name ?? null;
         $formulario->propietario_nombre = User::find($formulario->propietario_id)->name;
-        return view(trans($this->plural) . '.ver', compact('formulario'));
+
+        $formulario_candidatos = $formulario->candidatos->pluck('id')->toArray();
+        $candidatos = Candidato::select('id', 'name')->get();
+
+        return view(trans($this->plural) . '.ver', compact('formulario', 'candidatos', 'formulario_candidatos'));
     }
 
     public function eliminar(Request $request, $id)
@@ -286,9 +307,13 @@ class FormularioController extends Controller
             Alert::error(trans($this->className), 'No se ha encontrado el ' . $this->singular . ' solicitado.');
             return redirect()->route(trans($this->plural));
         }
-        $formulario->candidato_nombre = Candidato::find($formulario->candidato_id)->name ?? null;
+
         $formulario->propietario_nombre = User::find($formulario->propietario_id)->name ?? null;
-        return view(trans($this->plural) . '.eliminar', compact('formulario'));
+
+        $formulario_candidatos = $formulario->candidatos->pluck('id')->toArray();
+        $candidatos = Candidato::select('id', 'name')->get();
+
+        return view(trans($this->plural) . '.eliminar', compact('formulario', 'candidatos', 'formulario_candidatos'));
     }
 
     public function eliminar_confirmar(Request $request, $id)
