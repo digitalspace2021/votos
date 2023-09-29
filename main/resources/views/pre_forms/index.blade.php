@@ -114,18 +114,23 @@ Preview Formularios
             </select>
         </div>
     </div>
-    <div class="row">
+    <div class="row mb-3">
         <div class="col-md-12 d-flex justify-content-around align-items-center mt-4">
             <button class="btn btn-danger" id="btnClear">Limpiar</button>
             <button class="btn btn-warning" id="btnFiltrar">Filtrar</button>
         </div>
     </div>
     <div class="row">
-        @if (Auth::user()->hasRole(['administrador']))
-        <div class="col-10">
-            <a href="{{ route('pre-formularios.export') }}" class="btn  btn-sm btn-warning">Exportar</a>
+        <div class="d-flex align-items-center justy-content-between">
+            @if (Auth::user()->hasRole(['administrador']))
+            <div class="col-2">
+                <a href="{{ route('pre-formularios.export') }}" class="btn  btn-sm btn-warning">Exportar</a>
+            </div>
+            <div class="col-2">
+                @include('components.options-forms', ['route' => route('pre-formularios.delete.all'), 'table'=>'pre_forms', 'route_approved' => route('pre-formularios.aprobar.all')])
+            </div>
+            @endif
         </div>
-        @endif
     </div>
     <!-- End filtros -->
     <hr>
@@ -145,9 +150,10 @@ Preview Formularios
 
 @section('cuerpo')
 <div class="table-responsive">
-    <table class="table text-center" id="table_problem">
+    <table class="table text-center" id="pre_forms">
         <thead>
             <tr>
+                <th></th>
                 <th>Identificacion</th>
                 <th>Nombre Completo</th>
                 <th>Telefono</th>
@@ -207,7 +213,7 @@ Preview Formularios
                 let corregimiento = $('#selectCorregimiento').val();
                 let vereda = $('#selectVereda').val();
 
-                $('#table_problem').DataTable().destroy();
+                $('#pre_forms').DataTable().destroy();
                 viewData(cedula, nombre, fecha, creador, candidato, comuna, barrio, corregimiento, vereda);
             });
 
@@ -216,7 +222,7 @@ Preview Formularios
                 $('#InputNombre').val('');
                 $('#inputDate').val('');
                 $('#selectCreador').val('');
-                $('#table_problem').DataTable().destroy();
+                $('#pre_forms').DataTable().destroy();
                 $('#selectCandidato').val('');
                 $('#selectComuna').val('');
                 $('#selectBarrio').val('');
@@ -232,9 +238,10 @@ Preview Formularios
         });
 
         function viewData(cedula = null, nombre = null, fecha = null, creador = null, candidato = null, comuna = null, barrio = null, corregimiento = null, vereda = null) {
-            $('#table_problem').DataTable({
+            $('#pre_forms').DataTable({
                 processing: true,
                 serverSide: true,
+                order: [],
                 language: {
                     url: '//cdn.datatables.net/plug-ins/1.13.1/i18n/es-ES.json',
                 },
@@ -252,7 +259,12 @@ Preview Formularios
                         vereda: vereda
                     }
                 },
-                columns: [{
+                columns: [
+                    {
+                        data: 'select',
+                        name: 'select'
+                    },
+                    {
                         data: 'identificacion',
                         name: 'identificacion'
                     },

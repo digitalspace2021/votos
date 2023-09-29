@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PreFormulario\StoreRequest;
+use App\Http\Services\Problems\ApprovedInfoService;
 use App\Models\Candidato;
 use App\Models\Formulario;
 use App\Models\PreFormulario;
 use App\Models\User;
+use App\Services\ResponseService;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +20,15 @@ use Yajra\DataTables\Facades\DataTables;
 
 class PreFormularioController extends Controller
 {
+    protected $resp;
+    protected $appInfoService;
+
+    public function __construct()
+    {
+        $this->resp = new ResponseService();
+        $this->appInfoService = new ApprovedInfoService();
+    }
+
     public function index(): View
     {
         $comunas = DB::table('comunas')->select('id', 'name')->get();
@@ -28,6 +40,12 @@ class PreFormularioController extends Controller
         return view('pre_forms.index', compact('creadores', 'candidatos', 'comunas', 'barrios', 'corregimientos', 'veredas'));
     }
 
+    /**
+     * Get all pre-formularios with filters and pagination.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Yajra\DataTables\DataTables
+     */
     public function getAll(Request $request)
     {
         $pre_forms = PreFormulario::query()
@@ -65,8 +83,8 @@ class PreFormularioController extends Controller
                 return $query->where('formularios.tipo_zona', 'comuna')
                     ->where('pre_formularios.zona', $vereda);
             })
-            ->when($request->get('candidato'), function($query, $candidato) {
-                return $query->whereHas('candidatos', function($query) use ($candidato) {
+            ->when($request->get('candidato'), function ($query, $candidato) {
+                return $query->whereHas('candidatos', function ($query) use ($candidato) {
                     $query->where('candidatos.id', $candidato);
                 });
             })
@@ -98,13 +116,22 @@ class PreFormularioController extends Controller
 
                 return $btn;
             })
-            ->rawColumns(['acciones', 'status'])
+            ->addColumn('select', function ($pre_form) {
+                return '<input type="checkbox" name="formularios[]" onclick="selectForms(this)" class="option-form" value="' . $pre_form->id . '">';
+            })
+            ->rawColumns(['acciones', 'status', 'select'])
             ->make(true);
 
         return $pre_forms;
     }
 
-    public function show($id)
+    /**
+     * Display the specified resource.
+     *
+     * @param  string  $id
+     * @return \Illuminate\View\View
+     */
+    public function show(string $id): View
     {
         $formulario = PreFormulario::findOrFail($id);
 
@@ -164,7 +191,14 @@ class PreFormularioController extends Controller
         return view('pre_forms.edit', compact('pre_formulario', 'users', 'candidatos', 'puestos', 'formulario_candidatos'));
     }
 
-    public function update(StoreRequest $request, $id)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \App\Http\Requests\StoreRequest  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(StoreRequest $request, $id): RedirectResponse
     {
         $pre_formulario = PreFormulario::findOrFail($id);
         if (!$pre_formulario) {
@@ -212,32 +246,11 @@ class PreFormularioController extends Controller
             return back()->with('error', 'Error al aprobar la preview del formulario');
         }
 
-        if (!$pre_formulario->direccion || !$pre_formulario->puesto_votacion) {
-            return back()->with('error', 'Para aprobar es necesario que el formulario tenga email, dirección y puesto de votación');
+        if (!$pre_formulario->puesto_votacion) {
+            return back()->with('error', 'Para aprobar es necesario que el formulario tenga puesto de votación');
         }
 
-        DB::beginTransaction();
-
-        $formulario = Formulario::create([
-            'propietario_id' => $pre_formulario->propietario_id,
-            'candidato_id' => $pre_formulario->candidato_id,
-            'identificacion' => $pre_formulario->identificacion,
-            'nombre' => $pre_formulario->nombre,
-            'apellido' => $pre_formulario->apellido,
-            'telefono' => $pre_formulario->telefono,
-            'direccion' => $pre_formulario->direccion,
-            'puesto_votacion' => $pre_formulario->puesto_votacion,
-            'mesa' => $pre_formulario->mesa,
-            'genero' => $pre_formulario->genero,
-            'email' => $pre_formulario->email ?? '',
-            'mensaje' => $pre_formulario->mensaje,
-            'tipo_zona' => $pre_formulario->tipo_zona,
-            'zona' => $pre_formulario->zona,
-        ]);
-
-        $formulario->candidatos()->sync($pre_formulario->candidatos->pluck('id')->toArray());
-
-        DB::commit();
+        $formulario = $this->appInfoService->approvedInfo($pre_formulario);
 
         if (!$formulario) {
             return back()->with('error', 'Error al aprobar la preview del formulario');
@@ -248,7 +261,13 @@ class PreFormularioController extends Controller
         return redirect()->route('pre-formularios')->with('success', 'Formulario aprobado correctamente');
     }
 
-    public function destroy(int $id)
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy(int $id): RedirectResponse
     {
         $pre_formulario = PreFormulario::findOrFail($id);
         if (!$pre_formulario) {
@@ -258,5 +277,69 @@ class PreFormularioController extends Controller
         $pre_formulario->delete();
 
         return redirect()->route('pre-formularios')->with('success', 'Formulario eliminado correctamente');
+    }
+
+    /**
+     * Delete all selected pre-formularios.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteAll(Request $request): JsonResponse
+    {
+        $ids = $request->id_forms;
+
+        if (!$ids) {
+            return $this->resp->response('error', 'Error al eliminar los formularios', 400);
+        }
+
+        $pre_formularios = PreFormulario::whereIn('id', $ids)->get();
+
+        if (!$pre_formularios) {
+            return $this->resp->response('error', 'Error al eliminar los formularios', 404);
+        }
+
+        foreach ($pre_formularios as $pre_formulario) {
+            $pre_formulario->delete();
+        }
+
+        return $this->resp->response('success', 'Formularios eliminados correctamente', 200);
+    }
+
+    /**
+     * Approve all pre-forms with the given IDs.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function approvedAll(Request $request): JsonResponse
+    {
+        $ids = $request->id_forms;
+
+        if (!$ids) {
+            return $this->resp->response('error', 'Error al aprobar los formularios', 400);
+        }
+
+        $pre_formularios = PreFormulario::whereIn('id', $ids)->get();
+
+        if (!$pre_formularios) {
+            return $this->resp->response('error', 'Error al aprobar los formularios', 404);
+        }
+
+        foreach ($pre_formularios as $pre_formulario) {
+            if (!$pre_formulario->puesto_votacion) {
+                return $this->resp->response('error', 'Para aprobar es necesario que el formulario tenga puesto de votación', 400);
+            }
+
+            $formulario = $this->appInfoService->approvedInfo($pre_formulario);
+
+            if (!$formulario) {
+                return $this->resp->response('error', 'Error al aprobar los formularios', 400);
+            }
+
+            $pre_formulario->delete();
+        }
+
+        return $this->resp->response('success', 'Formularios aprobados correctamente', 200);
     }
 }

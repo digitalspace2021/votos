@@ -72,6 +72,8 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/pre-formularios/{id}/aprobar', [PreFormularioController::class, 'approvedInfo'])->name('pre-formularios.aprobar');
     Route::get('/pre-formularios/{id}/delete', [PreFormularioController::class, 'destroy'])->name('pre-formularios.destroy');
     Route::get('/pre-formularios/export', [FileManagementController::class, 'exportPreFormulario'])->name('pre-formularios.export');
+    Route::post('/pre-formularios/all/delete', [PreFormularioController::class, 'deleteAll'])->name('pre-formularios.delete.all');
+    Route::post('/pre-formularios/all/aprobar', [PreFormularioController::class, 'approvedAll'])->name('pre-formularios.aprobar.all');
 
 
     Route::get('/formularios', [FormularioController::class, 'index'])->name('formularios');
@@ -83,6 +85,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/formularios/{id}/actualizar', [FormularioController::class, 'actualizar_guardar'])->name('formularios.actualizar.guardar');
     Route::get('/formularios/{id}/eliminar', [FormularioController::class, 'eliminar'])->name('formularios.eliminar');
     Route::get('/formularios/{id}/eliminar/conf', [FormularioController::class, 'eliminar_confirmar'])->name('formularios.eliminar.confirmar');
+    Route::post('/formularios/all/delete', [FormularioController::class, 'deleteAll'])->name('formularios.delete.all');
 
     Route::get('/usuarios', [UsuarioController::class, 'index'])->name('usuarios');
     Route::get('/usuarios/tabla', [UsuarioController::class, 'tabla'])->name('usuarios.tabla');
@@ -188,10 +191,12 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/oportunidades/{id}/update', [ProblemController::class, 'update'])->name('problems.update');
     Route::put('/oportunidades/{id}/status', [ProblemController::class, 'changeStatus'])->name('problems.changeStatus');
     Route::get('/oportunidades/export', [FileOportunidadesManagementController::class, 'export'])->name('problems.export');
+    Route::post('/oportunidades/all/delete', [ProblemController::class, 'deleteAll'])->name('problems.delete.all');
     /* Route::get('/estadisticas/ediles', [EdilHighchartController::class, 'handleChart'])->name('ediles.statistics'); */
     Route::get('/estadisticas/ediles/{edil?}/{zona?}/{zona_id?}', [EdilHighchartController::class, 'handleChart'])->name('ediles.statistics');
     Route::get('/estadisticas/asambleistas/{asamb?}/{zona?}/{zona_id?}', [AsambHighchartController::class, 'handleChart'])->name('asambleistas.statistics');
     /* Route::get('/estadisticas/ediles/{edil?}', [EdilHighchartController::class, 'handleChart'])->name('ediles.statistics'); */
+
 
 
     /* usuarios ediles */
