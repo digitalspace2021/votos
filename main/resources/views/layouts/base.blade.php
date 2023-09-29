@@ -34,6 +34,7 @@
         }
     </style>
     @yield('css-extra')
+    @stack('custom-css')
 </head>
 <body>
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
@@ -225,6 +226,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     @yield('js-extra')
-
+    @stack('custom-js')
 </body>
 </html>

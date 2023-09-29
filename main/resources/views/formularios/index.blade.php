@@ -120,16 +120,22 @@
         <!-- End filtros -->
 
         <div class="row mt-5">
-            @if (Auth::user()->hasRole(['administrador']))
-                <div class="col-10">
-                    <a href="{{ route('export.forms') }}" class="btn  btn-sm btn-warning">Exportar</a>
-                </div>
-            @endif
-            @if (Auth::user()->hasRole(['administrador', 'simple']))
-                <div class="col-2 mb-2 text-center">
-                    <a href="{{ route('formularios.crear') }}" class="btn  btn-sm btn-success">Crear formulario</a>
-                </div>
-            @endif
+            <div class="d-flex align-items-center justy-content-between">
+
+                @if (Auth::user()->hasRole(['administrador']))
+                    <div class="col-8">
+                        <a href="{{ route('export.forms') }}" class="btn  btn-sm btn-warning">Exportar</a>
+                    </div>
+                @endif
+
+                @include('components.del-forms', ['route' => route('formularios.delete.all'), 'table' => 'tablas-formularios'])
+    
+                @if (Auth::user()->hasRole(['administrador', 'simple']))
+                    <div class="col-2 mb-2 text-center">
+                        <a href="{{ route('formularios.crear') }}" class="btn  btn-sm btn-success">Crear formulario</a>
+                    </div>
+                @endif
+            </div>
         </div>
     </div>
        
@@ -140,6 +146,7 @@
         <table class="table text-center" id="tablas-formularios">
             <thead>
                 <tr>
+                    <th></th>
                     <th>Creador</th>
                     <th>Identificación</th>
                     <th>Nombre completo</th>
@@ -208,7 +215,7 @@
                 fecha = document.getElementById('inputDate').value;
                 $('#tablas-formularios').DataTable().destroy();
                 viewTable(candidato,creador,cedula,nombre,comuna,barrio,corregimiento,vereda,fecha);
-            });
+            }); 
         });
 
         function viewTable(candidato,creador,cedula,nombre,comuna,barrio,corregimiento,vereda,fecha){
@@ -234,7 +241,12 @@
                     fecha: fecha, 
                 }
             },
-                columns: [{
+                columns: [
+                    {
+                        data: 'select',
+                        name: 'select'
+                    },
+                    {
                         data: 'creador',
                         name: 'creador'
                     },

@@ -6,6 +6,7 @@ use App\Models\Candidato;
 use App\Models\Formulario;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -131,7 +132,10 @@ class FormularioController extends Controller
                 }
                 return $btn;
             })
-            ->rawColumns(['acciones'])
+            ->addColumn('select', function ($col) {
+                return '<input type="checkbox" name="formularios[]" onclick="selectForms(this)" class="option-form" value="' . $col->id . '">';
+            })
+            ->rawColumns(['acciones', 'select'])
             ->make(true);
     }
 
@@ -204,8 +208,8 @@ class FormularioController extends Controller
                     WHEN pv.zone_type = 'Comuna' THEN CONCAT('Barrio: ', COALESCE(barrios.name, 'Sin información'))
                     WHEN pv.zone_type = 'Corregimiento' THEN CONCAT('Vereda: ', COALESCE(veredas.name, 'Sin información'))
                 END) AS puesto_nombre, pv.id"))
-                /* after case */
-                /* , ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre */
+            /* after case */
+            /* , ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre */
             ->leftJoin('barrios', function ($join) {
                 $join->on('pv.zone', '=', 'barrios.id')
                     ->where('pv.zone_type', '=', 'Comuna');
@@ -332,5 +336,30 @@ class FormularioController extends Controller
 
         Alert::success(trans($this->className), 'Se ha eliminado el ' . $this->singular . ' con exito.');
         return redirect()->route(trans($this->plural));
+    }
+
+    /**
+     * Delete multiple formularios by their ids.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteAll(Request $request): JsonResponse
+    {
+        $ids = $request->id_forms;
+        $formularios = $this->model::whereIn('id', $ids)->get();
+        
+        foreach ($formularios as $formulario) {
+            if ($formulario->foto) {
+                Storage::disk('public')->delete($formulario->foto);
+            }
+        }
+
+        $this->model::whereIn('id', $ids)->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => "Formularios eliminados correctamente."
+        ], 200);
     }
 }
