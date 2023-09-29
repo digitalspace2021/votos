@@ -72,6 +72,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/pre-formularios/{id}/aprobar', [PreFormularioController::class, 'approvedInfo'])->name('pre-formularios.aprobar');
     Route::get('/pre-formularios/{id}/delete', [PreFormularioController::class, 'destroy'])->name('pre-formularios.destroy');
     Route::get('/pre-formularios/export', [FileManagementController::class, 'exportPreFormulario'])->name('pre-formularios.export');
+    /* Route::post('/pre-formularios/all/delete', [PreFormularioController::class, 'deleteAll'])->name('pre-formularios.delete.all'); */
 
 
     Route::get('/formularios', [FormularioController::class, 'index'])->name('formularios');
@@ -189,10 +190,12 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/oportunidades/{id}/update', [ProblemController::class, 'update'])->name('problems.update');
     Route::put('/oportunidades/{id}/status', [ProblemController::class, 'changeStatus'])->name('problems.changeStatus');
     Route::get('/oportunidades/export', [FileOportunidadesManagementController::class, 'export'])->name('problems.export');
+    Route::post('/oportunidades/all/delete', [ProblemController::class, 'deleteAll'])->name('problems.delete.all');
     /* Route::get('/estadisticas/ediles', [EdilHighchartController::class, 'handleChart'])->name('ediles.statistics'); */
     Route::get('/estadisticas/ediles/{edil?}/{zona?}/{zona_id?}', [EdilHighchartController::class, 'handleChart'])->name('ediles.statistics');
     Route::get('/estadisticas/asambleistas/{asamb?}/{zona?}/{zona_id?}', [AsambHighchartController::class, 'handleChart'])->name('asambleistas.statistics');
     /* Route::get('/estadisticas/ediles/{edil?}', [EdilHighchartController::class, 'handleChart'])->name('ediles.statistics'); */
+
 
 
     /* usuarios ediles */

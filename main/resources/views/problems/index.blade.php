@@ -75,13 +75,18 @@ Posibles Votantes
 @endif
 
 <div class="row mb-3">
-    <div class="col-md-6 d-flex justify-content-start">
-        @if (Auth::user()->hasRole('administrador'))
-            <button class="btn btn-sm btn-success" id="exportar">Exportar</button>
-        @endif
-    </div>
-    <div class="col-md-6 d-flex justify-content-end">
-        <a href="{{ route('problems.create') }}" class="btn btn-sm btn-success">Crear Votante</a>
+    <div class="d-flex align-items-center justy-content-between">
+        <div class="col-md-4 d-flex justify-content-start">
+            @if (Auth::user()->hasRole('administrador'))
+                <button class="btn btn-sm btn-success" id="exportar">Exportar</button>
+            @endif
+        </div>
+
+        @include('components.del-forms', ['route' => route('problems.delete.all'), 'table' => 'table_problem'])
+
+        <div class="col-md-6 d-flex justify-content-end">
+            <a href="{{ route('problems.create') }}" class="btn btn-sm btn-success">Crear Votante</a>
+        </div>
     </div>
 </div>
 @endsection
@@ -91,6 +96,7 @@ Posibles Votantes
     <table class="table text-center" id="table_problem">
         <thead>
             <tr>
+                <th></th>
                 <th>Identificacion</th>
                 <th>Nombre Completo</th>
                 <th>Telefono</th>
@@ -155,7 +161,12 @@ Posibles Votantes
                         creador: creador
                     }
                 },
-                columns: [{
+                columns: [
+                    {
+                        data: 'select',
+                        name: 'select',
+                    },
+                    {
                         data: 'identificacion',
                         name: 'identificacion'
                     },

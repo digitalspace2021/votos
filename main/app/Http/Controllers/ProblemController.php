@@ -113,7 +113,10 @@ class ProblemController extends Controller
                     return '<span class="badge badge-success">Resuelto</span>';
                 }
             })
-            ->rawColumns(['acciones', 'status'])
+            ->addColumn('select', function ($problem) {
+                return '<input type="checkbox" name="formularios[]" onclick="selectForms(this)" class="option-form" value="' . $problem->id . '">';
+            })
+            ->rawColumns(['acciones', 'status', 'select'])
             ->make(true);
 
         return $problems;
@@ -157,7 +160,13 @@ class ProblemController extends Controller
         return view('problems.create', compact('users', 'edils', 'puestos'));
     }
 
-    public function edit($id)
+    /**
+     * Display the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\View\View
+     */
+    public function edit($id): View
     {
         $users = DB::table('users')->get();
 
@@ -378,7 +387,7 @@ class ProblemController extends Controller
             'tipo_zona' => $request->tipo_zona,
         ]);
 
-        if($request->has('candidatos')){
+        if ($request->has('candidatos')) {
             $problem->candidatos()->sync($request->candidatos);
         }
 
@@ -390,7 +399,13 @@ class ProblemController extends Controller
         return back()->with('success', 'Oportunidad de votante pendiente a confirmar');
     }
 
-    public function show($id)
+    /**
+     * Display the specified resource.
+     *
+     * @param  string  $id
+     * @return \Illuminate\View\View
+     */
+    public function show(string $id): View
     {
         $problem = Formulario::findOrFail($id);
         $users = DB::table('users')->get();
@@ -400,5 +415,24 @@ class ProblemController extends Controller
         }
 
         return view('problems.show', compact('problem', 'users'));
+    }
+
+    public function deleteAll(Request $request)
+    {
+        $ids = $request->id_forms;
+        $problems = Formulario::whereIn('id', $ids)->get();
+
+        foreach ($problems as $problem) {
+            if ($problem->foto) {
+                Storage::disk('public')->delete($problem->foto);
+            }
+
+            $problem->delete();
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => "Formularios eliminados correctamente."
+        ], 200);
     }
 }
