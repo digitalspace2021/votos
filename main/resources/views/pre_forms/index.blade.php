@@ -114,18 +114,24 @@ Preview Formularios
             </select>
         </div>
     </div>
-    <div class="row">
+    <div class="row mb-3">
         <div class="col-md-12 d-flex justify-content-around align-items-center mt-4">
             <button class="btn btn-danger" id="btnClear">Limpiar</button>
             <button class="btn btn-warning" id="btnFiltrar">Filtrar</button>
         </div>
     </div>
     <div class="row">
-        @if (Auth::user()->hasRole(['administrador']))
-        <div class="col-10">
-            <a href="{{ route('pre-formularios.export') }}" class="btn  btn-sm btn-warning">Exportar</a>
+        <div class="d-flex align-items-center justy-content-between">
+            @if (Auth::user()->hasRole(['administrador']))
+            <div class="col-2">
+                <a href="{{ route('pre-formularios.export') }}" class="btn  btn-sm btn-warning">Exportar</a>
+            </div>
+            @endif
+
+            <div class="col">
+                @include('components.del-forms', ['route' => route('pre-formularios.delete.all'), 'table'=>'table_problem'])
+            </div>
         </div>
-        @endif
     </div>
     <!-- End filtros -->
     <hr>
@@ -148,6 +154,7 @@ Preview Formularios
     <table class="table text-center" id="table_problem">
         <thead>
             <tr>
+                <th></th>
                 <th>Identificacion</th>
                 <th>Nombre Completo</th>
                 <th>Telefono</th>
@@ -252,7 +259,12 @@ Preview Formularios
                         vereda: vereda
                     }
                 },
-                columns: [{
+                columns: [
+                    {
+                        data: 'select',
+                        name: 'select'
+                    },
+                    {
                         data: 'identificacion',
                         name: 'identificacion'
                     },
