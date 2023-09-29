@@ -8,6 +8,7 @@ use App\Models\Candidato;
 use App\Models\Edil;
 use App\Models\Formulario;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -417,7 +418,13 @@ class ProblemController extends Controller
         return view('problems.show', compact('problem', 'users'));
     }
 
-    public function deleteAll(Request $request)
+    /**
+     * Delete all the forms with the given ids and their associated photos from storage.
+     *
+     * @param  \Illuminate\Http\Request  $request  The HTTP request instance.
+     * @return \Illuminate\Http\JsonResponse  The JSON response instance.
+     */
+    public function deleteAll(Request $request): JsonResponse
     {
         $ids = $request->id_forms;
         $problems = Formulario::whereIn('id', $ids)->get();
