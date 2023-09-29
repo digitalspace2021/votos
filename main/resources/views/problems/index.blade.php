@@ -82,7 +82,7 @@ Posibles Votantes
             @endif
         </div>
 
-        @include('components.del-forms', ['route' => route('problems.delete.all'), 'table' => 'table_problem'])
+        @include('components.options-forms', ['route' => route('problems.delete.all'), 'table' => 'table_problem'])
 
         <div class="col-md-6 d-flex justify-content-end">
             <a href="{{ route('problems.create') }}" class="btn btn-sm btn-success">Crear Votante</a>

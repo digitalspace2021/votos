@@ -127,7 +127,7 @@ Preview Formularios
                 <a href="{{ route('pre-formularios.export') }}" class="btn  btn-sm btn-warning">Exportar</a>
             </div>
             <div class="col-2">
-                @include('components.del-forms', ['route' => route('pre-formularios.delete.all'), 'table'=>'pre_forms', 'route_approved' => route('pre-formularios.aprobar.all')])
+                @include('components.options-forms', ['route' => route('pre-formularios.delete.all'), 'table'=>'pre_forms', 'route_approved' => route('pre-formularios.aprobar.all')])
             </div>
             @endif
         </div>

@@ -128,7 +128,7 @@
                     </div>
                 @endif
 
-                @include('components.del-forms', ['route' => route('formularios.delete.all'), 'table' => 'tablas-formularios'])
+                @include('components.options-forms', ['route' => route('formularios.delete.all'), 'table' => 'tablas-formularios'])
     
                 @if (Auth::user()->hasRole(['administrador', 'simple']))
                     <div class="col-2 mb-2 text-center">
