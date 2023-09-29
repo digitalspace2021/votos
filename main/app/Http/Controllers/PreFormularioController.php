@@ -305,4 +305,41 @@ class PreFormularioController extends Controller
 
         return $this->resp->response('success', 'Formularios eliminados correctamente', 200);
     }
+
+    /**
+     * Approve all pre-forms with the given IDs.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function approvedAll(Request $request): JsonResponse
+    {
+        $ids = $request->id_forms;
+
+        if (!$ids) {
+            return $this->resp->response('error', 'Error al aprobar los formularios', 400);
+        }
+
+        $pre_formularios = PreFormulario::whereIn('id', $ids)->get();
+
+        if (!$pre_formularios) {
+            return $this->resp->response('error', 'Error al aprobar los formularios', 404);
+        }
+
+        foreach ($pre_formularios as $pre_formulario) {
+            if (!$pre_formulario->puesto_votacion) {
+                return $this->resp->response('error', 'Para aprobar es necesario que el formulario tenga puesto de votación', 400);
+            }
+
+            $formulario = $this->appInfoService->approvedInfo($pre_formulario);
+
+            if (!$formulario) {
+                return $this->resp->response('error', 'Error al aprobar los formularios', 400);
+            }
+
+            $pre_formulario->delete();
+        }
+
+        return $this->resp->response('success', 'Formularios aprobados correctamente', 200);
+    }
 }

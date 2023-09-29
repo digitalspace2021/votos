@@ -73,6 +73,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pre-formularios/{id}/delete', [PreFormularioController::class, 'destroy'])->name('pre-formularios.destroy');
     Route::get('/pre-formularios/export', [FileManagementController::class, 'exportPreFormulario'])->name('pre-formularios.export');
     Route::post('/pre-formularios/all/delete', [PreFormularioController::class, 'deleteAll'])->name('pre-formularios.delete.all');
+    Route::post('/pre-formularios/all/aprobar', [PreFormularioController::class, 'approvedAll'])->name('pre-formularios.aprobar.all');
 
 
     Route::get('/formularios', [FormularioController::class, 'index'])->name('formularios');
