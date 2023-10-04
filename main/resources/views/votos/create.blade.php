@@ -44,9 +44,14 @@ Crear votacion
                 <button class="btn btn-md btn-warning col-md-12" id="clear">Limpiar</button>
             </div>
         </div>
-        <form action="" method="POST" enctype="multipart/form-data" id="createProblem">
+        <form action="{{route('votos.store')}}" method="POST" enctype="multipart/form-data" id="createProblem">
             @csrf
             <div class="row">
+                @error('form_id')
+                <div class="col-md-12 mb-2">
+                    <span class="text-danger">{{$message}}</span>
+                </div>
+                @enderror
                 <input type="hidden" name="form_id" id="form_idform">
                 <div class="col-md-6 mb-2">
                     <label for="nombres" class="form-label">Nombres Votante</label>
@@ -68,7 +73,25 @@ Crear votacion
                     <label for="direccion" class="form-label">Direccion</label>
                     <input type="text" class="form-control" value="" id="direccion" disabled>
                 </div>
-
+            </div>
+            <div class="row">
+                <div class="col-12 d-flex justify-content-center align-items-center">
+                    <span class="text-center" style="font-size: 1.5rem; font-weight: 600;">Voto?</span>
+                </div>
+                {{-- two input radio centers --}}
+                <div class="col-md-6 d-flex justify-content-center align-items-center">
+                    <label for="voto">Si</label>
+                    <input type="radio" name="voto" id="voto" value="si" class="form-check-input" required>
+                </div>
+                <div class="col-md-6 d-flex justify-content-center align-items-center">
+                    <label for="voto">No</label>
+                    <input type="radio" name="voto" id="voto" value="no" class="form-check-input" required>
+                </div>
+                @error('voto')
+                <div class="col-md-12">
+                    <span class="text-danger">{{$message}}</span>
+                </div>
+                @enderror
             </div>
             <div class="row mt-3">
                 <div class="col-md-12 d-flex justify-content-between">
@@ -103,6 +126,7 @@ Crear votacion
         $('#clear').click(function(e){
             e.preventDefault();
             $("#createProblem")[0].reset();
+            $('#form_idform').val('');
         })
 
         function getFormIdentification(identification){

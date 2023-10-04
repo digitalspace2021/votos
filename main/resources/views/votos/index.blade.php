@@ -20,7 +20,8 @@ Historial de votaciones
 @section('cabecera')
 <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
     <h1 class="display-4 fw-normal">Historial de votaciones</h1>
-    <p class="fs-5 text-muted">Aqui se tendra registro de las votaciones hechas en base a los formularios registrados, diciendo si voto o no.</p>
+    <p class="fs-5 text-muted">Aqui se tendra registro de las votaciones hechas en base a los formularios registrados,
+        diciendo si voto o no.</p>
 </div>
 
 
@@ -88,12 +89,12 @@ Historial de votaciones
 
 @section('cuerpo')
 <div class="table-responsive">
-    <table class="table text-center" id="table_problem">
+    <table class="table text-center" id="table_votos">
         <thead>
             <tr>
                 <th>Identificacion</th>
                 <th>Creador</th>
-                <th>Comuna</th>
+                <th>Ubicacion</th>
                 <th>Voto</th>
                 <th>Fecha</th>
                 <th>Acciones</th>
@@ -104,7 +105,53 @@ Historial de votaciones
 @endsection
 
 @push('custom-js')
-    <script>
-        console.log('vamos');
-    </script>
+<script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+    $(document).ready(function(){
+        viewTable();
+
+        function viewTable(candidato,creador,cedula,nombre,comuna,barrio,corregimiento,vereda,fecha){
+            $('#table_votos').DataTable({
+                processing: true,
+                serverSide: true,
+                order: [],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.1/i18n/es-ES.json',
+                },
+                ajax: {
+                url: "{!! route('votos.getAll') !!}",
+                type: "GET",
+            },
+                columns: [
+                    {
+                        data: 'identificacion',
+                        name: 'identificacion'
+                    },
+                    {
+                        data: 'creador',
+                        name: 'creador'
+                    },
+                    {
+                        data: 'ubicacion',
+                        name: 'ubicacion'
+                    },
+                    {
+                        data: 'voto',
+                        name: 'voto'
+                    },
+                    {
+                        data: 'fecha',
+                        name: 'fecha'
+                    },
+                    {
+                        data: 'acciones',
+                        name: 'acciones'
+                    }
+                ]
+            });
+        }
+    })
+</script>
 @endpush

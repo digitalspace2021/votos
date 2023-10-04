@@ -216,9 +216,10 @@ Route::middleware(['auth'])->group(function () {
 
     /* votos */
     Route::get('/votos', [VotosController::class, 'index'])->name('votos.index');
-    Route::get('/votos/geall', [VotosController::class, 'getAll'])->name('votos.getAll');
+    Route::get('/votos/getall', [VotosController::class, 'getAll'])->name('votos.getAll');
     Route::get('/votos/create/{form_id?}', [VotosController::class, 'create'])->name('votos.create');
     Route::get('/votos/info/form', [VotosController::class, 'getFormIdentification'])->name('votos.getFormIdentification');
+    Route::post('/votos/store', [VotosController::class, 'store'])->name('votos.store');
 });
 Route::get('/oportunidades', [ProblemController::class, 'index'])->name('problems.index');
 Route::get('/oportunidades/getall', [ProblemController::class, 'getAll'])->name('problems.getAll');

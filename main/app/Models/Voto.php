@@ -16,7 +16,7 @@ class Voto extends Model
         'form_id',
     ];
 
-    public function formularios(){
+    public function form(){
         return $this->belongsTo(Formulario::class);
     }
     
