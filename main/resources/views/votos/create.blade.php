@@ -155,6 +155,9 @@ Crear votacion
                 statusCode: {
                     404: function(){
                         alert('No se encontro el formulario con la identificacion ingresada');
+                    },
+                    400: function(response){
+                        alert(response.responseJSON.message);
                     }
                 },
                 error: function(error){

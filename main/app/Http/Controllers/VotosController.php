@@ -112,9 +112,9 @@ class VotosController extends Controller
      * Retrieve a form by identification and return it as a FormResource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \App\Http\Resources\FormResource
+     * @return \App\Http\Resources\FormResource|\Illuminate\Http\JsonResponse
      */
-    public function getFormIdentification(Request $request): FormResource
+    public function getFormIdentification(Request $request)
     {
         $form = Formulario::select('formularios.id', 'formularios.identificacion', 'formularios.created_at', 'direccion', 'tipo_zona', 'nombre', 'apellido', 'zona', 'users.name as registrador')
             ->join('users', 'formularios.propietario_id', '=', 'users.id')
@@ -126,8 +126,23 @@ class VotosController extends Controller
             return $this->resp->response('error', 'No se encontro el formulario', 404);
         }
 
+        if ($this->verificationHasVoto($form->id)) {
+            return $this->resp->response('error', 'El formulario ya tiene un voto registrado', 400);
+        }
+
         $form->ubicacion = $form->ubicacion();
 
         return new FormResource($form);
+    }
+
+    public function verificationHasVoto(string $id)
+    {
+        $voto = Voto::where('form_id', $id)->first();
+
+        if ($voto) {
+            return true;
+        }
+
+        return false;
     }
 }

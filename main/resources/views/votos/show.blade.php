@@ -19,7 +19,7 @@ Crear votacion
 
 @section('cabecera')
 <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
-    <h1 class="display-4 fw-normal">Nueva votacion</h1>
+    <h1 class="display-4 fw-normal">Ver voto</h1>
 </div>
 
 @if (session('success') || session('error'))
