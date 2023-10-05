@@ -221,6 +221,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/votos/info/form', [VotosController::class, 'getFormIdentification'])->name('votos.getFormIdentification');
     Route::post('/votos/store', [VotosController::class, 'store'])->name('votos.store');
     Route::get('/votos/{id}/show', [VotosController::class, 'show'])->name('votos.show');
+    Route::get('/votos/{id}/edit', [VotosController::class, 'edit'])->name('votos.edit');
+    Route::put('/votos/{id}/update', [VotosController::class, 'update'])->name('votos.update');
 });
 Route::get('/oportunidades', [ProblemController::class, 'index'])->name('problems.index');
 Route::get('/oportunidades/getall', [ProblemController::class, 'getAll'])->name('problems.getAll');
