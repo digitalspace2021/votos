@@ -95,7 +95,7 @@ Crear votacion
             </div>
             <div class="row mt-3">
                 <div class="col-md-12 d-flex justify-content-between">
-                    <a href="" class="btn btn-danger" id="btnCancel">Cancelar</a>
+                    <a href="{{route('votos.index')}}" class="btn btn-danger" id="btnCancel">Cancelar</a>
                     <button type="submit" class="btn btn-success" id="btnSave">Guardar</button>
                 </div>
             </div>

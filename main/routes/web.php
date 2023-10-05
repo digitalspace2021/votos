@@ -220,6 +220,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/votos/create/{form_id?}', [VotosController::class, 'create'])->name('votos.create');
     Route::get('/votos/info/form', [VotosController::class, 'getFormIdentification'])->name('votos.getFormIdentification');
     Route::post('/votos/store', [VotosController::class, 'store'])->name('votos.store');
+    Route::get('/votos/{id}/show', [VotosController::class, 'show'])->name('votos.show');
 });
 Route::get('/oportunidades', [ProblemController::class, 'index'])->name('problems.index');
 Route::get('/oportunidades/getall', [ProblemController::class, 'getAll'])->name('problems.getAll');
