@@ -76,7 +76,7 @@ Historial de votaciones
     <div class="d-flex align-items-center justy-content-between">
         <div class="col-md-4 d-flex justify-content-start">
             @if (Auth::user()->hasRole('administrador'))
-            <button class="btn btn-sm btn-success" id="exportar">Exportar</button>
+            <button class="btn btn-sm btn-success exportar" id="exportar">Exportar</button>
             @endif
         </div>
 
@@ -102,6 +102,7 @@ Historial de votaciones
         </thead>
     </table>
 </div>
+@include('components.loading')
 @endsection
 
 @push('custom-js')
@@ -152,6 +153,45 @@ Historial de votaciones
                 ]
             });
         }
-    })
+    });
+    function deleteVoto(e, id){
+        let url = "{{route('votos.destroy', ['id'=>':id'])}}";
+        url = url.replace(':id', id);
+
+        if(confirm('¿Esta seguro de eliminar este voto?')){
+            $.ajax({
+                url: url,
+                method: 'DELETE',
+                data: {
+                    _token: "{{csrf_token()}}"
+                },
+                beforeSend: function(){
+                    $('.loading-overlay').show();
+                },
+                success: function(response){
+                    if (response.status == 'success') {
+                        alert(response.message);
+                        $("#table_votos").DataTable().ajax.reload();
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                statusCode: {
+                    404: function(){
+                        alert('No se encontro el voto');
+                    },
+                    400: function(response){
+                        alert(response.responseJSON.message);
+                    }
+                },
+                error: function(error){
+                    console.log(error);
+                },
+                complete: function(){
+                    $('.loading-overlay').hide();
+                }
+            })
+        }
+    }
 </script>
 @endpush

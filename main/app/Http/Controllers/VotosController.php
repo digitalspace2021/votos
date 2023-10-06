@@ -8,6 +8,7 @@ use App\Models\Formulario;
 use App\Models\Voto;
 use App\Services\ResponseService;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -57,7 +58,7 @@ class VotosController extends Controller
                 /* view, del, and update */
                 $btns = '<a href="' . route('votos.show', ['id' => $col->id]) . '" class="btn btn-sm btn-primary mx-2" title="Ver"><i class="fa fa-eye"></i></a>';
                 $btns .= '<a href="' . route('votos.edit', ['id' => $col->id]) . '" class="btn btn-sm btn-warning mx-2" title="Editar"><i class="fa fa-edit"></i></a>';
-                $btns .= '<a href="" class="btn btn-sm btn-danger mx-2" title="Eliminar"><i class="fa fa-trash"></i></a>';
+                $btns .= '<button type="button" onclick="deleteVoto(this, '.$col->id.')" class="btn btn-sm btn-danger mx-2 delete" title="Eliminar" voto_id="'.$col->id.'"><i class="fa fa-trash"></i></button>';
                 return $btns;
             })
             ->rawColumns(['acciones'])
@@ -151,6 +152,28 @@ class VotosController extends Controller
         }
 
         return redirect()->route('votos.index')->with('error', 'No se pudo actualizar el voto');
+    }
+
+    /**
+     * Delete a voto by ID.
+     *
+     * @param string $id The ID of the voto to delete.
+     *
+     * @return JsonResponse A JSON response indicating success or failure.
+     */
+    public function destroy(string $id): JsonResponse
+    {
+        $voto = Voto::find($id);
+
+        if (!$voto) {
+            return $this->resp->response('error', 'No se encontro el voto', 404);
+        }
+
+        if ($voto->delete()) {
+            return $this->resp->response('success', 'Voto eliminado correctamente', 200);
+        }
+
+        return $this->resp->response('error', 'No se pudo eliminar el voto', 400);
     }
 
     /**
