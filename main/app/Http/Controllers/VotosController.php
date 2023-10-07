@@ -30,7 +30,7 @@ class VotosController extends Controller
     public function index()
     {
         $candidates = Candidato::select('name', 'id')->get();
-        return view('Votos.index', compact('candidates'));
+        return view('votos.index', compact('candidates'));
     }
 
     public function getAll(Request $request)
