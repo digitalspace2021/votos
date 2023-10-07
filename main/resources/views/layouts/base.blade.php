@@ -88,6 +88,17 @@
                                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle btn-hover" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa fa-tasks" aria-hidden="true"></i> Votaciones
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item btn-hover" href="{{ route('votos.index') }}">Votaciones</a></li>
+                                        <li><a class="dropdown-item btn-hover" href="{{ route('votos.info') }}">Informacion General</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle btn-hover" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="fa fa-file" aria-hidden="true"></i> Formularios
                                         </a>
                                         <ul class="dropdown-menu">

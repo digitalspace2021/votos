@@ -22,6 +22,7 @@ use App\Http\Controllers\PuestoVotacionController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\UsuariosEdilController;
 use App\Http\Controllers\UtilityController;
+use App\Http\Controllers\VotosController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -212,6 +213,19 @@ Route::middleware(['auth'])->group(function () {
     /* cumpleanios */
     Route::get('/cumpleanios/usuarios', [CumpleaniosController::class, 'index'])->name('cumpleanios.index');
     Route::get('/cumpleanios/usuarios/getAll', [CumpleaniosController::class, 'getAll'])->name('cumpleanios.getAll');
+
+    /* votos */
+    Route::get('/votos', [VotosController::class, 'index'])->name('votos.index');
+    Route::get('/votos/getall', [VotosController::class, 'getAll'])->name('votos.getAll');
+    Route::get('/votos/create/{form_id?}', [VotosController::class, 'create'])->name('votos.create');
+    Route::get('/votos/info/form', [VotosController::class, 'getFormIdentification'])->name('votos.getFormIdentification');
+    Route::post('/votos/store', [VotosController::class, 'store'])->name('votos.store');
+    Route::get('/votos/{id}/show', [VotosController::class, 'show'])->name('votos.show');
+    Route::get('/votos/{id}/edit', [VotosController::class, 'edit'])->name('votos.edit');
+    Route::put('/votos/{id}/update', [VotosController::class, 'update'])->name('votos.update');
+    Route::delete('/votos/{id}/delete', [VotosController::class, 'destroy'])->name('votos.destroy');
+    Route::get('/votos/info', [VotosController::class, 'viewGeneralInfo'])->name('votos.info');
+    Route::get('/votos/export', [VotosController::class, 'exportVotos'])->name('votos.export');
 });
 Route::get('/oportunidades', [ProblemController::class, 'index'])->name('problems.index');
 Route::get('/oportunidades/getall', [ProblemController::class, 'getAll'])->name('problems.getAll');

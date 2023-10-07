@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\DB;
 
 class Formulario extends Model
 {
@@ -30,7 +31,7 @@ class Formulario extends Model
         'mesa',
         'fecha_nacimiento',
         'per_descrip'
-        
+
     ];
 
     public function edil()
@@ -49,5 +50,39 @@ class Formulario extends Model
     public function candidatos(): BelongsToMany
     {
         return $this->belongsToMany(Candidato::class, 'formulario_candidatos', 'formulario_id', 'candidato_id');
+    }
+
+    public function creador()
+    {
+        return $this->belongsTo(User::class, 'propietario_id');
+    }
+
+    public function voto()
+    {
+        return $this->hasOne(Voto::class, 'form_id');
+    }
+
+    /**
+     * Returns the location of the form based on the type of zone and zone id.
+     *
+     * @return string The location of the form in the format "general - location".
+     */
+    public function ubicacion(): string
+    {
+        if ($this->tipo_zona == 'Comuna') {
+            $ubication = DB::table('comunas')
+                ->join('barrios', 'comunas.id', '=', 'barrios.comuna_id')
+                ->where('barrios.id', $this->zona)
+                ->select('comunas.name as general', 'barrios.name as location')
+                ->first();
+        } else {
+            $ubication = DB::table('corregimientos')
+                ->join('corregimientos', 'veredas.corregimiento_id', '=', 'corregimientos.id')
+                ->where('veredas.id', $this->zona)
+                ->select('corregimientos.name as general', 'veredas.name as location')
+                ->first();
+        }
+
+        return "$ubication->general - $ubication->location";
     }
 }
