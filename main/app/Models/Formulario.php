@@ -77,7 +77,7 @@ class Formulario extends Model
                 ->first();
         } else {
             $ubication = DB::table('corregimientos')
-                ->join('corregimientos', 'veredas.corregimiento_id', '=', 'corregimientos.id')
+                ->join('veredas', 'veredas.corregimiento_id', '=', 'corregimientos.id')
                 ->where('veredas.id', $this->zona)
                 ->select('corregimientos.name as general', 'veredas.name as location')
                 ->first();
