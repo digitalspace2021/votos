@@ -286,18 +286,17 @@ class VotosController extends Controller
         $query = Formulario::where('estado', true)
             ->whereHas('voto', function ($query) use ($request) {
                 $query->when($request->voto, function ($query) use ($request) {
-                    $query->where('voto', $request->voto);
+                    $voto = strtolower($request->voto) == 'si' ? true : false;
+                    $query->where('voto', $voto);
                 });
             })
-            ->when($request->candidate, function ($query) use ($request) {
+            ->when($request->candidato, function ($query) use ($request) {
                 $query->whereHas('candidatos', function ($query) use ($request) {
-                    $query->where('candidatos.id', $request->candidate);
+                    $query->where('candidatos.id', $request->candidato);
                 });
             })
-            ->when($request->creator, function ($query) use ($request) {
-                $query->whereHas('creador', function ($query) use ($request) {
-                    $query->where('users.id', $request->creator);
-                });
+            ->when($request->identificacion, function ($query) use ($request) {
+                $query->where('identificacion', $request->identificacion);
             })
             ->get();
 
