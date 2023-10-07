@@ -72,6 +72,18 @@ Historial de votaciones
 </div>
 @endif
 
+<div class="row">
+    <div class="col-md-4 mb-3">
+        <input type="text" name="" id="voto" class="form-control" placeholder="identificacion">
+    </div>
+    <div class="col-md-4 mb-3">
+        <input type="text" name="" id="candidato" class="form-control" placeholder="identificacion">
+    </div>
+    <div class="col-md-4 mb-3">
+        <input type="text" name="" id="creator" class="form-control" placeholder="identificacion">
+    </div>
+</div>
+
 <div class="row mb-3">
     <div class="d-flex align-items-center justy-content-between">
         <div class="col-md-4 d-flex justify-content-start">
@@ -153,6 +165,16 @@ Historial de votaciones
                 ]
             });
         }
+
+        $('#exportar').click(function(){
+            let url = "{{route('votos.export')}}";
+            let voto = $('#voto').val();
+            let candidato = $('#candidato').val();
+            let creator = $('#creator').val();
+
+            url = url + '?voto=' + voto + '&candidato=' + candidato + '&creator=' + creator;
+            window.location.href = url;
+        })
     });
     function deleteVoto(e, id){
         let url = "{{route('votos.destroy', ['id'=>':id'])}}";

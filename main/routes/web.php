@@ -225,6 +225,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/votos/{id}/update', [VotosController::class, 'update'])->name('votos.update');
     Route::delete('/votos/{id}/delete', [VotosController::class, 'destroy'])->name('votos.destroy');
     Route::get('/votos/info', [VotosController::class, 'viewGeneralInfo'])->name('votos.info');
+    Route::get('/votos/export', [VotosController::class, 'exportVotos'])->name('votos.export');
 });
 Route::get('/oportunidades', [ProblemController::class, 'index'])->name('problems.index');
 Route::get('/oportunidades/getall', [ProblemController::class, 'getAll'])->name('problems.getAll');

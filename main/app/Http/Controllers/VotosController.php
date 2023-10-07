@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\Votos\VotosExport;
 use App\Http\Enum\Cargo\CargoEnum;
 use App\Http\Requests\Votos\StoreRequest;
 use App\Http\Resources\Votos\FormResource;
@@ -13,6 +14,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
 
 class VotosController extends Controller
@@ -251,5 +253,38 @@ class VotosController extends Controller
         }
 
         return false;
+    }
+
+    /**
+     * Export votes to Excel file based on filters.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function exportVotos(Request $request)
+    {
+        $query = Formulario::where('estado', true)
+            ->whereHas('voto', function ($query) use ($request) {
+                $query->when($request->voto, function ($query) use ($request) {
+                    $query->where('voto', $request->voto);
+                });
+            })
+            ->when($request->candidate, function ($query) use ($request) {
+                $query->whereHas('candidatos', function ($query) use ($request) {
+                    $query->where('candidatos.id', $request->candidate);
+                });
+            })
+            ->when($request->creator, function ($query) use ($request) {
+                $query->whereHas('creador', function ($query) use ($request) {
+                    $query->where('users.id', $request->creator);
+                });
+            })
+            ->get();
+
+        $now = time();
+
+        return Excel::download(new VotosExport(
+            $query
+        ), "votos-$now.xlsx");
     }
 }
