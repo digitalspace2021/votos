@@ -73,14 +73,32 @@ Historial de votaciones
 @endif
 
 <div class="row">
-    <div class="col-md-4 mb-3">
-        <input type="text" name="" id="voto" class="form-control" placeholder="identificacion">
+    <div class="col-md-3 mb-3">
+        <input type="text" name="" id="identificacion" class="form-control" placeholder="identificacion">
     </div>
     <div class="col-md-4 mb-3">
-        <input type="text" name="" id="candidato" class="form-control" placeholder="identificacion">
+        <select name="" id="candidato" class="form-select">
+            <option value="">Filtrar por candidato</option>
+            @foreach ($candidates as $item)
+            <option value="{{$item->id}}">{{$item->name}}</option>                
+            @endforeach
+        </select>
     </div>
-    <div class="col-md-4 mb-3">
-        <input type="text" name="" id="creator" class="form-control" placeholder="identificacion">
+    <div class="col-md-2 mb-3">
+        {{-- <input type="text" name="" id="creator" class="form-control" placeholder="identificacion"> --}}
+        <select name="" id="voto" class="form-select">
+            <option value="" selected>Filtrar por voto</option>
+            <option value="si">Si</option>
+            <option value="no">No</option>
+        </select>
+    </div>
+    <div class="col-md-3 mb-3 d-flex justify-content-between align-items-center">
+        <div>
+            <button class="btn btn-md btn-success" id="btnFiltrar">Filtrar</button>
+        </div>
+        <div>
+            <button class="btn btn-md btn-warning" id="btnLimpiar">Limpiar</button>
+        </div>
     </div>
 </div>
 
@@ -125,7 +143,7 @@ Historial de votaciones
     $(document).ready(function(){
         viewTable();
 
-        function viewTable(candidato,creador,cedula,nombre,comuna,barrio,corregimiento,vereda,fecha){
+        function viewTable(candidato=null,voto=null,identificacion=null){
             $('#table_votos').DataTable({
                 processing: true,
                 serverSide: true,
@@ -136,6 +154,11 @@ Historial de votaciones
                 ajax: {
                 url: "{!! route('votos.getAll') !!}",
                 type: "GET",
+                data: {
+                    candidato: candidato,
+                    voto: voto,
+                    identificacion: identificacion
+                }
             },
                 columns: [
                     {
@@ -170,11 +193,29 @@ Historial de votaciones
             let url = "{{route('votos.export')}}";
             let voto = $('#voto').val();
             let candidato = $('#candidato').val();
-            let creator = $('#creator').val();
+            let identificacion = $('#identificacion').val();
 
-            url = url + '?voto=' + voto + '&candidato=' + candidato + '&creator=' + creator;
+            url = url + '?voto=' + voto + '&candidato=' + candidato + '&identificacion=' + identificacion;
             window.location.href = url;
-        })
+        });
+
+        $('#btnFiltrar').click(function(){
+            let voto = $('#voto').val();
+            let candidato = $('#candidato').val();
+            let identificacion = $('#identificacion').val();
+
+            $('#table_votos').DataTable().destroy();
+            viewTable(candidato,voto,identificacion);
+        });
+
+        $('#btnLimpiar').click(function(){
+            $('#voto').val('');
+            $('#candidato').val('');
+            $('#identificacion').val('');
+
+            $('#table_votos').DataTable().destroy();
+            viewTable();
+        });
     });
     function deleteVoto(e, id){
         let url = "{{route('votos.destroy', ['id'=>':id'])}}";

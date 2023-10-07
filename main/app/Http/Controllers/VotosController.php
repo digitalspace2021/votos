@@ -6,6 +6,7 @@ use App\Exports\Votos\VotosExport;
 use App\Http\Enum\Cargo\CargoEnum;
 use App\Http\Requests\Votos\StoreRequest;
 use App\Http\Resources\Votos\FormResource;
+use App\Models\Candidato;
 use App\Models\Formulario;
 use App\Models\Voto;
 use App\Services\ResponseService;
@@ -28,13 +29,32 @@ class VotosController extends Controller
 
     public function index()
     {
-        return view('Votos.index');
+        $candidates = Candidato::select('name', 'id')->get();
+        return view('Votos.index', compact('candidates'));
     }
 
-    public function getAll()
+    public function getAll(Request $request)
     {
-        $votos = Voto::query()
-            ->get();
+        $votos = Voto::query();
+
+        $votos->when($request->voto, function ($query) use ($request) {
+            $voto = strtolower($request->voto) == 'si' ? true : false;
+            $query->where('voto', $voto);
+        });
+
+        $votos->when($request->identificacion, function ($query) use ($request) {
+            $query->whereHas('form', function ($query) use ($request) {
+                $query->where('identificacion', $request->identificacion);
+            });
+        });
+
+        $votos->when($request->candidato, function ($query) use ($request) {
+            $query->whereHas('form', function ($query) use ($request) {
+                $query->whereHas('candidatos', function ($query) use ($request) {
+                    $query->where('candidatos.id', $request->candidato);
+                });
+            });
+        });
 
         /* dd($votos); */
         /* foreach ($votos as $voto) {
