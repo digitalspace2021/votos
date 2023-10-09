@@ -22,6 +22,7 @@ use App\Http\Controllers\PuestoVotacionController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\UsuariosEdilController;
 use App\Http\Controllers\UtilityController;
+use App\Http\Controllers\VerifyExcelController;
 use App\Http\Controllers\VotosController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
@@ -226,6 +227,10 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/votos/{id}/delete', [VotosController::class, 'destroy'])->name('votos.destroy');
     Route::get('/votos/info', [VotosController::class, 'viewGeneralInfo'])->name('votos.info');
     Route::get('/votos/export', [VotosController::class, 'exportVotos'])->name('votos.export');
+
+    /* verificar exlce */
+    Route::get('/verify/excel', [VerifyExcelController::class, 'index'])->name('verify.excel');
+    Route::post('/verify/excel', [VerifyExcelController::class, 'verify'])->name('verify.excel');
 });
 Route::get('/oportunidades', [ProblemController::class, 'index'])->name('problems.index');
 Route::get('/oportunidades/getall', [ProblemController::class, 'getAll'])->name('problems.getAll');

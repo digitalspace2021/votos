@@ -63,6 +63,14 @@
                     @endforeach
                 </ul>
 
+                <div class="row">
+                    <div class="col-12 mb-2">
+                        <a href="{{route('verify.excel')}}" class="btn btn-success btn-md">
+                            Verificar estado
+                        </a>
+                    </div>
+                </div>
+
                 <form class="needs-validation" enctype="multipart/form-data" method="POST"
                     action="{{ route('import.form') }}">
                     @csrf
