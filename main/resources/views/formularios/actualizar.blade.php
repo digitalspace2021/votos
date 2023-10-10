@@ -38,16 +38,28 @@
                         @endif
                     </div>
                     <input type="hidden" name="creador_id" id="creador_id" value="{{ $formulario->propietario_id }}">
-                    <input type="hidden" name="candidato_id" id="candidato_id" value="{{ $formulario->candidato_id }}">
 
                     <div class="row g-3">
 
                         <div class="col-12">
+                            @php
+                                $oldCandidatos = old('candidatos') ? old('candidatos') : $formulario->candidatos->pluck('id')->toArray();
+                            @endphp
                             <label for="candidato" class="form-label">Candidato</label>
-                            <select name="candidato" class="form-control" name="candidato" id="candidato" required>
-                                <option value="{{ $formulario->candidato_id }}">{{ $formulario->candidato_nombre }}
-                                </option>
+                            <select name="candidatos[]" id="candidatos" class="form-select" aria-multiselectable="true" multiple required>
+                                <option value="" disabled>Selecciona un candidato</option>
+                                @foreach ($candidatos as $candidato)
+                                    <option value="{{ $candidato->id }}"
+                                        {{ in_array($candidato->id, $oldCandidatos) ? 'selected' : '' }}
+                                        >{{ $candidato->name }}</option>
+                                @endforeach
                             </select>
+
+                            @error('cxandidatos')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
 
                         <div class="col-12">
@@ -161,7 +173,7 @@
 
                         <div class="col-md-6 mb-2">
                             <label for="mesa" class="form-label">Mesa</label>
-                            <select name="mesa" id="mesa" class="form-select" required>
+                            <select name="mesa" id="mesa" class="form-select">
                                 <option value="" selected disabled>Seleccione una mesa</option>
                             </select>
                             {{-- @error('mesa')
@@ -306,32 +318,8 @@
                     $('#creador_id').val(data.id);
                 });
 
-                $('#candidato').select2({
-                    theme: "bootstrap",
-                    ajax: {
-                        dataType: 'json',
-                        url: "{!! route('util.lista_candidatos') !!}",
-                        type: "get",
-                        delay: 250,
-                        data: function(params) {
-                            return {
-                                search: params.term
-                            };
-                        },
-                        processResults: function(response) {
-                            return {
-                                results: response
-                            };
-                        },
-                        cache: true
-                    }
-
-                });
-                $('#candidato').val('{{ $formulario->candidato_id }}').trigger('change');
-
-                $('#candidato').on('select2:select', function(e) {
-                    var data = e.params.data;
-                    $('#candidato_id').val(data.id);
+                $('#candidatos').select2({
+                    multiple: true,
                 });
 
                 (() => {

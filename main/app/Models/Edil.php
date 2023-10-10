@@ -13,7 +13,7 @@ class Edil extends Model
 
     protected $fillable = [
         'edil_id',
-        'asamblea_edil',
+        'asamblea_id',
         'concejo',
         'alcaldia',
         'gobernacion',

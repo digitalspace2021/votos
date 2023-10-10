@@ -75,13 +75,18 @@ Posibles Votantes
 @endif
 
 <div class="row mb-3">
-    <div class="col-md-6 d-flex justify-content-start">
-        @if (Auth::user()->hasRole('administrador'))
-            <button class="btn btn-sm btn-success" id="exportar">Exportar</button>
-        @endif
-    </div>
-    <div class="col-md-6 d-flex justify-content-end">
-        <a href="{{ route('problems.create') }}" class="btn btn-sm btn-success">Crear Votante</a>
+    <div class="d-flex align-items-center justy-content-between">
+        <div class="col-md-4 d-flex justify-content-start">
+            @if (Auth::user()->hasRole('administrador'))
+                <button class="btn btn-sm btn-success" id="exportar">Exportar</button>
+            @endif
+        </div>
+
+        @include('components.options-forms', ['route' => route('problems.delete.all'), 'table' => 'table_problem'])
+
+        <div class="col-md-6 d-flex justify-content-end">
+            <a href="{{ route('problems.create') }}" class="btn btn-sm btn-success">Crear Votante</a>
+        </div>
     </div>
 </div>
 @endsection
@@ -91,6 +96,7 @@ Posibles Votantes
     <table class="table text-center" id="table_problem">
         <thead>
             <tr>
+                <th></th>
                 <th>Identificacion</th>
                 <th>Nombre Completo</th>
                 <th>Telefono</th>
@@ -104,7 +110,7 @@ Posibles Votantes
 </div>
 @endsection
 
-@include('problems.modals.address-modal')
+@include('problems.modals.address-modal', ['candidatos' => $candidatos])
 
 
 @section('js-extra')
@@ -141,6 +147,8 @@ Posibles Votantes
             $('#table_problem').DataTable({
                 processing: true,
                 serverSide: true,
+                responsive: true,
+                order: [],
                 language: {
                     url: '//cdn.datatables.net/plug-ins/1.13.1/i18n/es-ES.json',
                 },
@@ -153,7 +161,12 @@ Posibles Votantes
                         creador: creador
                     }
                 },
-                columns: [{
+                columns: [
+                    {
+                        data: 'select',
+                        name: 'select',
+                    },
+                    {
                         data: 'identificacion',
                         name: 'identificacion'
                     },
@@ -266,34 +279,11 @@ Posibles Votantes
             });
 
 
-            $('#candidato_id').select2({
-                    theme: "bootstrap",
-                    ajax: {
-                        dataType: 'json',
-                        url: "{!! route('util.lista_candidatos') !!}",
-                        type: "get",
-                        delay: 250,
-                        data: function(params) {
-                            return {
-                                search: params.term
-                            };
-                        },
-                        processResults: function(response) {
-                            return {
-                                results: response
-                            };
-                        },
-                        cache: true
-                    },
-                    placeholder: 'Buscar candidato',
-                    dropdownParent: $("#changeStatus")
-
-            });
-
-            $('#candidato_id').on('select2:select', function(e) {
-                var data = e.params.data;
-                $('#candidato_id').val(data.id);
-            });
+            $('#candidatos').select2({
+                multiple: true,
+                dropdownParent: $("#changeStatus"),
+                width: '100%',
+            })
         });
 
         $('#candidato_id').on('click', function(event) {

@@ -1,7 +1,7 @@
 @extends('layouts.base')
 
 @section('titulo')
-    Crear formulario
+    Importar Formularios
 @endsection
 
 @section('css-extra')
@@ -63,6 +63,14 @@
                     @endforeach
                 </ul>
 
+                <div class="row">
+                    <div class="col-12 mb-2">
+                        <a href="{{route('verify.excel')}}" class="btn btn-success btn-md">
+                            Verificar estado
+                        </a>
+                    </div>
+                </div>
+
                 <form class="needs-validation" enctype="multipart/form-data" method="POST"
                     action="{{ route('import.form') }}">
                     @csrf
@@ -70,13 +78,19 @@
                         @if (Auth::user()->hasRole('simple')) value="{{ Auth::user()->id }}" @endif>
 
                     <div class="row g-3">
-
                         <div class="col-12">
-                            <label for="candidato_id" class="form-label">Candidato</label>
-                            <select class="form-control" name="candidato_id" id="candidato_id" required></select>
-                            <div class="invalid-feedback">
-                                Este campo es requerido.
-                            </div>
+                            <label for="candidato_id" class="form-label">Candidato *</label>
+                            <select name="candidatos[]" id="candidatos" class="form-select">
+                                <option value="" selected disabled>Selecciona un candidato</option>
+                                @foreach ($candidatos as $candidato)
+                                    <option value="{{ $candidato->id }}">{{ $candidato->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('candidatos')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
 
                         <div class="col-12">
@@ -224,32 +238,9 @@
                     $('#creador_id').val(data.id);
                 });
 
-                $('#candidato_id').select2({
-                    theme: "bootstrap",
-                    ajax: {
-                        dataType: 'json',
-                        url: "{!! route('util.lista_candidatos') !!}",
-                        type: "get",
-                        delay: 250,
-                        data: function(params) {
-                            return {
-                                search: params.term
-                            };
-                        },
-                        processResults: function(response) {
-                            return {
-                                results: response
-                            };
-                        },
-                        cache: true
-                    }
-
-                });
-
-                $('#candidato_id').on('select2:select', function(e) {
-                    var data = e.params.data;
-                    $('#candidato_id').val(data.id);
-                });
+                $('#candidatos').select2({
+                    multiple: true,
+                })
 
                 $("#add_files").click(function() {
 

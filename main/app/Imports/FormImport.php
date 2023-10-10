@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Models\Formulario;
 use App\Models\PreFormulario;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Concerns\Importable;
@@ -44,7 +45,15 @@ class FormImport implements ToModel,  WithValidation, WithHeadingRow
             /* using validations of method rules */
             Validator::make($new_data, $this->rules());
 
-            return new PreFormulario(array_merge($new_data, $this->data));
+            //return new PreFormulario(array_merge($new_data, $this->data));
+
+            DB::beginTransaction();
+
+            $preFormulario = PreFormulario::create(array_merge($new_data, $this->data));
+            $preFormulario->candidatos()->attach($this->data['candidatos']);
+
+            DB::commit();
+
         } catch (\Exception $e) {
             dd($e);
         }

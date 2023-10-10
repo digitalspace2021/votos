@@ -34,6 +34,7 @@
         }
     </style>
     @yield('css-extra')
+    @stack('custom-css')
 </head>
 <body>
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
@@ -84,6 +85,17 @@
                         <nav class="nav flex-column">
                             @auth
                                 <a class="me-3 py-2 text-dark text-decoration-none btn-hover" href="{{ route('inicio') }}"><i class="fa fa-home" aria-hidden="true"></i> Inicio</a>
+                                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle btn-hover" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa fa-tasks" aria-hidden="true"></i> Votaciones
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item btn-hover" href="{{ route('votos.index') }}">Votaciones</a></li>
+                                        <li><a class="dropdown-item btn-hover" href="{{ route('votos.info') }}">Informacion General</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
                                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle btn-hover" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -225,6 +237,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     @yield('js-extra')
-
+    @stack('custom-js')
 </body>
 </html>

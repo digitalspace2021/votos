@@ -249,7 +249,10 @@ class ActividadController extends Controller
         
             $votos = Formulario::selectRaw('users.name as nombre, COUNT(*) as cantidad')
             ->leftJoin('users', 'formularios.propietario_id', '=', 'users.id')
-            ->where('formularios.candidato_id', $request->candidato)
+            //->where('formularios.candidato_id', $request->candidato)
+            ->whereHas('candidatos', function ($query) use ($request) {
+                $query->where('candidato_id', $request->candidato);
+            })
             ->where('users.identificacion',"=",$request->cedula)
             ->groupBy('users.name')
             ->get();

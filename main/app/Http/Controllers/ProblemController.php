@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Problem\StoreRequest;
+use App\Http\Services\Problems\ProblemsService;
+use App\Models\Candidato;
 use App\Models\Edil;
 use App\Models\Formulario;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +19,14 @@ use Yajra\DataTables\Facades\DataTables;
 
 class ProblemController extends Controller
 {
+
+    protected $service;
+
+    public function __construct()
+    {
+        $this->service = new ProblemsService();
+    }
+
     /**
      * The function retrieves all users from the database and passes them to the view.
      * 
@@ -32,7 +43,9 @@ class ProblemController extends Controller
         }
         $creadores = $creadores->get();
 
-        return view('problems.index', compact('creadores'));
+        $candidatos = Candidato::all();
+
+        return view('problems.index', compact('creadores', 'candidatos'));
     }
 
     /**
@@ -101,7 +114,10 @@ class ProblemController extends Controller
                     return '<span class="badge badge-success">Resuelto</span>';
                 }
             })
-            ->rawColumns(['acciones', 'status'])
+            ->addColumn('select', function ($problem) {
+                return '<input type="checkbox" name="formularios[]" onclick="selectForms(this)" class="option-form" value="' . $problem->id . '">';
+            })
+            ->rawColumns(['acciones', 'status', 'select'])
             ->make(true);
 
         return $problems;
@@ -130,8 +146,8 @@ class ProblemController extends Controller
                     WHEN pv.zone_type = 'Comuna' THEN CONCAT('Barrio: ', COALESCE(barrios.name, 'Sin información'))
                     WHEN pv.zone_type = 'Corregimiento' THEN CONCAT('Vereda: ', COALESCE(veredas.name, 'Sin información'))
                 END) AS puesto_nombre, pv.id"))
-                /* after case */
-                /* , ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre */
+            /* after case */
+            /* , ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre */
             ->leftJoin('barrios', function ($join) {
                 $join->on('pv.zone', '=', 'barrios.id')
                     ->where('pv.zone_type', '=', 'Comuna');
@@ -145,7 +161,13 @@ class ProblemController extends Controller
         return view('problems.create', compact('users', 'edils', 'puestos'));
     }
 
-    public function edit($id)
+    /**
+     * Display the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\View\View
+     */
+    public function edit($id): View
     {
         $users = DB::table('users')->get();
 
@@ -188,7 +210,8 @@ class ProblemController extends Controller
      */
     public function store(StoreRequest $request): RedirectResponse
     {
-
+        /* initialized transaction db */
+        DB::beginTransaction();
         $problem = Formulario::create([
             'propietario_id' => $request->creador,
             'identificacion' => $request->identificacion,
@@ -215,19 +238,12 @@ class ProblemController extends Controller
         }
 
         if ($problem && $request->edil == 1) {
-            $edil = new Edil();
-            $edil->formulario_id = $problem->id;
-            $edil->edil_id = $request->user_edil;
-            $edil->asamblea_id = $request->asamb_edil;
-            $edil->concejo = $request->concejo;
+            $this->service->storeHelpEdil($problem, $request);
 
-            if ($request->apoyo == 1) {
-                $edil->alcaldia = (bool)$request->alcaldia;
-                $edil->gobernacion = (bool)$request->gobernacion;
-            }
-
-            $edil->save();
+            $this->service->storeHelpCandidates($problem, $request);
         }
+
+        DB::commit();
 
         if ($problem) {
             if (auth()->check()) {
@@ -261,6 +277,8 @@ class ProblemController extends Controller
             return back()->with('error', 'No se puede editar una Oportunidad de votante');
         }
 
+        DB::beginTransaction();
+
         $problem->update([
             'propietario_id' => $request->creador,
             'identificacion' => $request->identificacion,
@@ -291,21 +309,12 @@ class ProblemController extends Controller
         }
 
         if ($request->edil == 1) {
-            $edil = new Edil();
-            $edil->createOrUpdate([
-                'formulario_id' => $problem->id,
-                'edil_id' => $request->user_edil,
-                'asamblea_id' => $request->asamb_edil,
-                'concejo' => $request->concejo,
-                'alcaldia' => $request->apoyo == 1 ? (bool)$request->alcaldia : null,
-                'gobernacion' => $request->apoyo == 1 ? (bool)$request->gobernacion : null,
-            ]);
+            $this->service->updateHelpEdil($problem, $request);
         } else {
-            $edil = Edil::where('formulario_id', $problem->id)->first();
-            if ($edil) {
-                $edil->delete();
-            }
+            $this->service->clearCandAndEdil($problem);
         }
+
+        DB::commit();
 
         if ($problem) {
             return redirect()->route('problems.index')->with('success', 'Oportunidad de votante actualizado correctamente');
@@ -371,12 +380,19 @@ class ProblemController extends Controller
             return back()->with('error', 'Error al cambiar el estado de la Oportunidad de votante');
         }
 
+        DB::beginTransaction();
+
         $problem->update([
             'estado' => !$problem->estado,
             'zona' => $request->zona,
             'tipo_zona' => $request->tipo_zona,
-            'candidato_id' => $request->candidato_id,
         ]);
+
+        if ($request->has('candidatos')) {
+            $problem->candidatos()->sync($request->candidatos);
+        }
+
+        DB::commit();
 
         if ($problem->estado == true) {
             return back()->with('success', 'Oportunidad de votante confirmada correctamente');
@@ -384,7 +400,13 @@ class ProblemController extends Controller
         return back()->with('success', 'Oportunidad de votante pendiente a confirmar');
     }
 
-    public function show($id)
+    /**
+     * Display the specified resource.
+     *
+     * @param  string  $id
+     * @return \Illuminate\View\View
+     */
+    public function show(string $id): View
     {
         $problem = Formulario::findOrFail($id);
         $users = DB::table('users')->get();
@@ -394,5 +416,30 @@ class ProblemController extends Controller
         }
 
         return view('problems.show', compact('problem', 'users'));
+    }
+
+    /**
+     * Delete all the forms with the given ids and their associated photos from storage.
+     *
+     * @param  \Illuminate\Http\Request  $request  The HTTP request instance.
+     * @return \Illuminate\Http\JsonResponse  The JSON response instance.
+     */
+    public function deleteAll(Request $request): JsonResponse
+    {
+        $ids = $request->id_forms;
+        $problems = Formulario::whereIn('id', $ids)->get();
+
+        foreach ($problems as $problem) {
+            if ($problem->foto) {
+                Storage::disk('public')->delete($problem->foto);
+            }
+
+            $problem->delete();
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => "Formularios eliminados correctamente."
+        ], 200);
     }
 }
