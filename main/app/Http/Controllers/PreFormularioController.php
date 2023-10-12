@@ -190,11 +190,11 @@ class PreFormularioController extends Controller
 
         return view('pre_forms.edit', compact('pre_formulario', 'users', 'candidatos', 'puestos', 'formulario_candidatos'));
     }
-
+    
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource in storage or approved it if call the action from the app.
      *
-     * @param  \App\Http\Requests\StoreRequest  $request
+     * @param  \Illuminate\Http\StoreRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\RedirectResponse
      */
