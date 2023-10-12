@@ -91,7 +91,7 @@ class FormImport implements ToModel,  WithValidation, WithHeadingRow
             ],
             'direccion' => [
                 'string',
-                'required'
+                'nullable'
             ],
             'genero' => [
                 'required',
