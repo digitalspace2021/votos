@@ -40,7 +40,7 @@ Verificar excel
 
         <div class="col-md-6 mb-3 d-flex" style="flex-direction: column;">
             <button class="btn btn-md btn-success col-md-12 mb-2" id="verify">Verificar</button>
-            <a href="{{route('import.form')}}" class="btn btn-warning col-md-12 mb-3" id="import" style="display: none">Ir a importar Formularios</a>
+            <a href="{{route('import.view')}}" class="btn btn-warning col-md-12 mb-3" id="import" style="display: none">Ir a importar Formularios</a>
         </div>
 
         <div class="row">
@@ -111,8 +111,8 @@ Verificar excel
                 },
                 success: function(response){
                     let messa = $('.message');
-                    $('cabeceras').hide();
-                    $('identificacion').hide();
+                    $('.cabeceras').hide();
+                    $('.identificacion').hide();
 
                     if(response.status == 'success'){
                         messa.html(response.message);
