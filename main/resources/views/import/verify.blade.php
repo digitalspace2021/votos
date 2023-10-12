@@ -44,6 +44,7 @@ Verificar excel
         </div>
 
         <div class="row">
+            <div class="alert alert-warning message-w" style="display: none"></div>
             <div class="col-md-12" id="results">
                 <div class="cabeceras" style="display: none;">
                     <h5>
@@ -113,6 +114,7 @@ Verificar excel
                     let messa = $('.message');
                     $('.cabeceras').hide();
                     $('.identificacion').hide();
+                    $('.message-w').hide();
 
                     if(response.status == 'success'){
                         messa.html(response.message);
@@ -143,6 +145,7 @@ Verificar excel
                         }
 
                         if (resp.identifications.oficiales.length > 0 || resp.identifications.posibles_votantes.length>0 || resp.identifications.importados.length > 0) {
+                            let total = resp.identifications.oficiales.length + resp.identifications.posibles_votantes.length + resp.identifications.importados.length;
                             identificacion.show();
 
                             let html = '<ul>';
@@ -163,6 +166,9 @@ Verificar excel
 
                             identificacion.find('ul').remove();
                             identificacion.find('p').after(html);
+
+                            $('.message-w').show();
+                            $('.message-w').html('Se encontraron ' + total + ' identificaciones ya registradas en la base de datos.');
                         }
 
                         $('#import').hide();
@@ -170,6 +176,7 @@ Verificar excel
                 },
                 error: function(xhr){
                     $('.message').hide();
+                    $('.message-w').hide();
                     console.log(xhr);
                 },
                 complete: function(){
