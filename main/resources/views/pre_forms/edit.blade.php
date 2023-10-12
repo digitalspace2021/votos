@@ -26,7 +26,7 @@ Editar Formulario
 <div class="container">
 
     <div class="d-flex justify-content-center align-items-center w-75" style="margin-left: auto; margin-right: auto;">
-        <form action="{{route('pre-formularios.update', $pre_formulario->id)}}" method="POST" novalidate>
+        <form action="{{route('pre-formularios.update', $pre_formulario->id)}}" method="POST" id="pre_form_update" novalidate>
             @method('PUT')
             @csrf
             <div class="row">
@@ -216,6 +216,7 @@ Editar Formulario
             <div class="row mt-3">
                 <div class="col-md-12 d-flex justify-content-between">
                     <button type="submit" class="btn btn-primary">Actualizar</button>
+                    <button type="submit" class="btn btn-primary" name="type_action" value="app-upd">Actualizar y Aprobar</button>
                     <a href="{{route('pre-formularios')}}" class="btn btn-danger">Cancelar</a>
                 </div>
             </div>

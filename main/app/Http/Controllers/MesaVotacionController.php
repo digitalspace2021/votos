@@ -68,6 +68,11 @@ class MesaVotacionController extends Controller
         $mesa -> save(); 
 
         Alert::success('Mesa de votacion', 'Se ha creado la mesa de votacion con exito!');
+
+        if ($request->type_action= 'create-cont') {
+            return redirect()->route('mesas.create')->with('success','Se ha creado la mesa de votacion con exito!');
+        }
+
         return redirect()->route('mesas.index');
     }
 

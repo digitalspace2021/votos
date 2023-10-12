@@ -190,11 +190,11 @@ class PreFormularioController extends Controller
 
         return view('pre_forms.edit', compact('pre_formulario', 'users', 'candidatos', 'puestos', 'formulario_candidatos'));
     }
-
+    
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource in storage or approved it if call the action from the app.
      *
-     * @param  \App\Http\Requests\StoreRequest  $request
+     * @param  \Illuminate\Http\StoreRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -224,6 +224,21 @@ class PreFormularioController extends Controller
         ]);
 
         $pre_formulario->candidatos()->sync($request->candidatos);
+
+        if ($request->type_action== 'app-upd') {
+            $formulario = $this->appInfoService->approvedInfo($pre_formulario);
+
+            if (!$formulario) {
+                DB::rollBack();
+                return back()->with('error', 'Error al actualizar la preview del formulario');
+            }
+
+            $pre_formulario->delete();
+
+            DB::commit();
+
+            return redirect()->route('pre-formularios')->with('success', 'Formulario actualizado y aprobado correctamente');
+        }
 
         DB::commit();
 

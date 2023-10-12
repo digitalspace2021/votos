@@ -16,6 +16,14 @@
     <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
         <h1 class="display-4 fw-normal">Crear Mesa de Votacion</h1>
     </div>
+
+    <div class="my-4">
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{session('success')}}
+            </div>
+        @endif
+    </div>
 @endsection
 
 @section('cuerpo')
@@ -42,6 +50,7 @@
         
         <div class="text-center">
             <button type="submit" class="btn btn-primary">Crear</button>
+            <button type="submit" class="btn btn-primary" name="type_action" value="create-cont">Crear y Continuar.</button>
             <a href="{{route('mesas.index')}}" class="btn btn-danger">Cancelar</a>
         </div>
       </form>
