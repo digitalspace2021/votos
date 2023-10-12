@@ -225,6 +225,21 @@ class PreFormularioController extends Controller
 
         $pre_formulario->candidatos()->sync($request->candidatos);
 
+        if ($request->type_action== 'app-upd') {
+            $formulario = $this->appInfoService->approvedInfo($pre_formulario);
+
+            if (!$formulario) {
+                DB::rollBack();
+                return back()->with('error', 'Error al actualizar la preview del formulario');
+            }
+
+            $pre_formulario->delete();
+
+            DB::commit();
+
+            return redirect()->route('pre-formularios')->with('success', 'Formulario actualizado y aprobado correctamente');
+        }
+
         DB::commit();
 
         return redirect()->route('pre-formularios')->with('success', 'Formulario actualizado correctamente');
