@@ -35,7 +35,7 @@ class FormImport implements ToModel,  WithValidation, WithHeadingRow
                 'apellido' => $row['apellidos'],
                 'email' => $row['email'],
                 'telefono' => $row['telefono'],
-                'genero' => $row['genero'],
+                'genero' => $this->generateGenero($row['genero']),
                 'direccion' => $row['direccion'],
                 'puesto_votacion' => $row['puesto_votacion'],
                 'mensaje' => $row['mensaje'],
@@ -82,7 +82,6 @@ class FormImport implements ToModel,  WithValidation, WithHeadingRow
                 'unique:formularios,identificacion'
             ],
             'mensaje' => [
-                'string',
                 'nullable'
             ],
             'puesto_votacion' => [
@@ -116,5 +115,27 @@ class FormImport implements ToModel,  WithValidation, WithHeadingRow
         return [
             'identificacion.unique' => 'El número de identificación ya se encuentra registrado',
         ];
+    }
+
+    /**
+     * Generate the gender based on the given string.
+     *
+     * @param string $gender The gender string to be processed.
+     *
+     * @return string The processed gender string.
+     */
+    private function generateGenero(string $gender)
+    {
+        $gender = strtolower($gender);
+
+        if ($gender == 'masculino' || $gender == 'hombre' || $gender == 'masculina') {
+            return 'Hombre';
+        }
+
+        if ($gender == 'femenino' || $gender == 'mujer' || $gender == 'femenina') {
+            return 'Mujer';
+        }
+
+        return 'Otro';
     }
 }
