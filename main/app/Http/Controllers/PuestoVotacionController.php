@@ -203,7 +203,10 @@ class PuestoVotacionController extends Controller
                 }
                 return $btn;
             })
-            ->rawColumns(['acciones'])
+            ->addColumn('identificador', function($col){
+                return $col->id;
+            })
+            ->rawColumns(['acciones','identificador'])
             ->make(true);     
     }
 }
