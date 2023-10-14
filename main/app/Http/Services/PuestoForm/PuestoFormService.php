@@ -16,6 +16,37 @@ class PuestoFormService
     {
         if (is_numeric($puesto)) {
             $convert = DB::table('puestos_votacion AS pv')
+                ->select(DB::raw("CONCAT('Puesto: ', COALESCE(pv.name, 'Sin información'), ', ', 
+                CASE
+                    WHEN pv.zone_type = 'Comuna' THEN CONCAT('Barrio: ', COALESCE(barrios.name, 'Sin información'))
+                    WHEN pv.zone_type = 'Corregimiento' THEN CONCAT('Vereda: ', COALESCE(veredas.name, 'Sin información'))
+                END) AS puesto_nombre, pv.id"))
+                ->leftJoin('barrios', function ($join) {
+                    $join->on('pv.zone', '=', 'barrios.id')
+                        ->where('pv.zone_type', '=', 'Comuna');
+                })
+                ->leftJoin('veredas', function ($join) {
+                    $join->on('pv.zone', '=', 'veredas.id')
+                        ->where('pv.zone_type', '=', 'Corregimiento');
+                })
+                ->where('pv.id', $puesto)
+                ->first();
+
+            $convert = $convert->puesto_nombre ?? "Sin información";
+        } else {
+            $convert = "Cambiar - $puesto";
+        }
+        return $convert;
+    }
+
+    /**
+     * Returns a list of puestos (voting stations) with their names and corresponding zones (barrios or veredas).
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function puestos($form, $ocuped = false)
+    {
+        $puestos = DB::table('puestos_votacion AS pv')
             ->select(DB::raw("CONCAT('Puesto: ', COALESCE(pv.name, 'Sin información'), ', ', 
                 CASE
                     WHEN pv.zone_type = 'Comuna' THEN CONCAT('Barrio: ', COALESCE(barrios.name, 'Sin información'))
@@ -29,13 +60,12 @@ class PuestoFormService
                 $join->on('pv.zone', '=', 'veredas.id')
                     ->where('pv.zone_type', '=', 'Corregimiento');
             })
-            ->where('pv.id', $puesto)
-            ->first();
+            ->when($ocuped, function ($query) use ($form) {
+                $query->join($form, 'pv.id', '=', "$form.puesto_votacion");
+            })
+            ->groupBy('pv.id')
+            ->get();
 
-            $convert = $convert->puesto_nombre ?? "Sin información";
-        }else{
-            $convert = "Cambiar - $puesto";
-        }
-        return $convert;
+        return $puestos;
     }
 }

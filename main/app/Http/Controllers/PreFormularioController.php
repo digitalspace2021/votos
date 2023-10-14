@@ -40,7 +40,8 @@ class PreFormularioController extends Controller
         $creadores = User::select('id', 'name')->get();
         $corregimientos = DB::table('corregimientos')->select('id', 'name')->get();
         $veredas = DB::table('veredas')->select('id', 'name')->get();
-        return view('pre_forms.index', compact('creadores', 'candidatos', 'comunas', 'barrios', 'corregimientos', 'veredas'));
+        $puestos = $this->puestoSer->puestos('pre_formularios', true);
+        return view('pre_forms.index', compact('creadores', 'candidatos', 'comunas', 'barrios', 'corregimientos', 'veredas', 'puestos'));
     }
 
     /**
@@ -90,6 +91,13 @@ class PreFormularioController extends Controller
                 return $query->whereHas('candidatos', function ($query) use ($candidato) {
                     $query->where('candidatos.id', $candidato);
                 });
+            })
+            ->when($request->get('puesto'), function ($query, $puesto) {
+                if (is_numeric($puesto)) {
+                    return $query->where('pre_formularios.puesto_votacion', $puesto);
+                } else {
+                    return $query->whereRaw('NOT pre_formularios.puesto_votacion REGEXP "^[0-9]+$"');
+                }
             })
             ->orderBy('pre_formularios.created_at', 'desc');
 
