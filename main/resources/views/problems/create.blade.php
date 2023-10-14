@@ -169,7 +169,7 @@ Crear formulario
                     <select name="puesto" id="puesto" class="form-select">
                         <option value="" disabled>Seleccione un puesto</option>
                         @foreach ($puestos as $puesto)
-                        <option value="{{$puesto->puesto_nombre}}" @if (old('puesto')==$puesto->puesto_nombre)
+                        <option value="{{$puesto->id}}" @if (old('puesto')==$puesto->id)
                             selected
                             @endif
                             puesto_id="{{$puesto->id}}"

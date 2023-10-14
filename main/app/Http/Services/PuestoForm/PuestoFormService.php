@@ -63,7 +63,13 @@ class PuestoFormService
                     ->where('pv.zone_type', '=', 'Corregimiento');
             })
             ->when($ocuped, function ($query) use ($form) {
+                $form = $form=='formularios_pr' ? 'formularios' : $form; 
                 $query->join($form, 'pv.id', '=', "$form.puesto_votacion");
+            })
+            ->when($form, function ($query) use ($form) {
+                if ($form=='formularios_pr') {
+                    $query->where('formularios.estado', false);
+                }
             })
             ->groupBy('pv.id')
             ->get();
