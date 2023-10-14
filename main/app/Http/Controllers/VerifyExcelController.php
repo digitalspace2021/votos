@@ -56,7 +56,7 @@ class VerifyExcelController extends Controller
      */
     private function validateExcel($data)
     {
-        $columns = ['nombres', 'apellidos', 'identificacion', 'email', 'telefono', 'genero', 'direccion', 'puesto_votacion', 'mensaje'];
+        $columns = ['nombres', 'apellidos', 'identificacion', 'email', 'telefono', 'genero', 'direccion', 'puesto_votacion', 'mensaje', 'mesa'];
 
         $data = $data[0];
 
