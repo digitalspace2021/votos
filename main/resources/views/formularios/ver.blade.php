@@ -125,7 +125,7 @@
                     <div class="col-6">
                         <label for="puesto_votacion" class="form-label">Puesto de votacion</label>
                         <input name="puesto_votacion" type="text" class="form-control"
-                            value="{{ $formulario->puesto_votacion }}">
+                            value="{{ $puesto }}">
                     </div>
                     <div class="col-6">
                         <label for="puesto_votacion" class="form-label">Mesa de votacion</label>

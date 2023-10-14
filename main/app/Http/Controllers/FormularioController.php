@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\PuestoForm\PuestoFormService;
 use App\Models\Candidato;
 use App\Models\Formulario;
 use App\Models\User;
@@ -18,9 +19,11 @@ class FormularioController extends Controller
 {
 
     protected $model;
+    protected $puestoSer;
     public function __construct()
     {
         $this->model = new Formulario;
+        $this->puestoSer = new PuestoFormService;
         parent::__construct($this->model);
     }
 
@@ -40,10 +43,11 @@ class FormularioController extends Controller
 
         $corregimientos = DB::table('corregimientos')->select('id', 'name')->get();
         $veredas = DB::table('veredas')->select('id', 'name')->get();
+        $puestos = $this->puestoSer->puestos('formularios', true);
         return view('formularios.index', [
             'candidatos' => $candidatos, 'creadores' => $creadores->get(),
             'comunas' => $comunas, 'barrios' => $barrios, 'corregimientos' => $corregimientos,
-            'veredas' => $veredas
+            'veredas' => $veredas, 'puestos' => $puestos
         ]);
     }
 
@@ -87,6 +91,15 @@ class FormularioController extends Controller
         if (!empty($request->fecha)) {
             $formularios->whereDate(DB::raw('DATE(created_at)'), '=', $request->fecha);
         }
+
+        $formularios->when($request->puesto, function ($query, $puesto) {
+            if (is_numeric($puesto)) {
+                return $query->where('formularios.puesto_votacion', $puesto);
+            } else {
+                return $query->whereRaw('NOT formularios.puesto_votacion REGEXP "^[0-9]+$"');
+            }
+        });
+
         $formularios->select(
             'formularios.id as id',
             'formularios.propietario_id as propietario_id',
@@ -202,23 +215,7 @@ class FormularioController extends Controller
 
         $formulario->propietario_nombre = User::find($formulario->propietario_id)->name;
 
-        $puestos = DB::table('puestos_votacion AS pv')
-            ->select(DB::raw("CONCAT('Puesto: ', COALESCE(pv.name, 'Sin información'), ', ', 
-                CASE
-                    WHEN pv.zone_type = 'Comuna' THEN CONCAT('Barrio: ', COALESCE(barrios.name, 'Sin información'))
-                    WHEN pv.zone_type = 'Corregimiento' THEN CONCAT('Vereda: ', COALESCE(veredas.name, 'Sin información'))
-                END) AS puesto_nombre, pv.id"))
-            /* after case */
-            /* , ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre */
-            ->leftJoin('barrios', function ($join) {
-                $join->on('pv.zone', '=', 'barrios.id')
-                    ->where('pv.zone_type', '=', 'Comuna');
-            })
-            ->leftJoin('veredas', function ($join) {
-                $join->on('pv.zone', '=', 'veredas.id')
-                    ->where('pv.zone_type', '=', 'Corregimiento');
-            })
-            ->get();
+        $puestos = $this->puestoSer->puestos();
 
         $candidatos = Candidato::select('id', 'name')->get();
 
@@ -300,8 +297,9 @@ class FormularioController extends Controller
 
         $formulario_candidatos = $formulario->candidatos->pluck('id')->toArray();
         $candidatos = Candidato::select('id', 'name')->get();
+        $puesto = $this->puestoSer->define($formulario->puesto_votacion);
 
-        return view(trans($this->plural) . '.ver', compact('formulario', 'candidatos', 'formulario_candidatos'));
+        return view(trans($this->plural) . '.ver', compact('formulario', 'candidatos', 'formulario_candidatos', 'puesto'));
     }
 
     public function eliminar(Request $request, $id)
@@ -316,8 +314,9 @@ class FormularioController extends Controller
 
         $formulario_candidatos = $formulario->candidatos->pluck('id')->toArray();
         $candidatos = Candidato::select('id', 'name')->get();
+        $puesto = $this->puestoSer->define($formulario->puesto_votacion);
 
-        return view(trans($this->plural) . '.eliminar', compact('formulario', 'candidatos', 'formulario_candidatos'));
+        return view(trans($this->plural) . '.eliminar', compact('formulario', 'candidatos', 'formulario_candidatos', 'puesto'));
     }
 
     public function eliminar_confirmar(Request $request, $id)

@@ -108,9 +108,19 @@
           </div>
 
           <div class="row">
-            <div class="col">
+            <div class="col-md-3">
                 <label for="">Por fecha</label>
                 <input class="form-control" type="date" id="inputDate">
+            </div>
+            <div class="col-md-6">
+                <label for="puesto">Por Puesto</label>
+                <select name="puesto" id="selectPV" class="form-select">
+                    <option value="">Filtrar por puesto</option>
+                    <option value="no">No tienen puesto</option>
+                    @foreach ($puestos as $puesto)
+                        <option value="{{$puesto->id}}">{{$puesto->puesto_nombre}}</option>
+                    @endforeach
+                </select>
             </div>
             <div class="col">
                 <button class="btn btn-success mt-4" id="btnFiltrar">Filtrar</button>
@@ -187,6 +197,10 @@
     $('#selectVereda').select2({
         theme: 'bootstrap-5'
     });
+
+    $('#selectPV').select2({
+        theme: 'bootstrap-5'
+    });
 });
 
 </script>
@@ -201,7 +215,8 @@
             var corregimiento = null;
             var vereda = null;
             var fecha = null;
-            viewTable(candidato,creador,cedula,nombre,comuna,barrio,corregimiento,vereda,fecha);
+            var puesto = null;
+            viewTable(candidato,creador,cedula,nombre,comuna,barrio,corregimiento,vereda,fecha, puesto);
 
             $('#btnFiltrar').click(function() {
                 candidato = document.getElementById('selectCandidato').value;
@@ -213,12 +228,13 @@
                 corregimiento = document.getElementById('selectCorregimiento').value;
                 vereda = document.getElementById('selectVereda').value;
                 fecha = document.getElementById('inputDate').value;
+                puesto = document.getElementById('selectPV').value;
                 $('#tablas-formularios').DataTable().destroy();
-                viewTable(candidato,creador,cedula,nombre,comuna,barrio,corregimiento,vereda,fecha);
+                viewTable(candidato,creador,cedula,nombre,comuna,barrio,corregimiento,vereda,fecha, puesto);
             }); 
         });
 
-        function viewTable(candidato,creador,cedula,nombre,comuna,barrio,corregimiento,vereda,fecha){
+        function viewTable(candidato,creador,cedula,nombre,comuna,barrio,corregimiento,vereda,fecha, puesto){
             $('#tablas-formularios').DataTable({
                 processing: true,
                 serverSide: true,
@@ -240,6 +256,7 @@
                     corregimiento: corregimiento,
                     vereda: vereda,
                     fecha: fecha, 
+                    puesto: puesto
                 }
             },
                 columns: [

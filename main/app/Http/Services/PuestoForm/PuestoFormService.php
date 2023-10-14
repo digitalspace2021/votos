@@ -40,11 +40,13 @@ class PuestoFormService
     }
 
     /**
-     * Returns a list of puestos (voting stations) with their names and corresponding zones (barrios or veredas).
+     * Returns a list of voting stations with their names and zones.
      *
-     * @return \Illuminate\Support\Collection
+     * @param string|null $form The name of the form table to join with the voting stations table.
+     * @param bool $ocuped Whether to include only occupied voting stations or not.
+     * @return \Illuminate\Support\Collection A collection of voting stations with their names and IDs.
      */
-    public function puestos($form, $ocuped = false)
+    public function puestos($form=null, $ocuped = false)
     {
         $puestos = DB::table('puestos_votacion AS pv')
             ->select(DB::raw("CONCAT('Puesto: ', COALESCE(pv.name, 'Sin información'), ', ', 
