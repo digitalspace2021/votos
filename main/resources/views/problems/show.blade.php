@@ -87,7 +87,7 @@ Posibles Votantes
                 </div>
                 <div class="col-md-6 mb-2">
                     <label for="puesto" class="form-label">Puesto de votacion</label>
-                    <input type="text" class="form-control" name="puesto" value="{{$problem->puesto_votacion}}" required
+                    <input type="text" class="form-control" name="puesto" value="{{$puesto}}" required
                         disabled>
                 </div>
                 <div class="col-md-6 mb-2">

@@ -1,7 +1,7 @@
 @extends('layouts.base')
 
 @section('titulo')
-Ver Formulario
+Ver Pre-Formulario
 @endsection
 
 @section('css-extra')
@@ -12,7 +12,7 @@ Ver Formulario
 
 @section('cabecera')
 <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
-    <h1 class="display-4 fw-normal">Ver Formulario</h1>
+    <h1 class="display-4 fw-normal">Ver Pre-Formulario</h1>
 </div>
 
 @if (session('error'))
@@ -78,10 +78,10 @@ Ver Formulario
                 </div>
                 <div class="col-md-6 mb-2">
                     <label for="puesto" class="form-label">Puesto de votacion</label>
-                    <input type="number" class="form-control" name="puesto" value="{{$formulario->puesto_votacion}}" required disabled>
+                    <input type="text" class="form-control" name="puesto" value="{{$puesto}}" required disabled>
                 </div>
                 <div class="col-md-6 mb-2">
-                    <label for="puesto" class="form-label">Mesa de votacion</label>
+                    <label for="mesa" class="form-label">Mesa de votacion</label>
                     <input type="number" class="form-control" name="mesa" value="{{$formulario->mesa}}" required disabled>
                 </div>
                 <div class="col-md-12" id="desc_problem">

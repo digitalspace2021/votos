@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Problem\StoreRequest;
 use App\Http\Services\Problems\ProblemsService;
+use App\Http\Services\PuestoForm\PuestoFormService;
 use App\Models\Candidato;
 use App\Models\Edil;
 use App\Models\Formulario;
@@ -21,10 +22,12 @@ class ProblemController extends Controller
 {
 
     protected $service;
+    protected $puestoSer;
 
     public function __construct()
     {
         $this->service = new ProblemsService();
+        $this->puestoSer = new PuestoFormService();
     }
 
     /**
@@ -44,8 +47,9 @@ class ProblemController extends Controller
         $creadores = $creadores->get();
 
         $candidatos = Candidato::all();
+        $puestos = $this->puestoSer->puestos('formularios_pr', true);
 
-        return view('problems.index', compact('creadores', 'candidatos'));
+        return view('problems.index', compact('creadores', 'candidatos', 'puestos'));
     }
 
     /**
@@ -79,6 +83,13 @@ class ProblemController extends Controller
             })
             ->when($request->get('creador'), function ($query, $creator_id) {
                 return $query->where('users.id', $creator_id);
+            })
+            ->when($request->get('puesto'), function($query, $puesto) {
+                if (is_numeric($puesto)) {
+                    return $query->where('formularios.puesto_votacion', $puesto);
+                } else {
+                    return $query->whereRaw('NOT formularios.puesto_votacion REGEXP "^[0-9]+$"');
+                }
             })
             ->orderBy('formularios.created_at', 'desc');
 
@@ -140,23 +151,7 @@ class ProblemController extends Controller
         $users = $users->get();
         $edils = DB::table('usuarios_ediles')->get();
 
-        $puestos = DB::table('puestos_votacion AS pv')
-            ->select(DB::raw("CONCAT('Puesto: ', COALESCE(pv.name, 'Sin información'), ', ', 
-                CASE
-                    WHEN pv.zone_type = 'Comuna' THEN CONCAT('Barrio: ', COALESCE(barrios.name, 'Sin información'))
-                    WHEN pv.zone_type = 'Corregimiento' THEN CONCAT('Vereda: ', COALESCE(veredas.name, 'Sin información'))
-                END) AS puesto_nombre, pv.id"))
-            /* after case */
-            /* , ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre */
-            ->leftJoin('barrios', function ($join) {
-                $join->on('pv.zone', '=', 'barrios.id')
-                    ->where('pv.zone_type', '=', 'Comuna');
-            })
-            ->leftJoin('veredas', function ($join) {
-                $join->on('pv.zone', '=', 'veredas.id')
-                    ->where('pv.zone_type', '=', 'Corregimiento');
-            })
-            ->get();
+        $puestos = $this->puestoSer->puestos();
 
         return view('problems.create', compact('users', 'edils', 'puestos'));
     }
@@ -178,22 +173,7 @@ class ProblemController extends Controller
             return back()->with('error', 'No se puede visualizar un formulario comfirmado');
         }
 
-        $puestos = DB::table('puestos_votacion AS pv')
-            ->select(DB::raw("CONCAT('Puesto: ', COALESCE(pv.name, 'Sin información'), ', ', 
-                CASE
-                    WHEN pv.zone_type = 'Comuna' THEN CONCAT('Barrio: ', COALESCE(barrios.name, 'Sin información'))
-                    WHEN pv.zone_type = 'Corregimiento' THEN CONCAT('Vereda: ', COALESCE(veredas.name, 'Sin información'))
-                END) AS puesto_nombre, pv.id"))
-            ->leftJoin('mesas_votacion AS mv', 'pv.id', '=', 'mv.puesto_votacion')
-            ->leftJoin('barrios', function ($join) {
-                $join->on('pv.zone', '=', 'barrios.id')
-                    ->where('pv.zone_type', '=', 'Comuna');
-            })
-            ->leftJoin('veredas', function ($join) {
-                $join->on('pv.zone', '=', 'veredas.id')
-                    ->where('pv.zone_type', '=', 'Corregimiento');
-            })
-            ->get();
+        $puestos = $this->puestoSer->puestos();
 
         return view('problems.edit', compact('users', 'problem', 'edils', 'puestos'));
     }
@@ -415,7 +395,9 @@ class ProblemController extends Controller
             return back()->with('error', 'Error al mostrar la Oportunidad de votante');
         }
 
-        return view('problems.show', compact('problem', 'users'));
+        $puesto = $this->puestoSer->define($problem->puesto_votacion);
+
+        return view('problems.show', compact('problem', 'users', 'puesto'));
     }
 
     /**

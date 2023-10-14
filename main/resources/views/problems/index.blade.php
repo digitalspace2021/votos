@@ -31,7 +31,7 @@ Posibles Votantes
     <!-- filtros -->
 
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-3">
             <label for="">Por cedula</label>
             <input type="text" class="form-control" placeholder="123456789" aria-label="First name" id="InputCedula">
         </div>
@@ -39,12 +39,22 @@ Posibles Votantes
             <label for="">Por nombre</label>
             <input type="text" class="form-control" placeholder="Nombre" aria-label="First name" id="InputNombre">
         </div>
+        <div class="col-md-3">
+            <label for="">Por fecha</label>
+            <input class="form-control" type="date" id="inputDate">
+        </div>
     </div>
 
     <div class="row">
         <div class="col-md-4">
-            <label for="">Por fecha</label>
-            <input class="form-control" type="date" id="inputDate">
+            <label for="puesto">Por Puesto</label>
+            <select name="puesto" class="form-select" id="selectPV">
+                <option value="">Filtrar por puesto</option>
+                <option value="no">No tienen puesto</option>
+                @foreach ($puestos as $puesto)
+                    <option value="{{$puesto->id}}">{{$puesto->puesto_nombre}}</option>
+                @endforeach
+            </select>
         </div>
 
         <div class="col-md-4">
@@ -125,8 +135,9 @@ Posibles Votantes
                 let nombre = $('#InputNombre').val();
                 let fecha = $('#inputDate').val();
                 let creador = $('#selectCreador').val();
+                let puesto = $('#selectPV').val();
                 $('#table_problem').DataTable().destroy();
-                viewData(cedula, nombre, fecha, creador);
+                viewData(cedula, nombre, fecha, creador, puesto);
             });
 
             $('#btnClear').click(function() {
@@ -134,6 +145,7 @@ Posibles Votantes
                 $('#InputNombre').val('');
                 $('#inputDate').val('');
                 $('#selectCreador').val('');
+                $('#selectPV').val('');
                 $('#table_problem').DataTable().destroy();
                 viewData();
             });
@@ -143,7 +155,7 @@ Posibles Votantes
             });
         });
 
-        function viewData(cedula = null, nombre = null, fecha = null, creador = null) {
+        function viewData(cedula = null, nombre = null, fecha = null, creador = null, puesto=null) {
             $('#table_problem').DataTable({
                 processing: true,
                 serverSide: true,
@@ -158,7 +170,8 @@ Posibles Votantes
                         cedula: cedula,
                         nombre: nombre,
                         fecha: fecha,
-                        creador: creador
+                        creador: creador,
+                        puesto: puesto
                     }
                 },
                 columns: [
@@ -287,7 +300,11 @@ Posibles Votantes
         });
 
         $('#candidato_id').on('click', function(event) {
-  event.stopPropagation();
-});
+            event.stopPropagation();
+        });
+
+        $('#selectPV').select2({
+            theme: 'bootstrap'
+        });
 </script>
 @endsection

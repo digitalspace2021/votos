@@ -160,8 +160,8 @@
                             <select name="puesto_votacion" id="puesto" class="form-select" required>
                                 <option value="" selected disabled>Seleccione un puesto</option>
                                 @foreach ($puestos as $puesto)
-                                <option value="{{$puesto->puesto_nombre}}" 
-                                    {{old('puesto_votacion')==$puesto->puesto_nombre ? 'selected' : '' }}
+                                <option value="{{$puesto->id}}" 
+                                    {{old('puesto_votacion')==$puesto->id ? 'selected' : '' }}
                                     puesto_id="{{$puesto->id}}"
                                     >{{$puesto->puesto_nombre}}</option>
                                 @endforeach

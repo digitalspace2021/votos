@@ -85,7 +85,7 @@ class FormImport implements ToModel,  WithValidation, WithHeadingRow
                 'nullable'
             ],
             'puesto_votacion' => [
-                'string',
+                'exists:puestos_votacion,id',
                 'nullable'
             ],
             'direccion' => [

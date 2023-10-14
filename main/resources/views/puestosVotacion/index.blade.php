@@ -1,7 +1,7 @@
 @extends('layouts.base')
 
 @section('titulo')
-    Formularios
+    Puestos Votacion
 @endsection
 
 @section('css-extra')
@@ -90,6 +90,7 @@
         <table class="table text-center" id="tabla-puesto-votacion">
             <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Nombre</th>
                     <th>Descripcion</th>
                     <th>Tipo de Zona</th>
@@ -163,6 +164,7 @@
                 },
                 searching: false,
                 columns: [
+                    { data: 'identificador', name: 'identificador' },
                     { data: 'nombre', name: 'nombre' },
                     { data: 'descripcion', name: 'descripcion' },
                     { data: 'tipoZona', name: 'tipoZona' },
