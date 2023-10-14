@@ -55,7 +55,7 @@ Preview Formularios
             <input class="form-control" type="date" id="inputDate">
         </div>
 
-        @if (auth()->user()->hasRole('admin'))
+        {{-- @if (auth()->user()->hasRole('admin'))
         <div class="col-md-4">
             <label for="">Por creador</label>
             <select class="form-select" aria-label="Default select example" id="selectCreador">
@@ -65,7 +65,17 @@ Preview Formularios
                 @endforeach
             </select>
         </div>
-        @endif
+        @endif --}}
+        <div class="col-md-4">
+            <label for="">Por Puesto</label>
+            <select class="form-select" aria-label="Default select example" id="selectPV">
+                <option value="" selected>Filtrar por puesto</option>
+                <option value="no">No tienen puesto</option>
+                @foreach ($puestos as $puesto)
+                <option value="{{$puesto->id}}">{{$puesto->puesto_nombre}}</option>
+                @endforeach
+            </select>
+        </div>
         <div class="col">
             <label for="">Por candidato</label>
             <select class="form-select" aria-label="Default select example" id="selectCandidato">
@@ -212,9 +222,10 @@ Preview Formularios
                 let barrio = $('#selectBarrio').val();
                 let corregimiento = $('#selectCorregimiento').val();
                 let vereda = $('#selectVereda').val();
+                let puesto = $('#selectPV').val();
 
                 $('#pre_forms').DataTable().destroy();
-                viewData(cedula, nombre, fecha, creador, candidato, comuna, barrio, corregimiento, vereda);
+                viewData(cedula, nombre, fecha, creador, candidato, comuna, barrio, corregimiento, vereda, puesto);
             });
 
             $('#btnClear').click(function() {
@@ -228,6 +239,7 @@ Preview Formularios
                 $('#selectBarrio').val('');
                 $('#selectCorregimiento').val('');
                 $('#selectVereda').val('');
+                $('#selectPV').val('');
 
                 viewData();
             });
@@ -237,7 +249,7 @@ Preview Formularios
             });
         });
 
-        function viewData(cedula = null, nombre = null, fecha = null, creador = null, candidato = null, comuna = null, barrio = null, corregimiento = null, vereda = null) {
+        function viewData(cedula = null, nombre = null, fecha = null, creador = null, candidato = null, comuna = null, barrio = null, corregimiento = null, vereda = null, puesto = null) {
             $('#pre_forms').DataTable({
                 processing: true,
                 serverSide: true,
@@ -256,7 +268,8 @@ Preview Formularios
                         comuna: comuna,
                         barrio: barrio,
                         corregimiento: corregimiento,
-                        vereda: vereda
+                        vereda: vereda,
+                        puesto: puesto
                     }
                 },
                 columns: [
@@ -391,6 +404,10 @@ Preview Formularios
             $('#candidato_id').on('select2:select', function(e) {
                 var data = e.params.data;
                 $('#candidato_id').val(data.id);
+            });
+
+            $("#selectPV").select2({
+                theme: "bootstrap",
             });
         });
 </script>

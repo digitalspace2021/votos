@@ -153,8 +153,8 @@
                                     $status = false;
                                 @endphp
                                 @foreach ($puestos as $puesto)
-                                <option value="{{$puesto->puesto_nombre}}" 
-                                    @if ($puesto->puesto_nombre == $formulario->puesto_votacion)
+                                <option value="{{$puesto->id}}" 
+                                    @if ($puesto->id == $formulario->puesto_votacion)
                                         @php
                                             $status = true;
                                         @endphp
@@ -165,9 +165,8 @@
                                 @endforeach
 
                                 @if ($status == false)
-                                    <option value="{{$formulario->puesto_votacion}}" selected>{{$formulario->puesto_votacion}}</option>
+                                    <option value="{{$formulario->puesto_votacion}}" selected>Cambiar - {{$formulario->puesto_votacion}}</option>
                                 @endif
-
                             </select>
                         </div>
 

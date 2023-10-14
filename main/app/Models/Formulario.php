@@ -62,6 +62,11 @@ class Formulario extends Model
         return $this->hasOne(Voto::class, 'form_id');
     }
 
+    public function puestoVotacion()
+    {
+        return $this->belongsTo(PuestoVotacion::class, 'puesto_votacion');
+    }
+
     /**
      * Returns the location of the form based on the type of zone and zone id.
      *

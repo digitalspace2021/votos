@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PreFormulario\StoreRequest;
 use App\Http\Services\Problems\ApprovedInfoService;
+use App\Http\Services\PuestoForm\PuestoFormService;
 use App\Models\Candidato;
 use App\Models\Formulario;
 use App\Models\PreFormulario;
@@ -22,11 +23,13 @@ class PreFormularioController extends Controller
 {
     protected $resp;
     protected $appInfoService;
+    protected $puestoSer;
 
     public function __construct()
     {
         $this->resp = new ResponseService();
         $this->appInfoService = new ApprovedInfoService();
+        $this->puestoSer = new PuestoFormService();
     }
 
     public function index(): View
@@ -37,7 +40,8 @@ class PreFormularioController extends Controller
         $creadores = User::select('id', 'name')->get();
         $corregimientos = DB::table('corregimientos')->select('id', 'name')->get();
         $veredas = DB::table('veredas')->select('id', 'name')->get();
-        return view('pre_forms.index', compact('creadores', 'candidatos', 'comunas', 'barrios', 'corregimientos', 'veredas'));
+        $puestos = $this->puestoSer->puestos('pre_formularios', true);
+        return view('pre_forms.index', compact('creadores', 'candidatos', 'comunas', 'barrios', 'corregimientos', 'veredas', 'puestos'));
     }
 
     /**
@@ -87,6 +91,13 @@ class PreFormularioController extends Controller
                 return $query->whereHas('candidatos', function ($query) use ($candidato) {
                     $query->where('candidatos.id', $candidato);
                 });
+            })
+            ->when($request->get('puesto'), function ($query, $puesto) {
+                if (is_numeric($puesto)) {
+                    return $query->where('pre_formularios.puesto_votacion', $puesto);
+                } else {
+                    return $query->whereRaw('NOT pre_formularios.puesto_votacion REGEXP "^[0-9]+$"');
+                }
             })
             ->orderBy('pre_formularios.created_at', 'desc');
 
@@ -143,9 +154,12 @@ class PreFormularioController extends Controller
 
         $candidatos = DB::table('candidatos')->get();
         $formulario_candidatos = $formulario->candidatos->pluck('id')->toArray();
+
+        /* validate if puesto_votacion is number */
+        $puesto = $this->puestoSer->define($formulario->puesto_votacion);
         /* dd($formulario); */
 
-        return view('pre_forms.show', compact('formulario', 'candidatos', 'formulario_candidatos'));
+        return view('pre_forms.show', compact('formulario', 'candidatos', 'formulario_candidatos', 'puesto'));
     }
 
     /**
@@ -174,8 +188,6 @@ class PreFormularioController extends Controller
                     WHEN pv.zone_type = 'Comuna' THEN CONCAT('Barrio: ', COALESCE(barrios.name, 'Sin información'))
                     WHEN pv.zone_type = 'Corregimiento' THEN CONCAT('Vereda: ', COALESCE(veredas.name, 'Sin información'))
                 END) AS puesto_nombre, pv.id"))
-            /* after case */
-            /* , ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre */
             ->leftJoin('barrios', function ($join) {
                 $join->on('pv.zone', '=', 'barrios.id')
                     ->where('pv.zone_type', '=', 'Comuna');

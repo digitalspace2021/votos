@@ -31,4 +31,8 @@ class PreFormulario extends Model
     public function candidatos(){
         return $this->belongsToMany(Candidato::class, 'pre_formulario_candidatos', 'formulario_id', 'candidato_id');
     }
+
+    public function puestoVotacion(){
+        return $this->belongsTo(PuestoVotacion::class, 'puesto_votacion', 'id');
+    }
 }

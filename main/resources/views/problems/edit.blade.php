@@ -164,17 +164,23 @@ Editar Posible Votante
                 <div class="col-md-6 mb-2">
                     <label for="puesto" class="form-label">Puesto de votacion</label>
                     <select name="puesto" id="puesto" class="form-select">
-                        <option value="" disabled>Seleccione un puesto</option>
-                        
+                        <option value="" selected disabled>Seleccione un puesto</option>
+                        @php
+                            $status = false;
+                        @endphp
                         @foreach ($puestos as $puesto)
-                        <option value="{{$puesto->puesto_nombre}}" 
-                            @if ($puesto->puesto_nombre == $problem->puesto_votacion)
+                        <option value="{{$puesto->id}}" 
+                            @if ($puesto->id == $problem->puesto_votacion)
                                 selected
+                                @php
+                                    $status = true;
+                                @endphp
                             @endif
-                            puesto_id="{{$puesto->id}}">{{$puesto->puesto_nombre}}</option>
+                            puesto_id="{{$puesto->id}}"
+                            >{{$puesto->puesto_nombre}}</option>
                         @endforeach
-                        @if (!$puesto->puesto_nombre == $problem->puesto_votacion)
-                            <option value="{{$problem->puesto_votacion}}" selected>{{$problem->puesto_votacion}}</option>
+                        @if (!$status)
+                            <option value="{{$problem->puesto_votacion}}" selected>Cambiar - {{$problem->puesto_votacion}}</option>
                         @endif
                     </select>
                     @error('puesto')
