@@ -1,7 +1,7 @@
 @extends('layouts.base')
 
 @section('titulo')
-    Formularios
+    Puestos Votacion
 @endsection
 
 @section('css-extra')

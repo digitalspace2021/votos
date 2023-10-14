@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PreFormulario\StoreRequest;
 use App\Http\Services\Problems\ApprovedInfoService;
+use App\Http\Services\PuestoForm\PuestoFormService;
 use App\Models\Candidato;
 use App\Models\Formulario;
 use App\Models\PreFormulario;
@@ -22,11 +23,13 @@ class PreFormularioController extends Controller
 {
     protected $resp;
     protected $appInfoService;
+    protected $puestoSer;
 
     public function __construct()
     {
         $this->resp = new ResponseService();
         $this->appInfoService = new ApprovedInfoService();
+        $this->puestoSer = new PuestoFormService();
     }
 
     public function index(): View
@@ -143,9 +146,12 @@ class PreFormularioController extends Controller
 
         $candidatos = DB::table('candidatos')->get();
         $formulario_candidatos = $formulario->candidatos->pluck('id')->toArray();
+
+        /* validate if puesto_votacion is number */
+        $puesto = $this->puestoSer->define($formulario->puesto_votacion);
         /* dd($formulario); */
 
-        return view('pre_forms.show', compact('formulario', 'candidatos', 'formulario_candidatos'));
+        return view('pre_forms.show', compact('formulario', 'candidatos', 'formulario_candidatos', 'puesto'));
     }
 
     /**
@@ -174,8 +180,6 @@ class PreFormularioController extends Controller
                     WHEN pv.zone_type = 'Comuna' THEN CONCAT('Barrio: ', COALESCE(barrios.name, 'Sin información'))
                     WHEN pv.zone_type = 'Corregimiento' THEN CONCAT('Vereda: ', COALESCE(veredas.name, 'Sin información'))
                 END) AS puesto_nombre, pv.id"))
-            /* after case */
-            /* , ', Mesa: ', COALESCE(mv.numero_mesa, 'Sin información')) AS puesto_nombre */
             ->leftJoin('barrios', function ($join) {
                 $join->on('pv.zone', '=', 'barrios.id')
                     ->where('pv.zone_type', '=', 'Comuna');

@@ -167,8 +167,8 @@ Editar Formulario
                             $status = false;
                         @endphp
                         @foreach ($puestos as $puesto)
-                        <option value="{{$puesto->puesto_nombre}}" 
-                            @if ($puesto->puesto_nombre == $pre_formulario->puesto_votacion)
+                        <option value="{{$puesto->id}}" 
+                            @if ($puesto->id == $pre_formulario->puesto_votacion)
                                 selected
                                 @php
                                     $status = true;
@@ -178,7 +178,7 @@ Editar Formulario
                             >{{$puesto->puesto_nombre}}</option>
                         @endforeach
                         @if (!$status)
-                            <option value="{{$pre_formulario->puesto_votacion}}" selected>{{$pre_formulario->puesto_votacion}}</option>
+                            <option value="{{$pre_formulario->puesto_votacion}}" selected>Cambiar - {{$pre_formulario->puesto_votacion}}</option>
                         @endif
                     </select>
                     @error('puesto')
