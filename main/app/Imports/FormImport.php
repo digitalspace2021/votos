@@ -39,7 +39,8 @@ class FormImport implements ToModel,  WithValidation, WithHeadingRow
                 'direccion' => $row['direccion'],
                 'puesto_votacion' => $row['puesto_votacion'],
                 'mensaje' => $row['mensaje'],
-                'identificacion' => $row['identificacion']
+                'identificacion' => $row['identificacion'],
+                'mesa' => "Mesa " . $row['mesa'],
             ];
 
             /* using validations of method rules */
