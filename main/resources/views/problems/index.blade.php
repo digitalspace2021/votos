@@ -218,7 +218,8 @@ Posibles Votantes
             let nombre = $('#InputNombre').val();
             let fecha = $('#inputDate').val();
             let creador = $('#selectCreador').val();
-            window.location.href = "{{ route('problems.export') }}?cedula="+cedula+"&nombre="+nombre+"&fecha="+fecha+"&creador="+creador;
+            let puesto = $('#selectPV').val();
+            window.location.href = `{{route('problems.export')}}?puesto=${puesto}`;
         }
 </script>
 

@@ -17,25 +17,33 @@ use Symfony\Component\HttpKernel\Event\ViewEvent;
 
 class FileManagementController extends Controller
 {
-    public function exportFormulario()
+    /**
+     * Export the form data to an Excel file.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function exportFormulario(Request $request)
     {
-        return Excel::download(new FormularioExport, 'formulario.xlsx');
+        return Excel::download(new FormularioExport($request), now().'-formulario.xlsx');
     }
+    
+    /**
+     * Display the import form view with a list of all candidates.
+     *
+     * @return \Illuminate\View\View
+     */
     public function importFormularioView()
     {
         $candidatos = Candidato::all();
         return view('formularios.import', compact('candidatos'));
     }
-
+    
     /**
-     * The function imports data from a file and handles any validation errors that occur during the
-     * import process.
-     * 
-     * @param Request request The  parameter is an instance of the Request class, which
-     * represents an HTTP request. It contains information about the request such as the input data,
-     * files, headers, and more.
-     * 
-     * @return a response back to the previous page.
+     * Import a form from an Excel file.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
     public function importFormulario(ImportRequest $request)
     {
@@ -105,8 +113,8 @@ class FileManagementController extends Controller
      * 
      * @return an Excel file download.
      */
-    public function exportPreFormulario()
+    public function exportPreFormulario(Request $request)
     {
-        return Excel::download(new ExportPreService, now().'preFormulario.xlsx');
+        return Excel::download(new ExportPreService($request), now().'preFormulario.xlsx');
     }
 }
