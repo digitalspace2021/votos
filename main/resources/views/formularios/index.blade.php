@@ -134,7 +134,7 @@
 
                 @if (Auth::user()->hasRole(['administrador']))
                     <div class="col-8">
-                        <a href="{{ route('export.forms') }}" class="btn  btn-sm btn-warning">Exportar</a>
+                        <button type="button" class="btn  btn-sm btn-warning" id="exportar">Exportar</button>
                     </div>
                 @endif
 
@@ -232,6 +232,18 @@
                 $('#tablas-formularios').DataTable().destroy();
                 viewTable(candidato,creador,cedula,nombre,comuna,barrio,corregimiento,vereda,fecha, puesto);
             }); 
+
+            function exportar(){
+                let puesto = $('#selectPV').val();
+                let comuna = $('#selectComuna').val();
+                let corregimiento = $('#selectCorregimiento').val();
+
+                window.location.href = `{{ route('export.forms') }}?puesto=${puesto}&comuna=${comuna}&corregimiento=${corregimiento}`;
+            }
+
+            $('#exportar').click(function() {
+                exportar();
+            });
         });
 
         function viewTable(candidato,creador,cedula,nombre,comuna,barrio,corregimiento,vereda,fecha, puesto){

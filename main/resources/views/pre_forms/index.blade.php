@@ -134,7 +134,7 @@ Preview Formularios
         <div class="d-flex align-items-center justy-content-between">
             @if (Auth::user()->hasRole(['administrador']))
             <div class="col-2">
-                <a href="{{ route('pre-formularios.export') }}" class="btn  btn-sm btn-warning">Exportar</a>
+                <button type="button" id="exportar" class="btn  btn-sm btn-warning">Exportar</button>
             </div>
             <div class="col-2">
                 @include('components.options-forms', ['route' => route('pre-formularios.delete.all'), 'table'=>'pre_forms', 'route_approved' => route('pre-formularios.aprobar.all')])
@@ -316,11 +316,10 @@ Preview Formularios
         }
 
         function exportar(){
-            let cedula = $('#InputCedula').val();
-            let nombre = $('#InputNombre').val();
-            let fecha = $('#inputDate').val();
-            let creador = $('#selectCreador').val();
-            window.location.href = "{{ route('problems.export') }}?cedula="+cedula+"&nombre="+nombre+"&fecha="+fecha+"&creador="+creador;
+            let comuna = $('#selectComuna').val();
+            let corregimiento = $('#selectCorregimiento').val();
+            let puesto = $('#selectPV').val();
+            window.location.href = `{{ route('pre-formularios.export') }}?puesto=${puesto}&comuna=${comuna}&corregimiento=${corregimiento}`;
         }
 </script>
 
