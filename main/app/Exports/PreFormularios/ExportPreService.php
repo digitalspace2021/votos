@@ -24,17 +24,36 @@ class ExportPreService implements FromCollection, WithHeadings, ShouldQueue, Sho
      */
     public function collection(): Collection
     {
-        return PreFormulario::join('users as propietario', 'propietario.id', 'pre_formularios.propietario_id')
+        $pre_forms = PreFormulario::join('users as propietario', 'propietario.id', 'pre_formularios.propietario_id')
             ->selectRaw("propietario.name as creador, 
             pre_formularios.identificacion,
             Concat_ws(' ', pre_formularios.nombre,  pre_formularios.apellido) as 'nombre completo',
             pre_formularios.email,
             pre_formularios.telefono,
             pre_formularios.direccion,
+            Concat_ws(' - ', pre_formularios.tipo_zona, pre_formularios.zona) as ubicacion,
             pre_formularios.puesto_votacion,
-            pre_formularios.created_at
+            pre_formularios.tipo_zona,
+            pre_formularios.zona,
+            pre_formularios.mesa,
+            pre_formularios.created_at,
+            pre_formularios.id
             ")
             ->get();
+
+        foreach ($pre_forms as $form) {
+            $candidatos = $form->candidatos->pluck('name')->toArray();
+            $form->ubicacion = $form->ubicacion();
+            $form->puesto_votacion = is_numeric($form->puesto_votacion) ? $form->puestoVotacion->name : $form->puesto_votacion;
+            $form->candidatos = implode(', ', $candidatos);
+            $form->fecha_creacion = $form->created_at;
+
+            unset($form->zona);
+            unset($form->tipo_zona);
+            unset($form->id);
+            unset($form->created_at);
+        }
+        return $pre_forms;
     }
 
     /**
@@ -47,13 +66,16 @@ class ExportPreService implements FromCollection, WithHeadings, ShouldQueue, Sho
     public function headings(): array
     {
         return [
-            'Creador',
+            'Responsable',
             'Identificación',
             'Nombre completo',
             'Email',
             'Telefono',
             'Dirección',
+            'Ubicacion',
             'Puesto de votacion',
+            'Mesa',
+            'Candidatos',
             'Fecha creación',
         ];
     }

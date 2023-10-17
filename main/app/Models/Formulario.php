@@ -74,18 +74,25 @@ class Formulario extends Model
      */
     public function ubicacion(): string
     {
-        if ($this->tipo_zona == 'Comuna') {
-            $ubication = DB::table('comunas')
-                ->join('barrios', 'comunas.id', '=', 'barrios.comuna_id')
-                ->where('barrios.id', $this->zona)
-                ->select('comunas.name as general', 'barrios.name as location')
-                ->first();
-        } else {
-            $ubication = DB::table('corregimientos')
-                ->join('veredas', 'veredas.corregimiento_id', '=', 'corregimientos.id')
-                ->where('veredas.id', $this->zona)
-                ->select('corregimientos.name as general', 'veredas.name as location')
-                ->first();
+        switch ($this->tipo_zona) {
+            case 'Comuna':
+                $ubication = DB::table('comunas')
+                    ->join('barrios', 'comunas.id', '=', 'barrios.comuna_id')
+                    ->where('barrios.id', $this->zona)
+                    ->select('comunas.name as general', 'barrios.name as location')
+                    ->first();
+                break;
+            case 'Corregimiento':
+                $ubication = DB::table('corregimientos')
+                    ->join('veredas', 'veredas.corregimiento_id', '=', 'corregimientos.id')
+                    ->where('veredas.id', $this->zona)
+                    ->select('corregimientos.name as general', 'veredas.name as location')
+                    ->first();
+                break;
+
+            default:
+                return 'No definido';
+                break;
         }
 
         return "$ubication->general - $ubication->location";
