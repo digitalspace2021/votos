@@ -12,7 +12,11 @@ use Maatwebsite\Excel\Events\AfterSheet;
 
 class ExportPreService implements FromCollection, WithHeadings, ShouldQueue, ShouldAutoSize
 {
-
+    protected $req;
+    public function __construct($req)
+    {
+        $this->req = $req;
+    }
     /**
      * The function returns a collection of form data joined with user data where the form state is
      * false.
@@ -39,6 +43,21 @@ class ExportPreService implements FromCollection, WithHeadings, ShouldQueue, Sho
             pre_formularios.created_at,
             pre_formularios.id
             ")
+            ->when($this->req->puesto, function ($query, $puesto) {
+                if (is_numeric($puesto)) {
+                    return $query->where('pre_formularios.puesto_votacion', $puesto);
+                } else {
+                    return $query->whereRaw('NOT pre_formularios.puesto_votacion REGEXP "^[0-9]+$"');
+                }
+            })
+            ->when($this->req->comuna, function ($query, $comuna) {
+                return $query->where('pre_formularios.tipo_zona', 'comuna')
+                    ->where('barrios.comuna_id', $comuna);
+            })
+            ->when($this->req->corregimiento, function ($query, $corregimiento) {
+                return $query->where('pre_formularios.tipo_zona', 'corregimiento')
+                    ->where('veredas.corregimiento_id', $corregimiento);
+            })
             ->get();
 
         foreach ($pre_forms as $form) {

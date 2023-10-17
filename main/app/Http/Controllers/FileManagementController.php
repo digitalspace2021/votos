@@ -105,8 +105,8 @@ class FileManagementController extends Controller
      * 
      * @return an Excel file download.
      */
-    public function exportPreFormulario()
+    public function exportPreFormulario(Request $request)
     {
-        return Excel::download(new ExportPreService, now().'preFormulario.xlsx');
+        return Excel::download(new ExportPreService($request), now().'preFormulario.xlsx');
     }
 }
