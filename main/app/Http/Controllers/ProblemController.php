@@ -91,7 +91,7 @@ class ProblemController extends Controller
                     return $query->whereRaw('NOT formularios.puesto_votacion REGEXP "^[0-9]+$"');
                 }
             })
-            ->orderBy('formularios.created_at', 'desc');
+            ->orderBy('formularios.id', 'desc');
 
         if (Auth::user()->hasRole('simple')) {
             $problems = $problems->where('formularios.propietario_id', Auth::user()->id);
