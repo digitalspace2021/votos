@@ -110,11 +110,12 @@ class FormularioController extends Controller
             'formularios.telefono as telefono',
             'formularios.direccion as direccion',
             'formularios.puesto_votacion as puesto_votacion',
-            'formularios.updated_at as updated_at'
+            'formularios.updated_at as created_at'
         )
             ->where('formularios.estado', true);
 
-        $formularios->with('candidatos:id,name');
+        $formularios->with('candidatos:id,name')
+            ->orderBy('formularios.id', 'desc');
 
         /* dd($formularios->get()); */
 
@@ -147,6 +148,9 @@ class FormularioController extends Controller
             })
             ->addColumn('select', function ($col) {
                 return '<input type="checkbox" name="formularios[]" onclick="selectForms(this)" class="option-form" value="' . $col->id . '">';
+            })
+            ->addColumn('puesto_votacion', function($col){
+                return $this->puestoSer->define($col->puesto_votacion);
             })
             ->rawColumns(['acciones', 'select'])
             ->make(true);
